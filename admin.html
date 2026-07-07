@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Admin · IDEAL BRO</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="grain"></div>
+
+  <main class="page">
+    <section class="intro">
+      <p class="kicker">admin protocol</p>
+      <h1>Pair Generator</h1>
+      <p class="lead">Загрузи результаты теста, раздели участников на две группы и собери пары.</p>
+    </section>
+
+    <section class="test-card">
+      <button class="btn primary" id="loadBtn">Загрузить результаты</button>
+      <button class="btn ghost" id="splitBtn">Разделить на 2 группы</button>
+      <button class="btn primary" id="pairBtn">Составить пары</button>
+
+      <h2>Участники</h2>
+      <div id="playersList" class="admin-list"></div>
+
+      <h2>Группы</h2>
+      <div class="admin-grid">
+        <div>
+          <h3>Group A</h3>
+          <div id="groupA" class="admin-list"></div>
+        </div>
+        <div>
+          <h3>Group B</h3>
+          <div id="groupB" class="admin-list"></div>
+        </div>
+      </div>
+
+      <h2>Пары</h2>
+      <div id="pairsList" class="admin-list"></div>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>
