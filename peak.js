@@ -1,64 +1,66 @@
-const missions = {
-  TABURET: {
-    name: "Табурет",
-    text: "Для развития устойчивости трижды подряд потеряй равновесие на медузе.",
-  },
-  FLOMASTER: {
-    name: "Фломастер",
-    text: "Найди время немного отдохнуть в колючках. Пяти секунд будет достаточно.",
-  },
-  PELMEN: {
-    name: "Пельмень",
-    text: "Найди лиану и не упусти шанс эффектно зацепиться за неё после прыжка сверху.",
-  },
-  BUDILNIK: {
-    name: "Будильник",
-    text: "Проверь свою стрессоустойчивость через непосредственное взаимодействие с ядовитой миной.",
-  },
-  VERMISHEL: {
-    name: "Вермишель",
-    text: "Найди гриб и не упусти шанс эффектно приземлиться на него после прыжка сверху.",
-  },
-  SHVABRA: {
-    name: "Швабра",
-    text: "Проверь свою стрессоустойчивость через непосредственное взаимодействие со споровым облаком.",
-  },
-  MUSHROOM: {
-    name: "Грибной протокол",
-    text: "Найди гриб и используй его максимально эффектно. Чем драматичнее момент, тем лучше.",
-  },
-};
-const codeInput = document.getElementById("codeInput"),
-  unlockBtn = document.getElementById("unlockBtn"),
-  errorText = document.getElementById("errorText"),
-  lockCard = document.getElementById("lockCard"),
-  missionCard = document.getElementById("missionCard");
-function normalize(v) {
-  return v
-    .trim()
-    .toUpperCase()
-    .replaceAll("Ё", "Е")
-    .replace(/[^A-ZА-Я0-9]/g, "");
+const PEAK_URL = "https://script.google.com/macros/s/AKfycbyxw5MeRedkRkW7EKLGYMrTF2S2RfyG7OPSHTjjvi45zW_XTb3ast0ecfLFPuydgqGH/exec";
+
+const $ = (id) => document.getElementById(id);
+
+function jsonp(action, params = {}) {
+  return new Promise((resolve, reject) => {
+    const callbackName =
+      "idealbroPeak_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+
+    window[callbackName] = (response) => {
+      delete window[callbackName];
+      script.remove();
+      resolve(response);
+    };
+
+    const searchParams = new URLSearchParams({
+      action,
+      callback: callbackName,
+      ...params
+    });
+
+    const script = document.createElement("script");
+    script.src = PEAK_URL + "?" + searchParams.toString();
+    script.onerror = reject;
+    document.body.appendChild(script);
+  });
 }
-function unlock() {
-  const code = normalize(codeInput.value),
-    mission = missions[code];
-  if (!mission) {
-    errorText.classList.remove("hidden");
+
+async function unlock() {
+  const code = $("codeInput").value.trim();
+
+  $("errorText").classList.add("hidden");
+  $("unlockBtn").textContent = "Проверяем...";
+  $("unlockBtn").disabled = true;
+
+  const response = await jsonp("getMission", { code });
+
+  $("unlockBtn").textContent = "Открыть задание →";
+  $("unlockBtn").disabled = false;
+
+  if (!response.ok) {
+    $("errorText").classList.remove("hidden");
     return;
   }
-  document.getElementById("missionName").textContent = mission.name;
-  document.getElementById("missionText").textContent = mission.text;
-  lockCard.classList.add("hidden");
-  missionCard.classList.remove("hidden");
+
+  $("missionName").textContent = response.name || "Secret Mission";
+  $("missionText").textContent = response.mission;
+
+  if ($("missionBiome")) {
+    $("missionBiome").textContent = response.biome
+      ? `Биом: ${response.biome}`
+      : "";
+  }
+
+  $("lockCard").classList.add("hidden");
+  $("missionCard").classList.remove("hidden");
+
+  sessionStorage.setItem("idealbro-peak-unlocked", "yes");
   sessionStorage.setItem("idealbro-peak-code", code);
 }
-unlockBtn.onclick = unlock;
-codeInput.onkeydown = (e) => {
+
+$("unlockBtn").addEventListener("click", unlock);
+
+$("codeInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") unlock();
-};
-const saved = sessionStorage.getItem("idealbro-peak-code");
-if (saved && missions[saved]) {
-  codeInput.value = saved;
-  unlock();
-}
+});
