@@ -48,15 +48,45 @@ async function runLoader(targetId, lines, delay = 850) {
     <div class="inline-loader">
       <div class="loader-ring"></div>
       <p id="inlineLoaderText">${lines[0]}</p>
+      <div class="loader-progress">
+        <div class="loader-progress-bar" id="loaderProgressBar"></div>
+      </div>
     </div>
   `;
 
   const text = document.getElementById("inlineLoaderText");
+  const bar = document.getElementById("loaderProgressBar");
 
-  for (const line of lines) {
-    text.textContent = line;
+  for (let i = 0; i < lines.length; i++) {
+    text.textContent = lines[i];
+    bar.style.width = `${Math.round(((i + 1) / lines.length) * 100)}%`;
     await sleep(delay);
   }
+
+  target.innerHTML = "";
+}
+
+function showSparks(targetId) {
+  const target = $(targetId);
+  const sparks = document.createElement("div");
+  sparks.className = "gold-sparks";
+
+  for (let i = 0; i < 18; i++) {
+    const spark = document.createElement("span");
+    spark.className = "gold-spark";
+
+    spark.style.left = `${45 + Math.random() * 10}%`;
+    spark.style.top = `${45 + Math.random() * 10}%`;
+    spark.style.setProperty("--x", `${-90 + Math.random() * 180}px`);
+    spark.style.setProperty("--y", `${-70 + Math.random() * 140}px`);
+    spark.style.animationDelay = `${Math.random() * .15}s`;
+
+    sparks.appendChild(spark);
+  }
+
+  target.appendChild(sparks);
+
+  setTimeout(() => sparks.remove(), 900);
 }
 
 function validatePlayers(players) {
@@ -102,7 +132,7 @@ function renderPlayers() {
       <h3>Участники</h3>
       <div class="compact-list">
         ${state.players.map((p, i) => `
-          <div class="compact-chip">
+          <div class="compact-chip reveal-card" style="animation-delay:${i * 80}ms">
             <span>${i + 1}</span>
             <b>${p.name}</b>
           </div>
@@ -127,11 +157,19 @@ function renderGroups() {
       <div class="compact-groups">
         <div>
           <h4>Group A</h4>
-          ${groupA.map(p => `<div class="compact-chip"><b>${p.name}</b></div>`).join("")}
+          ${groupA.map((p, i) => `
+            <div class="compact-chip reveal-card" style="animation-delay:${i * 90}ms">
+              <b>${p.name}</b>
+            </div>
+          `).join("")}
         </div>
         <div>
           <h4>Group B</h4>
-          ${groupB.map(p => `<div class="compact-chip"><b>${p.name}</b></div>`).join("")}
+          ${groupB.map((p, i) => `
+            <div class="compact-chip reveal-card" style="animation-delay:${(i + 3) * 90}ms">
+              <b>${p.name}</b>
+            </div>
+          `).join("")}
         </div>
       </div>
     </div>
@@ -149,7 +187,7 @@ function renderPairs() {
   $("pairsBox").innerHTML = `
     <div class="pairs-compact-list">
       ${pairs.map((pair, i) => `
-        <div class="pair-compact-card">
+       <div class="pair-compact-card reveal-card" style="animation-delay:${i * 650}ms">
           <span>Пара ${i + 1}</span>
           <b>${pair.player1}</b>
           <em>+</em>
@@ -254,6 +292,7 @@ async function createGroups() {
 
   state.groups = response.groups || [];
   renderAll();
+  showSparks("groupsBox");
 }
 
 async function generatePairs() {
@@ -285,6 +324,7 @@ async function generatePairs() {
   state.pairs = response.pairs || [];
 
   renderAll();
+  showSparks("pairsBox");
 }
 
 async function seedSandbox() {
