@@ -1525,3 +1525,19 @@ button:disabled{
     overflow:visible;
   }
 }
+.inline-loader{
+  min-height:140px;
+  display:grid;
+  place-items:center;
+  gap:14px;
+  text-align:center;
+  color:var(--gold2);
+}
+
+.inline-loader p{
+  margin:0;
+  color:var(--gold2);
+  font-weight:900;
+  letter-spacing:.08em;
+  line-height:1.4;
+}
