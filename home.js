@@ -6,7 +6,7 @@
 const EVENT_DAYS = [
   {
     day: 1,
-    date: new Date("2030-10-15T18:00:00"),
+    date: null,
     title: "ПЕРВЫЙ ЭТАП"
   },
   {
