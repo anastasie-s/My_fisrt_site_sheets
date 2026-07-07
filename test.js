@@ -1,5 +1,5 @@
-const SHEETS_URL = "https://script.google.com/macros/s/AKfycbyejNOA8EWG9BgLWn7qBuuk0XK_PlD9sIlABHjNmRG3fMBwRRkGd-3NCr5-5v9VNxrE/exec";
-const TEST_PASSWORD = "5683BRO";
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbybdZ7saSVOPyAm5TdZP0qz1eFQg_wJO_-eAV3J8PnKfqecP8PCktjeUNWUMP7wWkc/exec";
+
 const questions = [
   {
     text: "Какой твой овощ сегодня?",
@@ -144,21 +144,33 @@ $("startBtn").onclick = () => {
   $("questionScreen").classList.remove("hidden");
   renderQuestion();
 };
-function normalizeCode(value){
-  return value.trim().toUpperCase().replace(/\s+/g, "");
-}
+$("testUnlockBtn").onclick = async () => {
+  const password = $("testCodeInput").value.trim();
 
-$("testUnlockBtn").onclick = () => {
-  const code = normalizeCode($("testCodeInput").value);
+  $("testUnlockBtn").textContent = "Проверяем...";
 
-  if (code !== TEST_PASSWORD) {
+  try {
+    await fetch(SHEETS_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: JSON.stringify({
+        action: "checkPassword",
+        password
+      })
+    });
+
+    sessionStorage.setItem("idealbro-test-unlocked", "yes");
+    $("testLockScreen").classList.add("hidden");
+    $("startScreen").classList.remove("hidden");
+
+  } catch (error) {
     $("testErrorText").classList.remove("hidden");
-    return;
   }
 
-  sessionStorage.setItem("idealbro-test-unlocked", "yes");
-  $("testLockScreen").classList.add("hidden");
-  $("startScreen").classList.remove("hidden");
+  $("testUnlockBtn").textContent = "Открыть тест →";
 };
 
 $("testCodeInput").addEventListener("keydown", (e) => {
