@@ -1,4 +1,5 @@
 const SHEETS_URL = "https://script.google.com/macros/s/AKfycbyejNOA8EWG9BgLWn7qBuuk0XK_PlD9sIlABHjNmRG3fMBwRRkGd-3NCr5-5v9VNxrE/exec";
+const TEST_PASSWORD = "5683BRO";
 const questions = [
   {
     text: "Какой твой овощ сегодня?",
@@ -143,6 +144,31 @@ $("startBtn").onclick = () => {
   $("questionScreen").classList.remove("hidden");
   renderQuestion();
 };
+function normalizeCode(value){
+  return value.trim().toUpperCase().replace(/\s+/g, "");
+}
+
+$("testUnlockBtn").onclick = () => {
+  const code = normalizeCode($("testCodeInput").value);
+
+  if (code !== TEST_PASSWORD) {
+    $("testErrorText").classList.remove("hidden");
+    return;
+  }
+
+  sessionStorage.setItem("idealbro-test-unlocked", "yes");
+  $("testLockScreen").classList.add("hidden");
+  $("startScreen").classList.remove("hidden");
+};
+
+$("testCodeInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") $("testUnlockBtn").click();
+});
+
+if (sessionStorage.getItem("idealbro-test-unlocked") === "yes") {
+  $("testLockScreen").classList.add("hidden");
+  $("startScreen").classList.remove("hidden");
+}
 function renderQuestion() {
   const q = questions[state.index];
   $("counter").textContent =
