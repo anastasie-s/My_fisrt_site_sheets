@@ -1,8 +1,8 @@
 // Когда узнаем дату ивента, просто впиши её сюда.
 // Пример:
 // const EVENT_DATE = new Date("2026-08-15T18:00:00");
-
-const EVENT_DATE = null;
+const EVENT_DATE = new Date("2026-10-15T18:00:00");
+// const EVENT_DATE = null;
 
 const $ = (id) => document.getElementById(id);
 
