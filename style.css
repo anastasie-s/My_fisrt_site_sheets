@@ -763,3 +763,127 @@ footer b {
     font-size:38px;
   }
 }
+
+.rules-page{
+  min-height:calc(100vh - 150px);
+  display:grid;
+  grid-template-columns:minmax(0, .85fr) minmax(420px, 1fr);
+  align-items:center;
+  gap:80px;
+  padding:80px 7vw;
+}
+
+.rules-intro h1{
+  margin:14px 0 26px;
+  font-size:clamp(58px, 7vw, 108px);
+  line-height:.88;
+  letter-spacing:-.055em;
+  color:var(--paper);
+}
+
+.rules-intro h1 span{
+  color:var(--gold2);
+}
+
+.rules-intro .lead{
+  max-width:570px;
+}
+
+.rules-preview{
+  position:relative;
+  padding:48px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.055),
+      rgba(255,255,255,.018)
+    );
+  overflow:hidden;
+}
+
+.protocol-number{
+  position:absolute;
+  top:24px;
+  right:28px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.16em;
+  color:var(--muted);
+}
+
+.rules-lock{
+  margin:30px 0;
+  font-size:44px;
+  color:var(--gold2);
+  animation:resultPulse 2.4s ease-in-out infinite;
+}
+
+.rules-preview h2{
+  margin:0 0 18px;
+  font-size:clamp(34px, 4vw, 54px);
+  line-height:1;
+  color:var(--paper);
+}
+
+.rules-preview p{
+  max-width:560px;
+  line-height:1.7;
+  color:var(--muted);
+}
+
+.rules-progress{
+  height:3px;
+  margin:38px 0 22px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+}
+
+.rules-progress-bar{
+  width:42%;
+  height:100%;
+  background:var(--gold2);
+  animation:protocolLoading 2.8s ease-in-out infinite;
+}
+
+.rules-state{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.15em;
+  color:var(--muted);
+}
+
+@keyframes protocolLoading{
+  0%{
+    transform:translateX(-120%);
+  }
+
+  50%{
+    transform:translateX(140%);
+  }
+
+  100%{
+    transform:translateX(360%);
+  }
+}
+
+@media (max-width:900px){
+  .rules-page{
+    grid-template-columns:1fr;
+    gap:45px;
+  }
+}
+
+@media (max-width:560px){
+  .rules-page{
+    padding:55px 22px;
+  }
+
+  .rules-preview{
+    padding:38px 26px;
+  }
+}
