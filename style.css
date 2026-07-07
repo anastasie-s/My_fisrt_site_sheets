@@ -45,18 +45,18 @@ footer {
   position: relative;
   z-index: 1;
 }
-.topbar {
-  min-height: 72px;
-  padding: 18px clamp(18px, 4vw, 54px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--line);
-  background: rgba(6, 7, 6, 0.62);
-  backdrop-filter: blur(12px);
-  position: sticky;
-  top: 0;
-  z-index: 5;
+.topbar{
+  height:72px;
+  padding:0 clamp(18px,4vw,54px);
+  display:flex;
+  align-items:center;
+  gap:42px;
+  border-bottom:1px solid var(--line);
+  background:rgba(6,7,6,.62);
+  backdrop-filter:blur(12px);
+  position:sticky;
+  top:0;
+  z-index:5;
 }
 .brand {
   color: var(--text);
@@ -69,9 +69,10 @@ footer {
   align-items: center;
   gap: 9px;
 }
-nav {
-  display: flex;
-  gap: 28px;
+nav{
+  display:flex;
+  gap:28px;
+  margin-left:20px;
 }
 nav a {
   color: var(--muted);
@@ -134,17 +135,17 @@ h1 span {
   gap: 14px;
   margin-top: 30px;
 }
-.btn {
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  padding: 13px 24px;
-  cursor: pointer;
-  font: 800 14px Inter;
-  text-decoration: none;
-  transition: 0.2s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.btn{
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:17px 30px;
+  cursor:pointer;
+  font:900 17px Inter;
+  text-decoration:none;
+  transition:.2s;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 }
 .btn.primary {
   background: var(--paper);
@@ -494,10 +495,11 @@ footer b {
   .badge {
     display: none;
   }
-  .hero {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    padding-top: 48px;
+  .hero{
+    min-height:calc(100vh - 145px);
+    display:flex;
+    align-items:center;
+    padding:70px clamp(22px,10vw,160px);
   }
   .polaroid-stack {
     display: none;
@@ -511,7 +513,7 @@ footer b {
     font-size: 58px;
   }
   .hero h1{
-    font-size:clamp(48px,6vw,82px);
+    font-size:clamp(44px,5.5vw,78px);
   }
   .question-top {
     align-items: flex-start;
