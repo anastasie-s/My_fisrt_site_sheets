@@ -2,12 +2,24 @@ const PEAK_URL = "https://script.google.com/macros/s/AKfycbyxw5MeRedkRkW7EKLGYMr
 
 const $ = (id) => document.getElementById(id);
 
-function jsonp(action, params = {}) {
+function jsonp(action, params = {}, timeout = 6000) {
   return new Promise((resolve, reject) => {
     const callbackName =
-      "idealbroPeak_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+      "idealbroPeak_" +
+      Date.now() +
+      "_" +
+      Math.floor(Math.random() * 100000);
+
+    const script = document.createElement("script");
+
+    const timer = setTimeout(() => {
+      delete window[callbackName];
+      script.remove();
+      reject(new Error("Request timeout"));
+    }, timeout);
 
     window[callbackName] = (response) => {
+      clearTimeout(timer);
       delete window[callbackName];
       script.remove();
       resolve(response);
@@ -19,11 +31,27 @@ function jsonp(action, params = {}) {
       ...params
     });
 
-    const script = document.createElement("script");
     script.src = PEAK_URL + "?" + searchParams.toString();
-    script.onerror = reject;
+
+    script.onerror = () => {
+      clearTimeout(timer);
+      delete window[callbackName];
+      script.remove();
+      reject(new Error("Request failed"));
+    };
+
     document.body.appendChild(script);
   });
+}
+
+async function jsonpWithRetry(action, params = {}) {
+  try {
+    return await jsonp(action, params, 6000);
+  } catch (error) {
+    console.warn("Первый запрос не удался. Повторяем...", error);
+
+    return await jsonp(action, params, 6000);
+  }
 }
 
 async function unlock() {
@@ -34,7 +62,7 @@ async function unlock() {
     $("unlockBtn").textContent = "Проверяем...";
     $("unlockBtn").disabled = true;
 
-    const response = await jsonp("getMission", { code });
+    const response = await jsonpWithRetry("getMission", { code });
 
     console.log(response);
 
@@ -60,13 +88,16 @@ async function unlock() {
     sessionStorage.setItem("idealbro-peak-unlocked", "yes");
     sessionStorage.setItem("idealbro-peak-code", code);
 
-  } catch (e) {
+ } catch (e) {
     console.error(e);
-
+  
     $("unlockBtn").textContent = "Открыть задание →";
     $("unlockBtn").disabled = false;
-
-    alert(e.message);
+  
+    $("errorText").textContent =
+      "Не удалось получить задание. Попробуй ещё раз.";
+  
+    $("errorText").classList.remove("hidden");
   }
 }
 
