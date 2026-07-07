@@ -64,3 +64,16 @@ $("unlockBtn").addEventListener("click", unlock);
 $("codeInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") unlock();
 });
+
+$("newCodeBtn").addEventListener("click", () => {
+  $("missionCard").classList.add("hidden");
+  $("lockCard").classList.remove("hidden");
+
+  $("codeInput").value = "";
+  $("errorText").classList.add("hidden");
+
+  sessionStorage.removeItem("idealbro-peak-unlocked");
+  sessionStorage.removeItem("idealbro-peak-code");
+
+  $("codeInput").focus();
+});
