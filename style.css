@@ -1548,3 +1548,11 @@ button:disabled{
   letter-spacing:.08em;
   line-height:1.4;
 }
+
+.mission-biome{
+  margin:10px 0 0;
+  color:var(--gold2);
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
