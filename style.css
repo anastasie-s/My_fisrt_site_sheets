@@ -1007,7 +1007,7 @@ footer b {
 
 button:disabled{
   opacity:.65;
-  cursor:wait;
+  cursor:not-allowed;
 }
 
 @media (max-width:800px){
@@ -1481,7 +1481,7 @@ button:disabled{
 
 .pair-compact-card{
   display:grid;
-  grid-template-columns:auto 1fr auto 1fr;
+  grid-template-columns:70px 1fr auto 1fr;
   align-items:center;
   gap:14px;
   padding:16px;
@@ -1489,6 +1489,11 @@ button:disabled{
   border-radius:14px;
   background:rgba(255,255,255,.04);
   color:var(--paper);
+  text-align:center;
+}
+
+.pair-compact-card b{
+  text-align:center;
 }
 
 .pair-compact-card span{
