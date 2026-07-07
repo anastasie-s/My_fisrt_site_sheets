@@ -27,36 +27,47 @@ function jsonp(action, params = {}) {
 }
 
 async function unlock() {
-  const code = $("codeInput").value.trim();
+  try {
+    const code = $("codeInput").value.trim();
 
-  $("errorText").classList.add("hidden");
-  $("unlockBtn").textContent = "Проверяем...";
-  $("unlockBtn").disabled = true;
+    $("errorText").classList.add("hidden");
+    $("unlockBtn").textContent = "Проверяем...";
+    $("unlockBtn").disabled = true;
 
-  const response = await jsonp("getMission", { code });
+    const response = await jsonp("getMission", { code });
 
-  $("unlockBtn").textContent = "Открыть задание →";
-  $("unlockBtn").disabled = false;
+    console.log(response);
 
-  if (!response.ok) {
-    $("errorText").classList.remove("hidden");
-    return;
+    $("unlockBtn").textContent = "Открыть задание →";
+    $("unlockBtn").disabled = false;
+
+    if (!response.ok) {
+      $("errorText").classList.remove("hidden");
+      return;
+    }
+
+    $("missionName").textContent = response.name || "Secret Mission";
+    $("missionText").textContent = response.mission;
+
+    if ($("missionBiome")) {
+      $("missionBiome").textContent =
+        response.biome ? `Биом: ${response.biome}` : "";
+    }
+
+    $("lockCard").classList.add("hidden");
+    $("missionCard").classList.remove("hidden");
+
+    sessionStorage.setItem("idealbro-peak-unlocked", "yes");
+    sessionStorage.setItem("idealbro-peak-code", code);
+
+  } catch (e) {
+    console.error(e);
+
+    $("unlockBtn").textContent = "Открыть задание →";
+    $("unlockBtn").disabled = false;
+
+    alert(e.message);
   }
-
-  $("missionName").textContent = response.name || "Secret Mission";
-  $("missionText").textContent = response.mission;
-
-  if ($("missionBiome")) {
-    $("missionBiome").textContent = response.biome
-      ? `Биом: ${response.biome}`
-      : "";
-  }
-
-  $("lockCard").classList.add("hidden");
-  $("missionCard").classList.remove("hidden");
-
-  sessionStorage.setItem("idealbro-peak-unlocked", "yes");
-  sessionStorage.setItem("idealbro-peak-code", code);
 }
 
 $("unlockBtn").addEventListener("click", unlock);
