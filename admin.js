@@ -359,15 +359,18 @@ async function generatePairs() {
 }
 
 async function seedSandbox() {
-  await runLoader("playersBox", [
-    "Открываем sandbox...",
-    "Очищаем старые тестовые данные...",
-    "Генерируем 6 фиктивных участников...",
-    "Заполняем случайные ответы...",
-    "Сохраняем sandbox-протокол..."
-  ], 700);
-
-  const response = await jsonp("seedSandbox");
+  const response = await runLoader(
+    "playersBox",
+    jsonp("seedSandbox"),
+    [
+      "Открываем sandbox...",
+      "Очищаем старые тестовые данные...",
+      "Генерируем 6 фиктивных участников...",
+      "Заполняем случайные ответы...",
+      "Сохраняем sandbox-протокол..."
+    ],
+    4000
+  );
 
   if (!response.ok) {
     $("leftStatus").textContent = response.error || "Sandbox не заполнен.";
@@ -382,15 +385,18 @@ async function seedSandbox() {
 }
 
 async function resetCurrentSource() {
-  await runLoader("playersBox", [
-    "Сбрасываем группы...",
-    "Удаляем историю пар...",
-    "Возвращаем протокол в начальное состояние..."
-  ], 650);
-
-  const response = await jsonp("resetAdminState", {
-    source: currentSource
-  });
+  const response = await runLoader(
+    "playersBox",
+    jsonp("resetAdminState", {
+      source: currentSource
+    }),
+    [
+      "Сбрасываем группы...",
+      "Удаляем историю пар...",
+      "Возвращаем протокол в начальное состояние..."
+    ],
+    3000
+  );
 
   if (!response.ok) {
     $("leftStatus").textContent = response.error || "Ошибка сброса.";
