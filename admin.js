@@ -2,10 +2,12 @@ const SHEETS_URL = "https://script.google.com/macros/s/AKfycbybdZ7saSVOPyAm5TdZP
 
 const REQUIRED_PLAYERS = 6;
 
-let players = [];
-let groupA = [];
-let groupB = [];
-let usedPairs = [];
+let currentSource = "real";
+let state = {
+  players: [],
+  groups: [],
+  pairs: []
+};
 
 const $ = (id) => document.getElementById(id);
 
@@ -13,30 +15,10 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function showMessage(text, type = "info") {
-  const box = $("adminMessage");
-  box.className = `admin-message ${type}`;
-  box.textContent = text;
-}
-
-function hideMessage() {
-  $("adminMessage").classList.add("hidden");
-}
-
-function setButtonLoading(button, text = "Обработка...") {
-  button.dataset.originalText = button.textContent;
-  button.textContent = text;
-  button.disabled = true;
-}
-
-function unsetButtonLoading(button) {
-  button.textContent = button.dataset.originalText || button.textContent;
-  button.disabled = false;
-}
-
 function jsonp(action, params = {}) {
   return new Promise((resolve, reject) => {
-    const callbackName = "idealbroAdmin_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+    const callbackName =
+      "idealbroAdmin_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
 
     window[callbackName] = (response) => {
       delete window[callbackName];
@@ -57,18 +39,289 @@ function jsonp(action, params = {}) {
   });
 }
 
+function setStage(title, text) {
+  $("stageTitle").textContent = title;
+  $("stageText").textContent = text;
+}
+
+function setOutput(html) {
+  $("output").innerHTML = html;
+}
+
+function clearOutput() {
+  $("output").innerHTML = "";
+}
+
+async function runLoader(lines, minDelay = 900) {
+  $("loader").classList.remove("hidden");
+
+  for (const line of lines) {
+    $("loaderText").textContent = line;
+    await sleep(minDelay);
+  }
+
+  $("loader").classList.add("hidden");
+}
+
+function renderPlayers(players) {
+  return `
+    <div class="admin-result-block">
+      <h2>Участники</h2>
+      <div class="admin-mini-grid">
+        ${players.map((p, i) => `
+          <div class="admin-chip">
+            <span>${i + 1}</span>
+            <b>${p.name}</b>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderGroups(groups) {
+  const groupA = groups.filter(g => g.group === "A");
+  const groupB = groups.filter(g => g.group === "B");
+
+  return `
+    <div class="admin-result-block">
+      <h2>Группы</h2>
+      <div class="admin-two-cols">
+        <div class="group-box">
+          <h3>Group A</h3>
+          ${groupA.map(p => `<div class="admin-chip"><b>${p.name}</b></div>`).join("")}
+        </div>
+
+        <div class="group-box">
+          <h3>Group B</h3>
+          ${groupB.map(p => `<div class="admin-chip"><b>${p.name}</b></div>`).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPairs(game, pairs) {
+  return `
+    <div class="admin-result-block">
+      <h2>Пары · Игра ${game}</h2>
+      <div class="pairs-show-list">
+        ${pairs.map((pair, i) => `
+          <div class="pair-show-card">
+            <span>Пара ${i + 1}</span>
+            <b>${pair.player1}</b>
+            <em>+</em>
+            <b>${pair.player2}</b>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderState() {
+  let html = "";
+
+  if (state.players.length) {
+    html += renderPlayers(state.players);
+  }
+
+  if (state.groups.length) {
+    html += renderGroups(state.groups);
+  }
+
+  const games = [1, 2, 3];
+
+  games.forEach(game => {
+    const gamePairs = state.pairs.filter(p => Number(p.game) === game);
+    if (gamePairs.length) {
+      html += renderPairs(game, gamePairs);
+    }
+  });
+
+  setOutput(html);
+}
+
+function validatePlayers(players) {
+  if (players.length !== REQUIRED_PLAYERS) {
+    return `Нужно ровно ${REQUIRED_PLAYERS} участников. Сейчас найдено: ${players.length}.`;
+  }
+
+  const names = players.map(p => p.name.trim().toLowerCase());
+  const duplicates = names.filter((name, index) => names.indexOf(name) !== index);
+
+  if (duplicates.length > 0) {
+    return "Есть повторяющиеся имена. Проверь таблицу.";
+  }
+
+  return null;
+}
+
+async function loadAdminState() {
+  clearOutput();
+
+  await runLoader([
+    "Подключаемся к таблице...",
+    "Считываем результаты теста...",
+    "Проверяем участников...",
+    "Восстанавливаем сохранённый протокол..."
+  ], 800);
+
+  const response = await jsonp("getAdminState", {
+    source: currentSource
+  });
+
+  if (!response.ok) {
+    setStage("Ошибка протокола", response.error || "Не удалось загрузить данные.");
+    return;
+  }
+
+  state.players = response.players || [];
+  state.groups = response.groups || [];
+  state.pairs = response.pairs || [];
+
+  const validationError = validatePlayers(state.players);
+
+  if (validationError) {
+    setStage("Проверка не пройдена", validationError);
+    renderState();
+    return;
+  }
+
+  if (!state.groups.length) {
+    setStage("Результаты загружены", "Участники найдены. Теперь можно разделить их на две группы.");
+  } else {
+    setStage("Протокол восстановлен", "Группы и сохранённые пары загружены из таблицы.");
+  }
+
+  renderState();
+
+  if (!state.groups.length) {
+    $("output").innerHTML += `
+      <button class="btn primary admin-next-btn" id="createGroupsBtn">
+        Разделить на две группы →
+      </button>
+    `;
+
+    $("createGroupsBtn").onclick = createGroups;
+  }
+}
+
+async function createGroups() {
+  await runLoader([
+    "Запускаем модуль группировки...",
+    "Проверяем уникальность имён...",
+    "Сверяем количество участников...",
+    "Формируем две экспериментальные группы...",
+    "Сохраняем группы в протокол..."
+  ], 900);
+
+  const response = await jsonp("createGroups", {
+    source: currentSource
+  });
+
+  if (!response.ok) {
+    setStage("Группы не созданы", response.error || "Ошибка при создании групп.");
+    return;
+  }
+
+  state.groups = response.groups || [];
+
+  setStage("Группы сформированы", "Теперь можно выбирать пары для игр 1, 2 и 3.");
+  renderState();
+}
+
+async function generatePairs(game) {
+  await runLoader([
+    `Запускаем протокол игры ${game}...`,
+    "Считываем сохранённые группы...",
+    "Проверяем историю предыдущих пар...",
+    "Исключаем повторы...",
+    "Анализируем совместимость...",
+    "Формируем финальный список пар...",
+    "Сохраняем протокол в таблицу..."
+  ], 900);
+
+  const response = await jsonp("generatePairs", {
+    source: currentSource,
+    game
+  });
+
+  if (!response.ok) {
+    setStage(`Пары для игры ${game} не созданы`, response.error || "Ошибка генерации.");
+    renderState();
+    return;
+  }
+
+  state.groups = response.groups || state.groups;
+  state.pairs = response.pairs || [];
+
+  setStage(`Пары для игры ${game} готовы`, "Протокол сохранён. Можно продолжать.");
+  renderState();
+}
+
+async function seedSandbox() {
+  await runLoader([
+    "Открываем sandbox-таблицу...",
+    "Удаляем старые тестовые данные...",
+    "Генерируем 6 фиктивных участников...",
+    "Заполняем случайные ответы...",
+    "Сохраняем sandbox-протокол..."
+  ], 850);
+
+  const response = await jsonp("seedSandbox");
+
+  if (!response.ok) {
+    setStage("Sandbox не заполнен", response.error || "Ошибка заполнения.");
+    return;
+  }
+
+  setStage("Sandbox заполнен", "Переключись на «Запуск теста» и загрузи результаты.");
+}
+
+async function resetCurrentSource() {
+  await runLoader([
+    "Сбрасываем сохранённые группы...",
+    "Удаляем историю пар для текущего режима...",
+    "Возвращаем протокол в начальное состояние..."
+  ], 750);
+
+  const response = await jsonp("resetAdminState", {
+    source: currentSource
+  });
+
+  if (!response.ok) {
+    setStage("Сброс не выполнен", response.error || "Ошибка сброса.");
+    return;
+  }
+
+  state = {
+    players: [],
+    groups: [],
+    pairs: []
+  };
+
+  clearOutput();
+  setStage("Протокол сброшен", "Можно заново загрузить результаты.");
+}
+
 async function checkAdminPassword(password) {
-  const response = await jsonp("checkAdminPassword", { password });
+  const response = await jsonp("checkAdminPassword", {
+    password
+  });
+
   return response.ok === true;
 }
 
 $("adminUnlockBtn").onclick = async () => {
   $("adminErrorText").classList.add("hidden");
-  setButtonLoading($("adminUnlockBtn"), "Проверяем...");
+  $("adminUnlockBtn").textContent = "Проверяем...";
+  $("adminUnlockBtn").disabled = true;
 
   const ok = await checkAdminPassword($("adminCodeInput").value);
 
-  unsetButtonLoading($("adminUnlockBtn"));
+  $("adminUnlockBtn").textContent = "Открыть админ-панель →";
+  $("adminUnlockBtn").disabled = false;
 
   if (!ok) {
     $("adminErrorText").classList.remove("hidden");
@@ -89,183 +342,34 @@ if (sessionStorage.getItem("idealbro-admin-unlocked") === "yes") {
   $("adminPanel").classList.remove("hidden");
 }
 
-function renderPlayers(id, items) {
-  $(id).innerHTML = items
-    .map((p, index) => `
-      <div class="admin-item">
-        <span class="admin-number">${index + 1}</span>
-        <b>${p.name}</b>
-      </div>
-    `)
-    .join("");
-}
+document.querySelectorAll(".source-btn").forEach(button => {
+  button.onclick = () => {
+    document.querySelectorAll(".source-btn").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
 
-function validatePlayers() {
-  if (players.length !== REQUIRED_PLAYERS) {
-    return `Нужно ровно ${REQUIRED_PLAYERS} участников. Сейчас найдено: ${players.length}.`;
-  }
+    currentSource = button.dataset.source;
 
-  const names = players.map(p => p.name.trim().toLowerCase());
-  const duplicates = names.filter((name, index) => names.indexOf(name) !== index);
+    state = {
+      players: [],
+      groups: [],
+      pairs: []
+    };
 
-  if (duplicates.length > 0) {
-    return "Есть повторяющиеся имена. Проверь таблицу перед разделением на группы.";
-  }
+    clearOutput();
 
-  return null;
-}
-
-$("loadBtn").onclick = async () => {
-  hideMessage();
-  setButtonLoading($("loadBtn"), "Загружаем...");
-
-  await sleep(700);
-
-  const response = await jsonp("getResults");
-  players = response.players || [];
-
-  unsetButtonLoading($("loadBtn"));
-
-  if (!players.length) {
-    showMessage("Пока нет результатов теста.", "warning");
-    return;
-  }
-
-  renderPlayers("playersList", players);
-  $("playersStep").classList.remove("hidden");
-
-  const validationError = validatePlayers();
-
-  if (validationError) {
-    showMessage(validationError, "warning");
-  } else {
-    showMessage("Результаты загружены. Можно делить участников на группы.", "success");
-  }
-};
-
-$("seedBtn").onclick = async () => {
-  hideMessage();
-  setButtonLoading($("seedBtn"), "Заполняем...");
-
-  await sleep(700);
-
-  const response = await jsonp("seedTestData");
-
-  unsetButtonLoading($("seedBtn"));
-
-  if (!response.ok) {
-    showMessage(response.error || "Не получилось заполнить тестовые данные.", "warning");
-    return;
-  }
-
-  showMessage("Тестовые данные добавлены в Sheets. Теперь нажми «Загрузить результаты».", "success");
-};
-
-$("splitBtn").onclick = async () => {
-  hideMessage();
-
-  const validationError = validatePlayers();
-
-  if (validationError) {
-    showMessage(validationError, "warning");
-    return;
-  }
-
-  setButtonLoading($("splitBtn"), "Анализируем...");
-
-  await sleep(900);
-
-  const shuffled = [...players].sort(() => Math.random() - 0.5);
-
-  groupA = shuffled.slice(0, 3);
-  groupB = shuffled.slice(3, 6);
-
-  renderPlayers("groupA", groupA);
-  renderPlayers("groupB", groupB);
-
-  $("groupsStep").classList.remove("hidden");
-  $("pairsStep").classList.remove("hidden");
-
-  unsetButtonLoading($("splitBtn"));
-
-  showMessage("Группы сформированы. Можно запускать протокол пар.", "success");
-};
-
-function pairKey(a, b) {
-  return [a.name, b.name].sort().join("::");
-}
-
-function generatePairs() {
-  const a = [...groupA].sort(() => Math.random() - 0.5);
-  const b = [...groupB].sort(() => Math.random() - 0.5);
-
-  const pairs = [];
-
-  for (const p1 of a) {
-    let matchIndex = b.findIndex(p2 => !usedPairs.includes(pairKey(p1, p2)));
-
-    if (matchIndex === -1) {
-      matchIndex = 0;
-    }
-
-    const p2 = b.splice(matchIndex, 1)[0];
-    pairs.push([p1, p2]);
-    usedPairs.push(pairKey(p1, p2));
-  }
-
-  return pairs;
-}
-
-function renderPairs(id, pairs) {
-  $(id).innerHTML = pairs
-    .map(([p1, p2]) => `
-      <div class="admin-item pair">
-        <b>${p1.name}</b>
-        <span>+</span>
-        <b>${p2.name}</b>
-      </div>
-    `)
-    .join("");
-}
-
-document.querySelectorAll("[data-game]").forEach(button => {
-  button.onclick = async () => {
-    hideMessage();
-
-    if (!groupA.length || !groupB.length) {
-      showMessage("Сначала раздели участников на группы.", "warning");
-      return;
-    }
-
-    const game = button.dataset.game;
-
-    setButtonLoading(button, "Формируем...");
-
-    await sleep(1200);
-
-    const pairs = generatePairs();
-
-    renderPairs(`pairsGame${game}`, pairs);
-
-    unsetButtonLoading(button);
-
-    showMessage(`Пары для игры ${game} сформированы.`, "success");
+    setStage(
+      currentSource === "real" ? "Боевой режим" : "Запуск теста",
+      currentSource === "real"
+        ? "Будут использоваться реальные результаты участников."
+        : "Будут использоваться sandbox-данные."
+    );
   };
 });
 
-$("resetBtn").onclick = () => {
-  players = [];
-  groupA = [];
-  groupB = [];
-  usedPairs = [];
+document.querySelectorAll(".game-tab").forEach(button => {
+  button.onclick = () => generatePairs(button.dataset.game);
+});
 
-  ["playersList", "groupA", "groupB", "pairsGame1", "pairsGame2", "pairsGame3"].forEach(id => {
-    $(id).innerHTML = "";
-  });
-
-  ["playersStep", "groupsStep", "pairsStep"].forEach(id => {
-    $(id).classList.add("hidden");
-  });
-
-  hideMessage();
-};
+$("loadBtn").onclick = loadAdminState;
+$("seedBtn").onclick = seedSandbox;
+$("resetBtn").onclick = resetCurrentSource;
