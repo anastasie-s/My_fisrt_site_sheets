@@ -187,8 +187,8 @@ $("nextBtn").onclick = () => {
   } else showResult();
 };
 async function showResult(){
-  questionScreen.classList.add("hidden");
-  resultScreen.classList.remove("hidden");
+  $("questionScreen").classList.add("hidden");
+  $("resultScreen").classList.remove("hidden");
 
   const result = {
     player: state.name,
