@@ -2187,6 +2187,22 @@ svg{
 .participants-header h1 {
   font-size: clamp(50px, 5vw, 75px);
 }
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 20px;
+  display: block;
+  border: 1px solid rgba(212,160,50,.4);
+}
+
+.host-card .avatar {
+  width: 80px;
+  height: 80px;
+  border: 1px solid rgba(212,160,50,.4);
+}
 .place-button {
   display: inline-flex;
   align-items: center;
