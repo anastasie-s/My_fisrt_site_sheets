@@ -2018,21 +2018,18 @@ svg{
 
 
 .participants-page {
-  min-height: calc(100vh - 120px);
-  display: flex;
-  flex-direction: column;
+  padding-bottom: 80px;
 }
 
 
 .participants-header {
-  margin-bottom: 50px;
+  max-width: 1200px;
+  margin-bottom: 40px;
 }
 
-
 .participants-header h1 {
-  font-size: clamp(70px, 9vw, 140px);
-  line-height: .85;
-  margin: 20px 0;
+  font-size: clamp(60px, 8vw, 120px);
+  line-height: 0.9;
 }
 
 
@@ -2046,6 +2043,10 @@ svg{
 
 
 .participant-card {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border: 1px solid rgba(255,255,255,.15);
   border-radius: 14px;
 
