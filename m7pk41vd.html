@@ -22,6 +22,27 @@
       <span class="badge"> ЗАСЕКРЕЧЕНО </span>
     </header>
     <main class="page peak-page">
+      <section class="lock-card" id="accessCard">
+        <span class="lock-icon">🔒</span>
+        <h2>PEAK access</h2>
+        <p class="sub">Введи код доступа к протоколу.</p>
+      
+        <input
+          id="accessInput"
+          class="input code"
+          type="password"
+          placeholder="Код доступа"
+          autocomplete="off"
+        />
+      
+        <button class="btn primary full" id="accessBtn">
+          Загрузить протокол →
+        </button>
+      
+        <p id="accessErrorText" class="error hidden">
+          Не удалось загрузить протокол.
+        </p>
+      </section>
       <section class="peak-hero">
         <p class="kicker">ограниченный доступ</p>
         <h1>
@@ -29,7 +50,7 @@
           <span> secret mission </span>
         </h1>
       </section>
-      <section class="lock-card" id="lockCard">
+      <section class="lock-card hidden" id="lockCard">
         <span class="lock-icon"> 🔒 </span>
         <h2>Введи пароль для получения задания</h2>
         <p class="sub">Пароль выдается хостом. Регистр не важен.</p>
