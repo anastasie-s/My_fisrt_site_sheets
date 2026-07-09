@@ -2415,3 +2415,16 @@ footer {
   }
 
 }
+
+.hidden-protocol {
+  display: none;
+}
+
+.protocol-tab {
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.protocol-tab.active {
+  color: #d4a032;
+}
