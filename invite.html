@@ -1301,6 +1301,31 @@
           "Статус пока не удалось проверить. Подтверждение всё равно можно отправить.";
       }
     }
+    function wait(milliseconds) {
+      return new Promise(resolve => {
+        setTimeout(resolve, milliseconds);
+      });
+    }
+    
+    async function sendConfirmation(attempt = 0) {
+      const result = await jsonp(
+        "confirmInvite",
+        {
+          name: participantName
+        }
+      );
+    
+      if (
+        !result.ok &&
+        result.error === "BUSY" &&
+        attempt < 3
+      ) {
+        await wait(700 + attempt * 500);
+        return sendConfirmation(attempt + 1);
+      }
+    
+      return result;
+    }
 
     async function confirmParticipation() {
       confirmButton.disabled = true;
@@ -1313,12 +1338,7 @@
       inviteMessage.classList.remove("error");
 
       try {
-        const result = await jsonp(
-          "confirmInvite",
-          {
-            name: participantName
-          }
-        );
+        const result = await sendConfirmation();
 
         if (!result.ok) {
           throw new Error(
