@@ -1272,6 +1272,11 @@
           }
         );
 
+        if (result.invitesClosed) {
+          window.location.replace("index.html");
+          return;
+        }
+
         if (!result.ok) {
           throw new Error(
             result.error || "Ошибка получения статуса."
