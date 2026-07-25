@@ -1173,9 +1173,9 @@
                     <span class="rule-number">04</span>
                     <span>
                       За первое место каждый участник пары
-                      получал <strong>3 очка</strong>,
-                      за второе — <strong>2 очка</strong>,
-                      за третье — <strong>1 очко</strong>.
+                      получал <strong>6 очков</strong>,
+                      за второе — <strong>4 очка</strong>,
+                      за третье — <strong>2 очка</strong>.
                     </span>
                   </li>
 
@@ -1321,10 +1321,16 @@
       ]
     };
 
-    const POINTS_BY_PLACE = {
+    const DAY1_POINTS_BY_PLACE = {
       1: 3,
       2: 2,
       3: 1
+    };
+    
+    const DAY2_POINTS_BY_PLACE = {
+      1: 6,
+      2: 4,
+      3: 2
     };
 
     function createPlayerMap(players) {
@@ -1341,39 +1347,44 @@
       }));
     }
 
-    function applyGamesToPlayers(playerResults, games, keyPrefix) {
+    function applyGamesToPlayers(
+      playerResults,
+      games,
+      keyPrefix,
+      pointsByPlace
+    ) {
       const playerMap = new Map(
         playerResults.map(player => [player.name, player])
       );
-
+    
       games.forEach(game => {
         game.pairs.forEach(pair => {
-          const points = POINTS_BY_PLACE[pair.place] || 0;
-
+          const points = pointsByPlace[pair.place] || 0;
+    
           pair.players.forEach(playerName => {
             const player = playerMap.get(playerName);
-
+    
             if (!player) {
               console.warn(`Участник "${playerName}" отсутствует`);
               return;
             }
-
+    
             if (keyPrefix === "day1") {
               player.day1Games[game.id] = points;
               player.day1Total += points;
             }
-
+    
             if (keyPrefix === "day2") {
               player.day2Games[game.id] = points;
               player.day2Total += points;
             }
-
+    
             player.total += points;
-
+    
             if (pair.place === 1) {
               player.firstPlaces += 1;
             }
-
+    
             if (pair.place === 2) {
               player.secondPlaces += 1;
             }
@@ -1385,8 +1396,19 @@
     function calculateCombinedResults() {
       const allPlayers = createPlayerMap(DAY1_DATA.players);
 
-      applyGamesToPlayers(allPlayers, DAY1_DATA.games, "day1");
-      applyGamesToPlayers(allPlayers, DAY2_DATA.games, "day2");
+      applyGamesToPlayers(
+        allPlayers,
+        DAY1_DATA.games,
+        "day1",
+        DAY1_POINTS_BY_PLACE
+      );
+      
+      applyGamesToPlayers(
+        allPlayers,
+        DAY2_DATA.games,
+        "day2",
+        DAY2_POINTS_BY_PLACE
+      );
 
       allPlayers.sort((a, b) => {
         if (b.total !== a.total) {
@@ -1411,7 +1433,7 @@
       return allPlayers;
     }
 
-    function calculateDayOnlyResults(sourceData) {
+    function calculateDayOnlyResults(sourceData, pointsByPlace) {
       const playerResults = sourceData.players.map((player, originalIndex) => ({
         name: player,
         originalIndex,
@@ -1427,7 +1449,7 @@
 
       sourceData.games.forEach(game => {
         game.pairs.forEach(pair => {
-          const points = POINTS_BY_PLACE[pair.place] || 0;
+          const points = pointsByPlace[pair.place] || 0;
 
           pair.players.forEach(playerName => {
             const player = playerMap.get(playerName);
@@ -1531,7 +1553,11 @@
         .join("");
     }
 
-    function renderGames(containerId, sourceData) {
+    function renderGames(
+      containerId,
+      sourceData,
+      pointsByPlace
+    ) {
       const gamesGrid = document.getElementById(containerId);
 
       gamesGrid.innerHTML = sourceData.games
@@ -1556,7 +1582,7 @@
                     </div>
 
                     <span class="pair-score">
-                      +${POINTS_BY_PLACE[pair.place] || 0}
+                      +${pointsByPlace[pair.place] || 0}
                     </span>
                   </li>
                 `)
@@ -1608,16 +1634,33 @@
 
     function initializeResultsPage() {
       const overallResults = calculateCombinedResults();
-      const day1Results = calculateDayOnlyResults(DAY1_DATA);
-      const day2Results = calculateDayOnlyResults(DAY2_DATA);
-
+    
+      const day1Results = calculateDayOnlyResults(
+        DAY1_DATA,
+        DAY1_POINTS_BY_PLACE
+      );
+    
+      const day2Results = calculateDayOnlyResults(
+        DAY2_DATA,
+        DAY2_POINTS_BY_PLACE
+      );
+    
       renderOverallTable(overallResults);
       renderDay1Table(day1Results);
       renderDay2Table(day2Results);
-
-      renderGames("gamesGridDay1", DAY1_DATA);
-      renderGames("gamesGridDay2", DAY2_DATA);
-
+    
+      renderGames(
+        "gamesGridDay1",
+        DAY1_DATA,
+        DAY1_POINTS_BY_PLACE
+      );
+    
+      renderGames(
+        "gamesGridDay2",
+        DAY2_DATA,
+        DAY2_POINTS_BY_PLACE
+      );
+    
       initializeTabs();
     }
 
