@@ -9,7 +9,7 @@
   >
 
   <title>Обратная связь — IDEAL BRO</title>
-
+  <link rel="stylesheet" href="style.css">
   <style>
     @import url(
       "https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;900&family=Caveat:wght@600&display=swap"
@@ -87,85 +87,7 @@
       z-index: 1;
     }
 
-    /* =========================
-       ВЕРХНЕЕ МЕНЮ
-    ========================= */
-
-    .topbar {
-      min-height: 72px;
-      padding: 0 clamp(18px, 4vw, 54px);
-
-      display: flex;
-      align-items: center;
-      gap: 42px;
-
-      position: sticky;
-      top: 0;
-      z-index: 10;
-
-      border-bottom: 1px solid var(--line);
-
-      background: rgba(6, 7, 6, 0.62);
-      backdrop-filter: blur(12px);
-    }
-
-    .brand {
-      flex-shrink: 0;
-
-      display: flex;
-      align-items: center;
-
-      color: var(--text);
-      text-decoration: none;
-
-      font-family: Oswald, sans-serif;
-      font-size: 27px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-
-    nav {
-      display: flex;
-      gap: 36px;
-
-      margin-left: 28px;
-    }
-
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-
-      font: 700 17px Oswald, sans-serif;
-      letter-spacing: 0.06em;
-
-      transition:
-        color 0.18s ease,
-        transform 0.18s ease;
-    }
-
-    nav a:hover {
-      color: var(--gold2);
-      transform: translateY(-1px);
-    }
-
-    nav a.active {
-      color: var(--paper);
-    }
-
-    .badge {
-      margin-left: auto;
-      flex-shrink: 0;
-
-      padding: 7px 15px;
-
-      border: 1px solid rgba(228, 214, 189, 0.4);
-      border-radius: 6px;
-
-      color: var(--paper);
-
-      font: 700 12px Oswald, sans-serif;
-      letter-spacing: 0.12em;
-    }
+  
 
     /* =========================
        ОСНОВНАЯ СТРАНИЦА
@@ -509,35 +431,6 @@
        АДАПТИВ
     ========================= */
 
-    @media (max-width: 900px) {
-      .topbar {
-        padding: 16px 22px;
-
-        align-items: flex-start;
-        flex-wrap: wrap;
-        gap: 18px;
-      }
-
-      nav {
-        width: 100%;
-        order: 3;
-
-        margin: 0;
-
-        gap: 20px;
-
-        overflow-x: auto;
-      }
-
-      nav a {
-        white-space: nowrap;
-        font-size: 15px;
-      }
-
-      .badge {
-        margin-left: auto;
-      }
-    }
 
     @media (max-width: 680px) {
       .feedback-page {
@@ -599,13 +492,7 @@
     }
 
     @media (max-width: 460px) {
-      .badge {
-        display: none;
-      }
-
-      nav {
-        gap: 17px;
-      }
+  
 
       .google-form-wrapper iframe {
         height: 1400px;
@@ -619,20 +506,18 @@
 
   <header class="topbar">
     <a class="brand" href="index.html">
+      <span>✦</span>
       IDEAL BRO
     </a>
 
     <nav>
       <a href="index.html">ГЛАВНАЯ</a>
+      <a href="about.html">ОБ ИВЕНТЕ</a>
       <a href="participants.html">УЧАСТНИКИ</a>
-      <a href="rules.html">ПРАВИЛА</a>
       <a href="results.html">РЕЗУЛЬТАТЫ</a>
-      <a href="feedback.html">ФИДБЕК</a>
+      <a class="active" href="feedback.html">ФИДБЕК</a>
     </nav>
 
-    <div class="badge">
-      FEEDBACK // ACTIVE
-    </div>
   </header>
 
   <main class="feedback-page">
