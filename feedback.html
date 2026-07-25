@@ -418,7 +418,7 @@
       display: block;
 
       width: 100%;
-      height: 1200px;
+      height: 1400px;
 
       border: 0;
 
@@ -588,7 +588,7 @@
       }
 
       .google-form-wrapper iframe {
-        height: 1200px;
+        height: 1400px;
       }
 
       footer {
@@ -608,7 +608,7 @@
       }
 
       .google-form-wrapper iframe {
-        height: 1200px;
+        height: 1400px;
       }
     }
   </style>
@@ -689,5 +689,47 @@
   <footer>
     <b>IDEAL BRO</b>
   </footer>
+
+  <script>
+    const feedbackFrame = document.querySelector(
+      ".google-form-wrapper iframe"
+    );
+  
+    const formWrapper = document.querySelector(
+      ".google-form-wrapper"
+    );
+  
+    let initialFormLoadFinished = false;
+  
+    feedbackFrame.addEventListener("load", () => {
+      /*
+        Первую загрузку формы пропускаем.
+        Следующая загрузка обычно происходит после Submit,
+        когда Google показывает сообщение о подтверждении.
+      */
+      if (!initialFormLoadFinished) {
+        initialFormLoadFinished = true;
+        return;
+      }
+  
+      /*
+        Небольшая задержка нужна, чтобы экран подтверждения
+        успел полностью появиться внутри iframe.
+      */
+      setTimeout(() => {
+        const stickyMenuOffset = 90;
+  
+        const targetPosition =
+          formWrapper.getBoundingClientRect().top +
+          window.scrollY -
+          stickyMenuOffset;
+  
+        window.scrollTo({
+          top: targetPosition,
+          behavior: "smooth"
+        });
+      }, 350);
+    });
+  </script>
 </body>
 </html>
