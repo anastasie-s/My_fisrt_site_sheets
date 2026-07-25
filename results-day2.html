@@ -1102,20 +1102,6 @@
             </div>
           </header>
 
-          <div class="results-table-wrapper">
-            <table class="results-table">
-              <thead>
-                <tr>
-                  <th>Место</th>
-                  <th>Участник</th>
-                  <th>Итого</th>
-                </tr>
-              </thead>
-
-              <tbody id="day2TableBody"></tbody>
-            </table>
-          </div>
-
           <div
             class="games-grid"
             id="gamesGridDay2"
@@ -1539,19 +1525,6 @@
         .join("");
     }
 
-    function renderDay2Table(results) {
-      const tableBody = document.getElementById("day2TableBody");
-
-      tableBody.innerHTML = results
-        .map((player, index) => `
-          <tr>
-            <td class="place-cell">${getPlaceLabel(index)}</td>
-            <td class="player-cell">${escapeHtml(player.name)}</td>
-            <td class="total-cell">${player.total}</td>
-          </tr>
-        `)
-        .join("");
-    }
 
     function renderGames(
       containerId,
@@ -1640,14 +1613,9 @@
         DAY1_POINTS_BY_PLACE
       );
     
-      const day2Results = calculateDayOnlyResults(
-        DAY2_DATA,
-        DAY2_POINTS_BY_PLACE
-      );
-    
+  
       renderOverallTable(overallResults);
       renderDay1Table(day1Results);
-      renderDay2Table(day2Results);
     
       renderGames(
         "gamesGridDay1",
