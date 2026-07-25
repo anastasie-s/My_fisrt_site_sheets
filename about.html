@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Об ивенте — IDEAL BRO</title>
+
+  <style>
+    @import url(
+      "https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;900&family=Caveat:wght@600&display=swap"
+    );
+
+    :root {
+      --bg: #090b09;
+      --panel: #11140f;
+      --paper: #e4d6bd;
+      --paper-light: #eee3cf;
+      --ink: #15120d;
+      --text: #eee3cf;
+      --muted: #a99b84;
+      --line: rgba(228, 214, 189, 0.18);
+      --gold: #d7902f;
+      --gold2: #ffb84a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      color: var(--text);
+      font-family: Inter, system-ui, sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 18% 10%,
+          rgba(215, 144, 47, 0.13),
+          transparent 28rem
+        ),
+        radial-gradient(
+          circle at 86% 18%,
+          rgba(228, 214, 189, 0.08),
+          transparent 24rem
+        ),
+        linear-gradient(
+          180deg,
+          #090b09 0%,
+          #0e100d 58%,
+          #080908 100%
+        );
+    }
+
+    a,
+    button {
+      font: inherit;
+    }
+
+    .grain {
+      pointer-events: none;
+
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+
+      opacity: 0.1;
+
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+    }
+
+    .topbar,
+    main,
+    footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* =========================
+       ВЕРХНЕЕ МЕНЮ
+    ========================= */
+
+    .topbar {
+      min-height: 72px;
+      padding: 0 clamp(18px, 4vw, 54px);
+
+      display: flex;
+      align-items: center;
+      gap: 42px;
+
+      position: sticky;
+      top: 0;
+      z-index: 10;
+
+      border-bottom: 1px solid var(--line);
+
+      background: rgba(6, 7, 6, 0.62);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      flex-shrink: 0;
+
+      color: var(--text);
+      text-decoration: none;
+
+      font-family: Oswald, sans-serif;
+      font-size: 27px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    nav {
+      display: flex;
+      gap: 36px;
+
+      margin-left: 28px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+
+      font: 700 17px Oswald, sans-serif;
+      letter-spacing: 0.06em;
+
+      transition:
+        color 0.18s ease,
+        transform 0.18s ease;
+    }
+
+    nav a:hover {
+      color: var(--gold2);
+      transform: translateY(-1px);
+    }
+
+    nav a.active {
+      color: var(--paper);
+    }
+
+    .badge {
+      margin-left: auto;
+      flex-shrink: 0;
+
+      padding: 7px 15px;
+
+      border: 1px solid rgba(228, 214, 189, 0.4);
+      border-radius: 6px;
+
+      color: var(--paper);
+
+      font: 700 12px Oswald, sans-serif;
+      letter-spacing: 0.12em;
+    }
+
+    /* =========================
+       ОСНОВНАЯ СТРАНИЦА
+    ========================= */
+
+    .about-page {
+      min-height: calc(100vh - 145px);
+
+      padding:
+        72px
+        clamp(20px, 7vw, 110px)
+        95px;
+    }
+
+    .about-shell {
+      width: min(1080px, 100%);
+      margin: 0 auto;
+    }
+
+    /* =========================
+       ЗАГОЛОВОК
+    ========================= */
+
+    .about-heading {
+      max-width: 900px;
+      margin-bottom: 38px;
+    }
+
+    .kicker {
+      margin: 0 0 15px;
+
+      color: var(--gold);
+
+      font: 700 13px Oswald, sans-serif;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .about-heading h1 {
+      margin: 0;
+
+      color: var(--paper);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(44px, 5.8vw, 78px);
+      font-weight: 700;
+      line-height: 0.96;
+      letter-spacing: -0.025em;
+      text-transform: uppercase;
+    }
+
+    .about-heading h1 span {
+      display: block;
+
+      margin-top: 12px;
+
+      color: var(--gold2);
+
+      font-family: Caveat, cursive;
+      font-size: clamp(48px, 6.5vw, 88px);
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .about-lead {
+      max-width: 760px;
+
+      margin: 28px 0 0;
+
+      color: var(--muted);
+
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    /* =========================
+       ВНЕШНЯЯ КАРТОЧКА
+    ========================= */
+
+    .about-panel {
+      position: relative;
+      overflow: hidden;
+
+      padding: clamp(16px, 3vw, 30px);
+
+      border: 1px solid var(--line);
+      border-radius: 18px;
+
+      background:
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(215, 144, 47, 0.1),
+          transparent 24rem
+        ),
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.055),
+          rgba(255, 255, 255, 0.018)
+        );
+
+      box-shadow:
+        0 30px 90px rgba(0, 0, 0, 0.3);
+    }
+
+    .about-panel::before {
+      content: "";
+
+      position: absolute;
+      top: -150px;
+      right: -120px;
+
+      width: 310px;
+      height: 310px;
+
+      border: 1px solid rgba(228, 214, 189, 0.1);
+      border-radius: 50%;
+
+      pointer-events: none;
+    }
+
+    .protocol-line {
+      position: relative;
+      z-index: 1;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+
+      margin-bottom: 22px;
+      padding: 0 4px 20px;
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .protocol-line span {
+      color: var(--muted);
+
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+    }
+
+    .protocol-line strong {
+      color: var(--gold2);
+
+      font: 700 12px Oswald, sans-serif;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       СВЕТЛЫЙ ДОКУМЕНТ
+    ========================= */
+
+    .about-paper {
+      position: relative;
+      z-index: 1;
+
+      padding: clamp(28px, 5vw, 58px);
+
+      color: var(--ink);
+      background: var(--paper);
+
+      border-radius: 5px;
+
+      box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.32),
+        inset 0 0 0 1px rgba(21, 18, 13, 0.08);
+    }
+
+    .paper-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 28px;
+
+      margin-bottom: 36px;
+      padding-bottom: 34px;
+
+      border-bottom: 1px solid rgba(21, 18, 13, 0.18);
+    }
+
+    .paper-header small {
+      display: block;
+
+      margin-bottom: 17px;
+
+      color: #6f624f;
+
+      font: 700 11px Oswald, sans-serif;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .paper-header h2 {
+      margin: 0;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(38px, 5vw, 61px);
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .stamp {
+      flex-shrink: 0;
+
+      padding: 10px 16px;
+
+      border: 3px solid #b46f1f;
+      border-radius: 5px;
+
+      color: #a25f18;
+
+      font: 700 17px Oswald, sans-serif;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+
+      transform: rotate(-6deg);
+      opacity: 0.86;
+    }
+
+    .letter-text {
+      color: #2a241a;
+
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .letter-text p {
+      margin: 0 0 20px;
+    }
+
+    .letter-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .letter-text strong {
+      color: var(--ink);
+    }
+
+    /* =========================
+       СЕКЦИИ ДОКУМЕНТА
+    ========================= */
+
+    .paper-section {
+      margin-top: 44px;
+      padding-top: 36px;
+
+      border-top: 1px solid rgba(21, 18, 13, 0.18);
+    }
+
+    .paper-section h3 {
+      margin: 0 0 24px;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       ФАКТЫ
+    ========================= */
+
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fact-card {
+      min-height: 124px;
+      padding: 21px;
+
+      border: 1px solid rgba(21, 18, 13, 0.17);
+      border-radius: 8px;
+
+      background: rgba(21, 18, 13, 0.035);
+    }
+
+    .fact-number {
+      display: block;
+
+      margin-bottom: 10px;
+
+      color: #a25f18;
+
+      font: 700 11px Oswald, sans-serif;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .fact-card b {
+      display: block;
+
+      margin-bottom: 9px;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: 26px;
+      line-height: 1.05;
+      text-transform: uppercase;
+    }
+
+    .fact-card p {
+      margin: 0;
+
+      color: #655946;
+
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    /* =========================
+       ГЛАВНЫЙ ВОПРОС
+    ========================= */
+
+    .main-question {
+      width: fit-content;
+      max-width: 100%;
+
+      margin: 25px 0;
+      padding: 14px 18px;
+
+      border: 1px solid rgba(180, 111, 31, 0.65);
+      border-radius: 5px;
+
+      color: var(--ink);
+      background: rgba(180, 111, 31, 0.025);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(25px, 3vw, 36px);
+      font-weight: 700;
+      line-height: 1.15;
+      text-transform: uppercase;
+    }
+
+    .analysis-note {
+      margin-top: 22px;
+      padding: 4px 0 4px 15px;
+
+      border-left: 3px solid rgba(180, 111, 31, 0.55);
+
+      color: #6f624f;
+
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    /* =========================
+       КАК ПРОХОДИТ
+    ========================= */
+
+    .stages {
+      display: grid;
+      gap: 13px;
+
+      margin: 0;
+      padding: 0;
+
+      list-style: none;
+    }
+
+    .stage {
+      display: grid;
+      grid-template-columns: 49px 1fr;
+      gap: 17px;
+      align-items: start;
+
+      padding: 18px 20px;
+
+      border: 1px solid rgba(21, 18, 13, 0.15);
+      border-radius: 8px;
+
+      background: rgba(21, 18, 13, 0.025);
+    }
+
+    .stage-number {
+      width: 43px;
+      height: 43px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      color: var(--paper);
+      background: var(--ink);
+
+      font: 700 13px Oswald, sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    .stage h4 {
+      margin: 0 0 7px;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: 22px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .stage p {
+      margin: 0;
+
+      color: #655946;
+
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       ЧТО ПРОВЕРЯЕТСЯ
+    ========================= */
+
+    .qualities-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .quality {
+      padding: 19px 20px;
+
+      border-left: 4px solid rgba(180, 111, 31, 0.7);
+
+      background: rgba(21, 18, 13, 0.035);
+    }
+
+    .quality b {
+      display: block;
+
+      margin-bottom: 6px;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+
+    .quality span {
+      color: #655946;
+
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    /* =========================
+       ЗАКРЫТЫЙ ПРОТОКОЛ
+    ========================= */
+
+    .classified-block {
+      position: relative;
+      overflow: hidden;
+
+      margin-top: 44px;
+      padding: clamp(25px, 4vw, 39px);
+
+      border-radius: 9px;
+
+      color: var(--paper);
+      background:
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(215, 144, 47, 0.15),
+          transparent 18rem
+        ),
+        var(--ink);
+    }
+
+    .classified-block::before {
+      content: "CLASSIFIED";
+
+      position: absolute;
+      top: 16px;
+      right: -27px;
+
+      padding: 7px 32px;
+
+      color: var(--ink);
+      background: var(--gold2);
+
+      font: 700 10px Oswald, sans-serif;
+      letter-spacing: 0.12em;
+
+      transform: rotate(35deg);
+    }
+
+    .classified-label {
+      margin: 0 0 12px;
+
+      color: var(--gold2);
+
+      font: 700 11px Oswald, sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .classified-block h3 {
+      max-width: 750px;
+
+      margin: 0;
+
+      color: var(--paper);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(29px, 4vw, 43px);
+      line-height: 1.05;
+      text-transform: uppercase;
+    }
+
+    .classified-block p {
+      max-width: 720px;
+
+      margin: 18px 0 0;
+
+      color: #b8aa94;
+
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* =========================
+       КНОПКИ
+    ========================= */
+
+    .about-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+
+      margin-top: 28px;
+    }
+
+    .about-button {
+      min-height: 53px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 14px 23px;
+
+      border: 1px solid transparent;
+      border-radius: 7px;
+
+      text-decoration: none;
+
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+
+      transition:
+        transform 0.18s ease,
+        color 0.18s ease,
+        background 0.18s ease,
+        border-color 0.18s ease;
+    }
+
+    .about-button.primary {
+      color: var(--ink);
+      background: var(--gold2);
+    }
+
+    .about-button.primary:hover {
+      transform: translateY(-2px);
+      background: #ffc564;
+    }
+
+    .about-button.secondary {
+      color: var(--paper);
+
+      border-color: rgba(228, 214, 189, 0.35);
+      background: transparent;
+    }
+
+    .about-button.secondary:hover {
+      transform: translateY(-2px);
+
+      color: var(--ink);
+      border-color: var(--paper);
+      background: var(--paper);
+    }
+
+    /* =========================
+       ФУТЕР
+    ========================= */
+
+    footer {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+
+      padding:
+        26px
+        clamp(22px, 7vw, 110px);
+
+      border-top: 1px solid var(--line);
+
+      color: var(--muted);
+    }
+
+    footer b {
+      color: var(--paper);
+
+      font-family: Oswald, sans-serif;
+      font-size: 22px;
+    }
+
+    footer span {
+      font-size: 13px;
+    }
+
+    /* =========================
+       АДАПТИВ
+    ========================= */
+
+    @media (max-width: 900px) {
+      .topbar {
+        padding: 16px 22px;
+
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 18px;
+      }
+
+      nav {
+        width: 100%;
+        order: 3;
+
+        margin: 0;
+
+        gap: 20px;
+        overflow-x: auto;
+      }
+
+      nav a {
+        white-space: nowrap;
+        font-size: 15px;
+      }
+
+      .badge {
+        margin-left: auto;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .about-page {
+        padding:
+          52px
+          16px
+          70px;
+      }
+
+      .about-heading h1 {
+        font-size: clamp(40px, 12vw, 58px);
+      }
+
+      .about-heading h1 span {
+        font-size: clamp(45px, 14vw, 68px);
+      }
+
+      .about-lead {
+        font-size: 16px;
+      }
+
+      .about-panel {
+        padding: 8px;
+        border-radius: 13px;
+      }
+
+      .protocol-line {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+
+        padding: 10px 8px 18px;
+      }
+
+      .about-paper {
+        padding: 28px 21px;
+      }
+
+      .paper-header {
+        display: block;
+      }
+
+      .stamp {
+        width: fit-content;
+        margin-top: 27px;
+      }
+
+      .facts-grid,
+      .qualities-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .letter-text {
+        font-size: 16px;
+      }
+
+      .main-question {
+        padding: 13px 15px;
+        font-size: clamp(23px, 8vw, 31px);
+      }
+
+      .classified-block::before {
+        display: none;
+      }
+
+      .about-actions {
+        flex-direction: column;
+      }
+
+      .about-button {
+        width: 100%;
+      }
+
+      footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .badge {
+        display: none;
+      }
+
+      nav {
+        gap: 17px;
+      }
+
+      .stage {
+        grid-template-columns: 39px 1fr;
+        gap: 13px;
+
+        padding: 16px;
+      }
+
+      .stage-number {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grain"></div>
+
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      IDEAL BRO
+    </a>
+
+    <nav>
+      <a href="index.html">
+        ГЛАВНАЯ
+      </a>
+
+      <a class="active" href="about.html">
+        ОБ ИВЕНТЕ
+      </a>
+
+      <a href="participants.html">
+        УЧАСТНИКИ
+      </a>
+
+      <a href="results.html">
+        РЕЗУЛЬТАТЫ
+      </a>
+    </nav>
+
+    <div class="badge">
+      PROTOCOL // PUBLIC
+    </div>
+  </header>
+
+  <main class="about-page">
+    <div class="about-shell">
+      <section class="about-heading">
+        <p class="kicker">
+          Официальный протокол
+        </p>
+
+        <h1>
+          Эксперимент
+          <span>«Идеальный Бро»</span>
+        </h1>
+
+        <p class="about-lead">
+          Трёхдневный эксперимент по поиску человека,
+          который способен не только найти идеального бро,
+          но и сам стать таким для своей команды.
+        </p>
+      </section>
+
+      <section class="about-panel">
+        <div class="protocol-line">
+          <span>
+            PROTOCOL // EVENT DESCRIPTION
+          </span>
+
+          <strong>
+            Открытая информация
+          </strong>
+        </div>
+
+        <article class="about-paper">
+          <header class="paper-header">
+            <div>
+              <small>
+                Информация об эксперименте
+              </small>
+
+              <h2>
+                Что такое<br>
+                IDEAL BRO?
+              </h2>
+            </div>
+
+            <div class="stamp">
+              Одобрено<br>
+              приложением
+            </div>
+          </header>
+
+          <div class="letter-text">
+            <p>
+              <strong>IDEAL BRO</strong> — это не турнир
+              и не обычный игровой ивент.
+            </p>
+
+            <p>
+              Это трёхдневный эксперимент, в котором
+              приложение будет анализировать, как люди
+              взаимодействуют друг с другом, принимают решения,
+              справляются с неожиданными ситуациями
+              и становятся настоящими бро для своей команды.
+            </p>
+
+            <p>
+              Шесть участников пройдут серию испытаний,
+              где им предстоит проверить свои игровые навыки,
+              умение работать в команде и принимать решения,
+              чтобы в итоге не только найти своего идеального бро,
+              но и стать таким же для него.
+            </p>
+          </div>
+
+          <section class="paper-section">
+            <h3>
+              Что вас ждёт?
+            </h3>
+
+            <div class="facts-grid">
+              <article class="fact-card">
+                <span class="fact-number">
+                  Параметр 01
+                </span>
+
+                <b>
+                  6 участников
+                </b>
+
+                <p>
+                  Ограниченная экспериментальная группа,
+                  отобранная приложением.
+                </p>
+              </article>
+
+              <article class="fact-card">
+                <span class="fact-number">
+                  Параметр 02
+                </span>
+
+                <b>
+                  3 игровых дня
+                </b>
+
+                <p>
+                  Каждый день открывает новый этап
+                  эксперимента.
+                </p>
+              </article>
+
+              <article class="fact-card">
+                <span class="fact-number">
+                  Параметр 03
+                </span>
+
+                <b>
+                  Разные испытания
+                </b>
+
+                <p>
+                  Кооперативные игры, командные задачи
+                  и неожиданные ситуации.
+                </p>
+              </article>
+
+              <article class="fact-card">
+                <span class="fact-number">
+                  Параметр 04
+                </span>
+
+                <b>
+                  Смена напарников
+                </b>
+
+                <p>
+                  Новые сочетания участников
+                  и постоянная проверка совместимости.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section class="paper-section letter-text">
+            <h3>
+              Главная цель
+            </h3>
+
+            <p>
+              Эксперимент должен ответить всего
+              на один вопрос:
+            </p>
+
+            <div class="main-question">
+              Кто способен стать идеальным бро?
+            </div>
+
+            <p>
+              Победа определяется не только количеством очков
+              и результатами в играх.
+            </p>
+
+            <p class="analysis-note">
+              Приложение анализирует каждое действие,
+              принятое решение и взаимодействие внутри команды.
+            </p>
+          </section>
+
+          <section class="paper-section">
+            <h3>
+              Как проходит эксперимент?
+            </h3>
+
+            <ol class="stages">
+              <li class="stage">
+                <span class="stage-number">
+                  01
+                </span>
+
+                <div>
+                  <h4>
+                    Новые испытания
+                  </h4>
+
+                  <p>
+                    Каждый игровой день участники получают
+                    новые задачи, игры и условия прохождения.
+                  </p>
+                </div>
+              </li>
+
+              <li class="stage">
+                <span class="stage-number">
+                  02
+                </span>
+
+                <div>
+                  <h4>
+                    Новые напарники
+                  </h4>
+
+                  <p>
+                    Состав пар меняется, чтобы приложение
+                    могло проверить разные сочетания участников.
+                  </p>
+                </div>
+              </li>
+
+              <li class="stage">
+                <span class="stage-number">
+                  03
+                </span>
+
+                <div>
+                  <h4>
+                    Новые решения
+                  </h4>
+
+                  <p>
+                    Участникам придётся адаптироваться,
+                    договариваться и принимать решения
+                    в неожиданных ситуациях.
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </section>
+
+          <section class="paper-section">
+            <h3>
+              Что анализирует приложение?
+            </h3>
+
+            <div class="qualities-grid">
+              <article class="quality">
+                <b>
+                  Игровые навыки
+                </b>
+
+                <span>
+                  Как участник разбирается в новых механиках
+                  и справляется с испытаниями.
+                </span>
+              </article>
+
+              <article class="quality">
+                <b>
+                  Командную работу
+                </b>
+
+                <span>
+                  Как участник договаривается,
+                  помогает и взаимодействует с напарником.
+                </span>
+              </article>
+
+              <article class="quality">
+                <b>
+                  Принятие решений
+                </b>
+
+                <span>
+                  Как участник действует,
+                  когда привычный план перестаёт работать.
+                </span>
+              </article>
+
+              <article class="quality">
+                <b>
+                  Бро-совместимость
+                </b>
+
+                <span>
+                  Насколько комфортно, эффективно
+                  и интересно участники работают вместе.
+                </span>
+              </article>
+            </div>
+          </section>
+
+          <section class="classified-block">
+            <p class="classified-label">
+              Закрытая часть протокола
+            </p>
+
+            <h3>
+              Правила испытаний раскрываются только после их начала
+            </h3>
+
+            <p>
+              Чтобы сохранить элемент неожиданности,
+              подробные условия каждого игрового дня
+              заранее не публикуются. После завершения этапа
+              его правила и результаты появятся
+              в официальном протоколе эксперимента.
+            </p>
+
+            <div class="about-actions">
+              <a
+                class="about-button primary"
+                href="results.html"
+              >
+                ОТКРЫТЬ РЕЗУЛЬТАТЫ
+              </a>
+
+              <a
+                class="about-button secondary"
+                href="participants.html"
+              >
+                ПОСМОТРЕТЬ УЧАСТНИКОВ
+              </a>
+            </div>
+          </section>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <b>
+      IDEAL BRO
+    </b>
+  </footer>
+</body>
+</html>
