@@ -264,6 +264,10 @@
         inset 0 0 0 1px rgba(21, 18, 13, 0.08);
     }
 
+    .results-panel[hidden] {
+      display: none !important;
+    }
+
     .results-panel.active {
       display: block;
       animation: showResultsPanel 0.3s ease;
@@ -677,11 +681,12 @@
 
     .locked-panel {
       min-height: 430px;
-
+      text-align: center;
+    }
+    
+    .locked-panel.active {
       display: grid;
       place-items: center;
-
-      text-align: center;
     }
 
     .locked-content {
@@ -750,6 +755,8 @@
       letter-spacing: 0.13em;
       text-transform: uppercase;
     }
+
+  
 
     /* =========================
        АДАПТИВ
@@ -854,21 +861,12 @@
           Протокол результатов
         </p>
 
-        <h1>
-          День 01
-          <span>данные получены</span>
-        </h1>
-
         <p class="day-results-lead">
           Первый этап эксперимента завершён.
           Результаты обработаны приложением
           и добавлены в общий протокол.
         </p>
 
-        <div class="publication-status">
-          <span class="status-dot"></span>
-          Протокол первого дня опубликован
-        </div>
       </section>
 
       <section class="results-protocol">
@@ -915,7 +913,6 @@
             data-tab="day2"
           >
             День 2
-            <span class="results-tab-lock">●</span>
           </button>
 
           <button
@@ -926,7 +923,6 @@
             data-tab="day3"
           >
             День 3
-            <span class="results-tab-lock">●</span>
           </button>
         </div>
 
@@ -940,9 +936,7 @@
         >
           <header class="panel-heading">
             <div>
-              <small>
-                Состояние после первого этапа
-              </small>
+              
 
               <h2>
                 Общий зачёт
@@ -961,10 +955,10 @@
                 <tr>
                   <th>Место</th>
                   <th>Участник</th>
-                  <th>День 1</th>
-                  <th>День 2</th>
-                  <th>День 3</th>
-                  <th>Всего</th>
+                  <th>     День 1</th>
+                  <th>     День 2</th>
+                  <th>     День 3</th>
+                  <th>     Всего</th>
                 </tr>
               </thead>
 
@@ -1005,10 +999,10 @@
                 <tr>
                   <th>Место</th>
                   <th>Участник</th>
-                  <th>Alias</th>
-                  <th>We Were Here Too</th>
-                  <th>R.E.P.O.</th>
-                  <th>Итого</th>
+                  <th>     Игра 1</th>
+                  <th>     Игра 2</th>
+                  <th>     Игра 3</th>
+                  <th>     Итого</th>
                 </tr>
               </thead>
 
