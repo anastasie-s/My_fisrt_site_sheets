@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Результаты — День 1 — IDEAL BRO</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* =========================
+       СТРАНИЦА РЕЗУЛЬТАТОВ
+    ========================= */
+
+    .day-results-page {
+      min-height: calc(100vh - 145px);
+      padding:
+        64px
+        clamp(18px, 7vw, 110px)
+        90px;
+    }
+
+    .day-results-shell {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    /* =========================
+       ЗАГОЛОВОК
+    ========================= */
+
+    .day-results-heading {
+      max-width: 850px;
+      margin-bottom: 34px;
+    }
+
+    .day-results-heading h1 {
+      margin: 12px 0 0;
+
+      color: var(--paper);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(50px, 7vw, 96px);
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: -0.035em;
+      text-transform: uppercase;
+    }
+
+    .day-results-heading h1 span {
+      display: block;
+
+      margin-top: 12px;
+
+      color: var(--gold2);
+
+      font-family: Caveat, cursive;
+      font-size: 0.7em;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .day-results-lead {
+      max-width: 690px;
+      margin: 24px 0 0;
+
+      color: var(--muted);
+
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .publication-status {
+      width: fit-content;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+
+      margin-top: 24px;
+      padding: 11px 16px;
+
+      border: 1px solid var(--line);
+      border-radius: 999px;
+
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.025);
+
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       ВНЕШНЯЯ КАРТОЧКА
+    ========================= */
+
+    .results-protocol {
+      position: relative;
+      overflow: hidden;
+
+      padding: clamp(16px, 3vw, 30px);
+
+      border: 1px solid var(--line);
+      border-radius: 18px;
+
+      background:
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(215, 144, 47, 0.1),
+          transparent 24rem
+        ),
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.055),
+          rgba(255, 255, 255, 0.018)
+        );
+
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
+    }
+
+    .results-protocol::before {
+      content: "";
+
+      position: absolute;
+      top: -170px;
+      right: -130px;
+
+      width: 340px;
+      height: 340px;
+
+      border: 1px solid rgba(228, 214, 189, 0.1);
+      border-radius: 50%;
+
+      pointer-events: none;
+    }
+
+    .results-protocol-head {
+      position: relative;
+      z-index: 1;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+
+      margin-bottom: 22px;
+      padding: 0 4px 20px;
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .results-protocol-head span {
+      color: var(--muted);
+
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+    }
+
+    .results-protocol-head strong {
+      color: var(--gold2);
+
+      font: 700 12px Oswald, sans-serif;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       ВКЛАДКИ
+    ========================= */
+
+    .results-tabs {
+      position: relative;
+      z-index: 1;
+
+      display: flex;
+      gap: 8px;
+
+      margin-bottom: 14px;
+
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold) transparent;
+    }
+
+    .results-tab {
+      flex: 1;
+      min-width: 150px;
+      min-height: 52px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+
+      padding: 12px 18px;
+
+      border: 1px solid var(--line);
+      border-radius: 8px;
+
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.025);
+
+      cursor: pointer;
+
+      font-family: Oswald, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+
+      transition:
+        color 0.18s ease,
+        background 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+    }
+
+    .results-tab:hover {
+      color: var(--paper);
+      border-color: rgba(228, 214, 189, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .results-tab.active {
+      color: var(--ink);
+      border-color: var(--paper);
+      background: var(--paper);
+    }
+
+    .results-tab-lock {
+      color: var(--gold);
+      font-size: 12px;
+    }
+
+    /* =========================
+       ПАНЕЛИ
+    ========================= */
+
+    .results-panel {
+      display: none;
+      position: relative;
+      z-index: 1;
+
+      padding: clamp(27px, 5vw, 52px);
+
+      border-radius: 7px;
+
+      color: var(--ink);
+      background: var(--paper);
+
+      box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.32),
+        inset 0 0 0 1px rgba(21, 18, 13, 0.08);
+    }
+
+    .results-panel.active {
+      display: block;
+      animation: showResultsPanel 0.3s ease;
+    }
+
+    @keyframes showResultsPanel {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+
+      margin-bottom: 30px;
+      padding-bottom: 27px;
+
+      border-bottom: 1px solid rgba(21, 18, 13, 0.18);
+    }
+
+    .panel-heading small {
+      display: block;
+
+      margin-bottom: 12px;
+
+      color: #746650;
+
+      font: 700 10px Oswald, sans-serif;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .panel-heading h2 {
+      margin: 0;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 0.98;
+      text-transform: uppercase;
+    }
+
+    .panel-stamp {
+      flex-shrink: 0;
+
+      padding: 9px 14px;
+
+      border: 3px solid #b46f1f;
+      border-radius: 5px;
+
+      color: #9e5e1b;
+
+      font: 700 14px Oswald, sans-serif;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+
+      transform: rotate(-5deg);
+      opacity: 0.88;
+    }
+
+    /* =========================
+       ТАБЛИЦЫ
+    ========================= */
+
+    .results-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+
+      border: 1px solid rgba(21, 18, 13, 0.17);
+      border-radius: 9px;
+    }
+
+    .results-table {
+      width: 100%;
+      min-width: 710px;
+
+      border-collapse: collapse;
+
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .results-table th {
+      padding: 14px 16px;
+
+      border-bottom: 2px solid rgba(21, 18, 13, 0.2);
+
+      color: #6d604d;
+      background: rgba(21, 18, 13, 0.055);
+
+      font-family: Oswald, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-align: left;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .results-table td {
+      padding: 16px;
+
+      border-bottom: 1px solid rgba(21, 18, 13, 0.12);
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .results-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .results-table tbody tr:hover {
+      background: rgba(215, 144, 47, 0.055);
+    }
+
+    .place-cell {
+      width: 72px;
+
+      color: #a15e19;
+
+      font-family: Oswald, sans-serif;
+      font-size: 21px !important;
+      font-weight: 700 !important;
+      text-align: center;
+    }
+
+    .player-cell {
+      min-width: 170px;
+
+      font-size: 16px !important;
+      font-weight: 900 !important;
+    }
+
+    .score-cell {
+      text-align: center;
+    }
+
+    .total-cell {
+      color: #8d5015;
+
+      font-family: Oswald, sans-serif;
+      font-size: 20px !important;
+      font-weight: 700 !important;
+      text-align: center;
+    }
+
+    .future-score {
+      color: #a39784;
+      font-weight: 500;
+    }
+
+    /* =========================
+       ИГРЫ
+    ========================= */
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+
+      margin-top: 28px;
+    }
+
+    .game-card {
+      overflow: hidden;
+
+      border: 1px solid rgba(21, 18, 13, 0.17);
+      border-radius: 9px;
+
+      background: rgba(21, 18, 13, 0.025);
+    }
+
+    .game-card-header {
+      padding: 20px;
+
+      border-bottom: 1px solid rgba(21, 18, 13, 0.15);
+
+      background: rgba(21, 18, 13, 0.045);
+    }
+
+    .game-card-header small {
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: #a15e19;
+
+      font: 700 10px Oswald, sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .game-card-header h3 {
+      margin: 0;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: 27px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .game-pairs {
+      margin: 0;
+      padding: 0;
+
+      list-style: none;
+    }
+
+    .game-pair {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) 38px;
+      gap: 10px;
+      align-items: center;
+
+      padding: 15px 17px;
+
+      border-bottom: 1px solid rgba(21, 18, 13, 0.11);
+    }
+
+    .game-pair:last-child {
+      border-bottom: 0;
+    }
+
+    .pair-place {
+      width: 29px;
+      height: 29px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      color: var(--paper);
+      background: var(--ink);
+
+      font: 700 11px Oswald, sans-serif;
+    }
+
+    .pair-names {
+      min-width: 0;
+
+      color: #2c261c;
+
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .pair-names span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pair-score {
+      color: #9c5a17;
+
+      font-family: Oswald, sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* =========================
+       ОПИСАНИЕ ДНЯ
+    ========================= */
+
+    .day-summary {
+      margin-top: 34px;
+      padding-top: 31px;
+
+      border-top: 1px solid rgba(21, 18, 13, 0.18);
+    }
+
+    .day-summary h3 {
+      margin: 0 0 15px;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: 30px;
+      text-transform: uppercase;
+    }
+
+    .day-summary p {
+      max-width: 800px;
+
+      margin: 0;
+
+      color: #655946;
+
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    /* =========================
+       РАСКРЫВАЮЩИЕСЯ ПРАВИЛА
+    ========================= */
+
+    .day-rules {
+      margin-top: 24px;
+
+      border: 1px solid rgba(21, 18, 13, 0.17);
+      border-radius: 9px;
+
+      background: rgba(21, 18, 13, 0.025);
+    }
+
+    .day-rules summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+
+      padding: 19px 21px;
+
+      color: var(--ink);
+
+      cursor: pointer;
+      list-style: none;
+
+      font-family: Oswald, sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .day-rules summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .day-rules summary::after {
+      content: "+";
+
+      color: #a15e19;
+
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .day-rules[open] summary::after {
+      content: "−";
+    }
+
+    .rules-content {
+      padding:
+        0
+        21px
+        22px;
+    }
+
+    .rules-content ol {
+      display: grid;
+      gap: 13px;
+
+      margin: 0;
+      padding: 0;
+
+      list-style: none;
+    }
+
+    .rules-content li {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 13px;
+
+      color: #655946;
+
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .rule-number {
+      width: 30px;
+      height: 30px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      color: var(--paper);
+      background: var(--ink);
+
+      font: 700 10px Oswald, sans-serif;
+    }
+
+    .rules-content strong {
+      color: var(--ink);
+    }
+
+    /* =========================
+       ЗАКРЫТЫЕ ДНИ
+    ========================= */
+
+    .locked-panel {
+      min-height: 430px;
+
+      display: grid;
+      place-items: center;
+
+      text-align: center;
+    }
+
+    .locked-content {
+      width: min(620px, 100%);
+    }
+
+    .locked-mark {
+      margin-bottom: 20px;
+
+      color: #a15e19;
+
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .locked-content small {
+      display: block;
+
+      margin-bottom: 12px;
+
+      color: #7a6b55;
+
+      font: 700 10px Oswald, sans-serif;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .locked-content h2 {
+      margin: 0;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(38px, 6vw, 62px);
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+
+    .locked-content p {
+      max-width: 540px;
+      margin: 21px auto 0;
+
+      color: #655946;
+
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .locked-status {
+      width: fit-content;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+
+      margin-top: 25px;
+      padding: 11px 16px;
+
+      border: 1px solid rgba(21, 18, 13, 0.18);
+      border-radius: 999px;
+
+      color: #75674f;
+
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       АДАПТИВ
+    ========================= */
+
+    @media (max-width: 940px) {
+      .games-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .game-card {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .day-results-page {
+        padding:
+          48px
+          15px
+          70px;
+      }
+
+      .day-results-heading h1 {
+        font-size: clamp(44px, 15vw, 66px);
+      }
+
+      .day-results-heading h1 span {
+        font-size: 0.76em;
+      }
+
+      .results-protocol {
+        padding: 8px;
+        border-radius: 13px;
+      }
+
+      .results-protocol-head {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+
+        padding: 10px 8px 18px;
+      }
+
+      .results-tab {
+        min-width: 135px;
+      }
+
+      .results-panel {
+        padding: 27px 19px;
+      }
+
+      .panel-heading {
+        display: block;
+      }
+
+      .panel-stamp {
+        width: fit-content;
+        margin-top: 24px;
+      }
+
+      .locked-panel {
+        min-height: 360px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grain"></div>
+
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <span>✦</span>
+      IDEAL BRO
+    </a>
+
+    <nav>
+      <a href="index.html">
+        ГЛАВНАЯ
+      </a>
+
+      <a href="about.html">
+        ОБ ИВЕНТЕ
+      </a>
+
+      <a href="participants.html">
+        УЧАСТНИКИ
+      </a>
+
+      <a class="active" href="results.html">
+        РЕЗУЛЬТАТЫ
+      </a>
+    </nav>
+
+  </header>
+
+  <main class="day-results-page">
+    <div class="day-results-shell">
+      <section class="day-results-heading">
+        <p class="kicker">
+          Протокол результатов
+        </p>
+
+        <h1>
+          День 01
+          <span>данные получены</span>
+        </h1>
+
+        <p class="day-results-lead">
+          Первый этап эксперимента завершён.
+          Результаты обработаны приложением
+          и добавлены в общий протокол.
+        </p>
+
+        <div class="publication-status">
+          <span class="status-dot"></span>
+          Протокол первого дня опубликован
+        </div>
+      </section>
+
+      <section class="results-protocol">
+        <div class="results-protocol-head">
+          <span>
+            PROTOCOL // RESULTS DATABASE
+          </span>
+
+          <strong>
+            Доступ: частичный
+          </strong>
+        </div>
+
+        <div
+          class="results-tabs"
+          role="tablist"
+          aria-label="Разделы результатов"
+        >
+          <button
+            class="results-tab active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            data-tab="overall"
+          >
+            Общий зачёт
+          </button>
+
+          <button
+            class="results-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-tab="day1"
+          >
+            День 1
+          </button>
+
+          <button
+            class="results-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-tab="day2"
+          >
+            День 2
+            <span class="results-tab-lock">●</span>
+          </button>
+
+          <button
+            class="results-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-tab="day3"
+          >
+            День 3
+            <span class="results-tab-lock">●</span>
+          </button>
+        </div>
+
+        <!-- ОБЩИЙ ЗАЧЁТ -->
+
+        <section
+          class="results-panel active"
+          id="panel-overall"
+          role="tabpanel"
+          data-panel="overall"
+        >
+          <header class="panel-heading">
+            <div>
+              <small>
+                Состояние после первого этапа
+              </small>
+
+              <h2>
+                Общий зачёт
+              </h2>
+            </div>
+
+            <div class="panel-stamp">
+              День 01<br>
+              учтён
+            </div>
+          </header>
+
+          <div class="results-table-wrapper">
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>Место</th>
+                  <th>Участник</th>
+                  <th>День 1</th>
+                  <th>День 2</th>
+                  <th>День 3</th>
+                  <th>Всего</th>
+                </tr>
+              </thead>
+
+              <tbody id="overallTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ДЕНЬ 1 -->
+
+        <section
+          class="results-panel"
+          id="panel-day1"
+          role="tabpanel"
+          data-panel="day1"
+          hidden
+        >
+          <header class="panel-heading">
+            <div>
+              <small>
+                Игровой протокол 01
+              </small>
+
+              <h2>
+                Результаты дня
+              </h2>
+            </div>
+
+            <div class="panel-stamp">
+              Этап<br>
+              завершён
+            </div>
+          </header>
+
+          <div class="results-table-wrapper">
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>Место</th>
+                  <th>Участник</th>
+                  <th>Alias</th>
+                  <th>We Were Here Too</th>
+                  <th>R.E.P.O.</th>
+                  <th>Итого</th>
+                </tr>
+              </thead>
+
+              <tbody id="day1TableBody"></tbody>
+            </table>
+          </div>
+
+          <div
+            class="games-grid"
+            id="gamesGrid"
+          ></div>
+
+          <section class="day-summary">
+            <h3>
+              Что происходило в этот день?
+            </h3>
+
+            <p>
+              В первый день участники прошли тест приложения,
+              после чего были разделены на две экспериментальные
+              группы. Затем они сыграли три игры в разных парах.
+              Каждая новая игра проверяла другое сочетание
+              участников, а повторение пар не допускалось.
+            </p>
+
+            <details class="day-rules">
+              <summary>
+                Показать полный протокол дня
+              </summary>
+
+              <div class="rules-content">
+                <ol>
+                  <li>
+                    <span class="rule-number">01</span>
+
+                    <span>
+                      Перед началом игр участники прошли
+                      <strong>тест совместимости</strong>.
+                      На основании результатов приложение
+                      разделило их на две группы.
+                    </span>
+                  </li>
+
+                  <li>
+                    <span class="rule-number">02</span>
+
+                    <span>
+                      Каждая игровая пара состояла из одного
+                      участника первой группы и одного участника
+                      второй группы.
+                    </span>
+                  </li>
+
+                  <li>
+                    <span class="rule-number">03</span>
+
+                    <span>
+                      В каждой новой игре участники получали
+                      нового напарника. За первый день ни одна
+                      пара не могла повториться.
+                    </span>
+                  </li>
+
+                  <li>
+                    <span class="rule-number">04</span>
+
+                    <span>
+                      За первое место в игре каждый участник пары
+                      получал <strong>3 очка</strong>,
+                      за второе — <strong>2 очка</strong>,
+                      за третье — <strong>1 очко</strong>.
+                    </span>
+                  </li>
+
+                  <li>
+                    <span class="rule-number">05</span>
+
+                    <span>
+                      Очки, заработанные в трёх играх,
+                      складывались и формировали результат
+                      участника за первый день.
+                    </span>
+                  </li>
+                </ol>
+              </div>
+            </details>
+          </section>
+        </section>
+
+        <!-- ДЕНЬ 2 -->
+
+        <section
+          class="results-panel locked-panel"
+          id="panel-day2"
+          role="tabpanel"
+          data-panel="day2"
+          hidden
+        >
+          <div class="locked-content">
+            <div class="locked-mark">
+              ◈
+            </div>
+
+            <small>
+              PROTOCOL // CLASSIFIED
+            </small>
+
+            <h2>
+              День 02 засекречен
+            </h2>
+
+            <p>
+              Информация об этом этапе будет раскрыта
+              после завершения второго игрового дня.
+            </p>
+
+            <div class="locked-status">
+              <span class="status-dot"></span>
+              Ожидание новых данных
+            </div>
+          </div>
+        </section>
+
+        <!-- ДЕНЬ 3 -->
+
+        <section
+          class="results-panel locked-panel"
+          id="panel-day3"
+          role="tabpanel"
+          data-panel="day3"
+          hidden
+        >
+          <div class="locked-content">
+            <div class="locked-mark">
+              ◈
+            </div>
+
+            <small>
+              PROTOCOL // CLASSIFIED
+            </small>
+
+            <h2>
+              День 03 засекречен
+            </h2>
+
+            <p>
+              Финальная часть эксперимента пока недоступна.
+              Протокол будет опубликован после завершения
+              последнего этапа.
+            </p>
+
+            <div class="locked-status">
+              <span class="status-dot"></span>
+              Доступ не предоставлен
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <b>
+      IDEAL BRO
+    </b>
+
+  </footer>
+
+  <script>
+    /*
+      ================================================
+      ДАННЫЕ ПЕРВОГО ДНЯ
+      ================================================
+
+      Здесь нужно заменить временные имена
+      на настоящие ники участников.
+
+      В каждой игре пары уже распределены по местам:
+      place: 1 — первое место
+      place: 2 — второе место
+      place: 3 — третье место
+
+      Очки и общий рейтинг рассчитываются автоматически.
+    */
+
+    const RESULTS_DATA = {
+      players: [
+        "УЧАСТНИК 01",
+        "УЧАСТНИК 02",
+        "УЧАСТНИК 03",
+        "УЧАСТНИК 04",
+        "УЧАСТНИК 05",
+        "УЧАСТНИК 06"
+      ],
+
+      games: [
+        {
+          id: "alias",
+          title: "Игра 1",
+          protocol: "Испытание 01",
+
+          pairs: [
+            {
+              place: 1,
+              players: ["УЧАСТНИК 01", "УЧАСТНИК 04"]
+            },
+            {
+              place: 2,
+              players: ["УЧАСТНИК 02", "УЧАСТНИК 05"]
+            },
+            {
+              place: 3,
+              players: ["УЧАСТНИК 03", "УЧАСТНИК 06"]
+            }
+          ]
+        },
+
+        {
+          id: "wwh2",
+          title: "Игра 2",
+          protocol: "Испытание 02",
+
+          pairs: [
+            {
+              place: 1,
+              players: ["УЧАСТНИК 02", "УЧАСТНИК 06"]
+            },
+            {
+              place: 2,
+              players: ["УЧАСТНИК 03", "УЧАСТНИК 04"]
+            },
+            {
+              place: 3,
+              players: ["УЧАСТНИК 01", "УЧАСТНИК 05"]
+            }
+          ]
+        },
+
+        {
+          id: "repo",
+          title: "Игра 3",
+          protocol: "Испытание 03",
+
+          pairs: [
+            {
+              place: 1,
+              players: ["УЧАСТНИК 03", "УЧАСТНИК 05"]
+            },
+            {
+              place: 2,
+              players: ["УЧАСТНИК 01", "УЧАСТНИК 06"]
+            },
+            {
+              place: 3,
+              players: ["УЧАСТНИК 02", "УЧАСТНИК 04"]
+            }
+          ]
+        }
+      ]
+    };
+
+    const POINTS_BY_PLACE = {
+      1: 3,
+      2: 2,
+      3: 1
+    };
+
+    function calculateResults() {
+      const playerResults = RESULTS_DATA.players.map(
+        (player, originalIndex) => ({
+          name: player,
+          originalIndex,
+          games: {},
+          total: 0,
+          firstPlaces: 0,
+          secondPlaces: 0
+        })
+      );
+
+      const playerMap = new Map(
+        playerResults.map(player => [player.name, player])
+      );
+
+      RESULTS_DATA.games.forEach(game => {
+        game.pairs.forEach(pair => {
+          const points = POINTS_BY_PLACE[pair.place] || 0;
+
+          pair.players.forEach(playerName => {
+            const player = playerMap.get(playerName);
+
+            if (!player) {
+              console.warn(
+                `Участник "${playerName}" отсутствует в players`
+              );
+              return;
+            }
+
+            player.games[game.id] = points;
+            player.total += points;
+
+            if (pair.place === 1) {
+              player.firstPlaces += 1;
+            }
+
+            if (pair.place === 2) {
+              player.secondPlaces += 1;
+            }
+          });
+        });
+      });
+
+      playerResults.sort((a, b) => {
+        if (b.total !== a.total) {
+          return b.total - a.total;
+        }
+
+        if (b.firstPlaces !== a.firstPlaces) {
+          return b.firstPlaces - a.firstPlaces;
+        }
+
+        if (b.secondPlaces !== a.secondPlaces) {
+          return b.secondPlaces - a.secondPlaces;
+        }
+
+        const bWwh2 = b.games.wwh2 || 0;
+        const aWwh2 = a.games.wwh2 || 0;
+
+        if (bWwh2 !== aWwh2) {
+          return bWwh2 - aWwh2;
+        }
+
+        return a.originalIndex - b.originalIndex;
+      });
+
+      return playerResults;
+    }
+
+    function getPlaceLabel(index) {
+      return String(index + 1).padStart(2, "0");
+    }
+
+    function renderOverallTable(results) {
+      const tableBody = document.getElementById(
+        "overallTableBody"
+      );
+
+      tableBody.innerHTML = results
+        .map((player, index) => `
+          <tr>
+            <td class="place-cell">
+              ${getPlaceLabel(index)}
+            </td>
+
+            <td class="player-cell">
+              ${escapeHtml(player.name)}
+            </td>
+
+            <td class="score-cell">
+              ${player.total}
+            </td>
+
+            <td class="score-cell future-score">
+              —
+            </td>
+
+            <td class="score-cell future-score">
+              —
+            </td>
+
+            <td class="total-cell">
+              ${player.total}
+            </td>
+          </tr>
+        `)
+        .join("");
+    }
+
+    function renderDay1Table(results) {
+      const tableBody = document.getElementById(
+        "day1TableBody"
+      );
+
+      tableBody.innerHTML = results
+        .map((player, index) => `
+          <tr>
+            <td class="place-cell">
+              ${getPlaceLabel(index)}
+            </td>
+
+            <td class="player-cell">
+              ${escapeHtml(player.name)}
+            </td>
+
+            <td class="score-cell">
+              ${player.games.alias ?? "—"}
+            </td>
+
+            <td class="score-cell">
+              ${player.games.wwh2 ?? "—"}
+            </td>
+
+            <td class="score-cell">
+              ${player.games.repo ?? "—"}
+            </td>
+
+            <td class="total-cell">
+              ${player.total}
+            </td>
+          </tr>
+        `)
+        .join("");
+    }
+
+    function renderGames() {
+      const gamesGrid = document.getElementById(
+        "gamesGrid"
+      );
+
+      gamesGrid.innerHTML = RESULTS_DATA.games
+        .map(game => `
+          <article class="game-card">
+            <header class="game-card-header">
+              <small>
+                ${escapeHtml(game.protocol)}
+              </small>
+
+              <h3>
+                ${escapeHtml(game.title)}
+              </h3>
+            </header>
+
+            <ol class="game-pairs">
+              ${game.pairs
+                .slice()
+                .sort((a, b) => a.place - b.place)
+                .map(pair => `
+                  <li class="game-pair">
+                    <span class="pair-place">
+                      ${pair.place}
+                    </span>
+
+                    <div class="pair-names">
+                      <span>
+                        ${escapeHtml(pair.players[0])}
+                      </span>
+
+                      <span>
+                        ${escapeHtml(pair.players[1])}
+                      </span>
+                    </div>
+
+                    <span class="pair-score">
+                      +${POINTS_BY_PLACE[pair.place] || 0}
+                    </span>
+                  </li>
+                `)
+                .join("")}
+            </ol>
+          </article>
+        `)
+        .join("");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function openTab(tabName, updateHash = true) {
+      const tabs = document.querySelectorAll(
+        ".results-tab"
+      );
+
+      const panels = document.querySelectorAll(
+        ".results-panel"
+      );
+
+      tabs.forEach(tab => {
+        const isActive = tab.dataset.tab === tabName;
+
+        tab.classList.toggle("active", isActive);
+        tab.setAttribute(
+          "aria-selected",
+          String(isActive)
+        );
+      });
+
+      panels.forEach(panel => {
+        const isActive =
+          panel.dataset.panel === tabName;
+
+        panel.classList.toggle("active", isActive);
+        panel.hidden = !isActive;
+      });
+
+      if (updateHash) {
+        history.replaceState(
+          null,
+          "",
+          `#${tabName}`
+        );
+      }
+    }
+
+    function initializeTabs() {
+      const allowedTabs = [
+        "overall",
+        "day1",
+        "day2",
+        "day3"
+      ];
+
+      document
+        .querySelectorAll(".results-tab")
+        .forEach(tab => {
+          tab.addEventListener("click", () => {
+            openTab(tab.dataset.tab);
+          });
+        });
+
+      const initialTab = location.hash.slice(1);
+
+      if (allowedTabs.includes(initialTab)) {
+        openTab(initialTab, false);
+      }
+    }
+
+    function initializeResultsPage() {
+      const results = calculateResults();
+
+      renderOverallTable(results);
+      renderDay1Table(results);
+      renderGames();
+      initializeTabs();
+    }
+
+    initializeResultsPage();
+  </script>
+</body>
+</html>
