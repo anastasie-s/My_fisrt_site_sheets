@@ -9,7 +9,7 @@
   >
 
   <title>Об ивенте — IDEAL BRO</title>
-
+  <link rel="stylesheet" href="style.css">
   <style>
     @import url(
       "https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;900&family=Caveat:wght@600&display=swap"
@@ -85,83 +85,6 @@
     footer {
       position: relative;
       z-index: 1;
-    }
-
-    /* =========================
-       ВЕРХНЕЕ МЕНЮ
-    ========================= */
-
-    .topbar {
-      min-height: 72px;
-      padding: 0 clamp(18px, 4vw, 54px);
-
-      display: flex;
-      align-items: center;
-      gap: 42px;
-
-      position: sticky;
-      top: 0;
-      z-index: 10;
-
-      border-bottom: 1px solid var(--line);
-
-      background: rgba(6, 7, 6, 0.62);
-      backdrop-filter: blur(12px);
-    }
-
-    .brand {
-      flex-shrink: 0;
-
-      color: var(--text);
-      text-decoration: none;
-
-      font-family: Oswald, sans-serif;
-      font-size: 27px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-
-    nav {
-      display: flex;
-      gap: 36px;
-
-      margin-left: 28px;
-    }
-
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-
-      font: 700 17px Oswald, sans-serif;
-      letter-spacing: 0.06em;
-
-      transition:
-        color 0.18s ease,
-        transform 0.18s ease;
-    }
-
-    nav a:hover {
-      color: var(--gold2);
-      transform: translateY(-1px);
-    }
-
-    nav a.active {
-      color: var(--gold2);
-    }
-
-    .badge {
-      margin-left: auto;
-      flex-shrink: 0;
-
-      padding: 7px 15px;
-
-      border: 1px solid rgba(228, 214, 189, 0.4);
-      border-radius: 6px;
-
-      color: var(--paper);
-
-      font: 700 12px Oswald, sans-serif;
-      letter-spacing: 0.12em;
     }
 
     /* =========================
@@ -525,106 +448,7 @@
       line-height: 1.55;
     }
 
-    /* =========================
-       КАК ПРОХОДИТ
-    ========================= */
-
-    .stages {
-      display: grid;
-      gap: 13px;
-
-      margin: 0;
-      padding: 0;
-
-      list-style: none;
-    }
-
-    .stage {
-      display: grid;
-      grid-template-columns: 49px 1fr;
-      gap: 17px;
-      align-items: start;
-
-      padding: 18px 20px;
-
-      border: 1px solid rgba(21, 18, 13, 0.15);
-      border-radius: 8px;
-
-      background: rgba(21, 18, 13, 0.025);
-    }
-
-    .stage-number {
-      width: 43px;
-      height: 43px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 50%;
-
-      color: var(--paper);
-      background: var(--ink);
-
-      font: 700 13px Oswald, sans-serif;
-      letter-spacing: 0.04em;
-    }
-
-    .stage h4 {
-      margin: 0 0 7px;
-
-      color: var(--ink);
-
-      font-family: Oswald, sans-serif;
-      font-size: 22px;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-
-    .stage p {
-      margin: 0;
-
-      color: #655946;
-
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    /* =========================
-       ЧТО ПРОВЕРЯЕТСЯ
-    ========================= */
-
-    .qualities-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .quality {
-      padding: 19px 20px;
-
-      border-left: 4px solid rgba(180, 111, 31, 0.7);
-
-      background: rgba(21, 18, 13, 0.035);
-    }
-
-    .quality b {
-      display: block;
-
-      margin-bottom: 6px;
-
-      color: var(--ink);
-
-      font-family: Oswald, sans-serif;
-      font-size: 20px;
-      text-transform: uppercase;
-    }
-
-    .quality span {
-      color: #655946;
-
-      font-size: 14px;
-      line-height: 1.55;
-    }
+   
 
     /* =========================
        ЗАКРЫТЫЙ ПРОТОКОЛ
@@ -797,34 +621,7 @@
        АДАПТИВ
     ========================= */
 
-    @media (max-width: 900px) {
-      .topbar {
-        padding: 16px 22px;
-
-        align-items: flex-start;
-        flex-wrap: wrap;
-        gap: 18px;
-      }
-
-      nav {
-        width: 100%;
-        order: 3;
-
-        margin: 0;
-
-        gap: 20px;
-        overflow-x: auto;
-      }
-
-      nav a {
-        white-space: nowrap;
-        font-size: 15px;
-      }
-
-      .badge {
-        margin-left: auto;
-      }
-    }
+  
 
     @media (max-width: 680px) {
       .about-page {
@@ -906,13 +703,7 @@
     }
 
     @media (max-width: 460px) {
-      .badge {
-        display: none;
-      }
-
-      nav {
-        gap: 17px;
-      }
+      
 
       .stage {
         grid-template-columns: 39px 1fr;
