@@ -837,6 +837,30 @@
       color: #536844;
       background: rgba(83, 104, 68, 0.12);
     }
+
+    .day3-standings-table th:nth-child(2),
+    .day3-standings-table td:nth-child(2),
+    .day3-standings-table th:nth-child(3),
+    .day3-standings-table td:nth-child(3),
+    .day3-standings-table th:nth-child(4),
+    .day3-standings-table td:nth-child(4) {
+      text-align: center;
+    }
+
+    .pair-title {
+      display: grid;
+      gap: 4px;
+    }
+    
+    .pair-title span {
+      display: block;
+      overflow-wrap: anywhere;
+    }
+    
+    .pair-title span + span::before {
+      content: "/ ";
+      color: #8c7b62;
+    }
   </style>
 </head>
 
@@ -1247,7 +1271,10 @@
         <article class="biome-pair-card">
           <header class="biome-pair-head">
             <small>Первая часть маршрута</small>
-            <h4>${escapeHtml(pair.player1)} / ${escapeHtml(pair.player2)}</h4>
+            <h4 class="pair-title">
+              <span>${escapeHtml(pair.player1)}</span>
+              <span>${escapeHtml(pair.player2)}</span>
+            </h4>
           </header>
           <div class="biome-list">
             ${renderBiomeRow("Биом 1", pair.biome1.place, pair.biome1.bothSurvived, [pair.biome1.mission1, pair.biome1.mission2], 1)}
@@ -1277,7 +1304,10 @@
         <article class="final-pair-card">
           <header class="final-pair-head">
             <small>Финальная пара</small>
-            <h4>${escapeHtml(pair.player1)} / ${escapeHtml(pair.player2)}</h4>
+            <h4 class="pair-title">
+              <span>${escapeHtml(pair.player1)}</span>
+              <span>${escapeHtml(pair.player2)}</span>
+            </h4>
           </header>
           <div class="biome-list">
             ${renderBiomeRow("Биом 4", pair.biome4.place, pair.biome4.bothSurvived, [pair.biome4.mission7, pair.biome4.mission8], 7)}
@@ -1497,11 +1527,37 @@
     }
 
    function renderDay3Standings(players) {
+      const sortedPlayers = [...players].sort((a, b) => {
+        if (a.idealBro !== b.idealBro) {
+          return a.idealBro ? -1 : 1;
+        }
+    
+        if (a.idealBro && b.idealBro) {
+          return a.originalIndex - b.originalIndex;
+        }
+    
+        const aScore = Number(a.rawScore) || 0;
+        const bScore = Number(b.rawScore) || 0;
+    
+        if (bScore !== aScore) {
+          return bScore - aScore;
+        }
+    
+        const aPeak = Number(a.peakScore) || 0;
+        const bPeak = Number(b.peakScore) || 0;
+    
+        if (bPeak !== aPeak) {
+          return bPeak - aPeak;
+        }
+    
+        return a.originalIndex - b.originalIndex;
+      });
+    
       const tableBody = document.getElementById(
         "day3StandingsBody"
       );
     
-      tableBody.innerHTML = players
+      tableBody.innerHTML = sortedPlayers
         .map(player => `
           <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
             <td
@@ -1544,16 +1600,22 @@
             >
               ${
                 player.idealBro
-                  ? `<span class="betrayal-status no">
-                       Не предал
-                     </span>`
+                  ? `
+                    <span class="betrayal-status no">
+                      Не предал
+                    </span>
+                  `
                   : player.betrayed
-                    ? `<span class="betrayal-status yes">
-                         Да
-                       </span>`
-                    : `<span class="betrayal-status no">
-                         Нет
-                       </span>`
+                    ? `
+                      <span class="betrayal-status yes">
+                        Да
+                      </span>
+                    `
+                    : `
+                      <span class="betrayal-status no">
+                        Нет
+                      </span>
+                    `
               }
             </td>
           </tr>
