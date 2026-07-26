@@ -1478,8 +1478,43 @@
       return playerResults;
     }
 
-    function getPlaceLabel(index) {
-      return String(index + 1).padStart(2, "0");
+    function formatPlaceNumber(place) {
+      return String(place).padStart(2, "0");
+    }
+    
+    function getTiedPlaceLabels(results, scoreGetter) {
+      const labels = new Array(results.length);
+    
+      let groupStart = 0;
+    
+      while (groupStart < results.length) {
+        const groupScore = scoreGetter(results[groupStart]);
+    
+        let groupEnd = groupStart;
+    
+        while (
+          groupEnd + 1 < results.length &&
+          scoreGetter(results[groupEnd + 1]) === groupScore
+        ) {
+          groupEnd += 1;
+        }
+    
+        const startPlace = groupStart + 1;
+        const endPlace = groupEnd + 1;
+    
+        const label =
+          startPlace === endPlace
+            ? formatPlaceNumber(startPlace)
+            : `${formatPlaceNumber(startPlace)}-${formatPlaceNumber(endPlace)}`;
+    
+        for (let index = groupStart; index <= groupEnd; index += 1) {
+          labels[index] = label;
+        }
+    
+        groupStart = groupEnd + 1;
+      }
+    
+      return labels;
     }
 
     function escapeHtml(value) {
@@ -1493,33 +1528,77 @@
 
     function renderOverallTable(results) {
       const tableBody = document.getElementById("overallTableBody");
-
+    
+      const placeLabels = getTiedPlaceLabels(
+        results,
+        player => player.total
+      );
+    
       tableBody.innerHTML = results
         .map((player, index) => `
           <tr>
-            <td class="place-cell">${getPlaceLabel(index)}</td>
-            <td class="player-cell">${escapeHtml(player.name)}</td>
-            <td class="score-cell">${player.day1Total}</td>
-            <td class="score-cell">${player.day2Total}</td>
-            <td class="score-cell future-score">—</td>
-            <td class="total-cell">${player.total}</td>
+            <td class="place-cell">
+              ${placeLabels[index]}
+            </td>
+    
+            <td class="player-cell">
+              ${escapeHtml(player.name)}
+            </td>
+    
+            <td class="score-cell">
+              ${player.day1Total}
+            </td>
+    
+            <td class="score-cell">
+              ${player.day2Total}
+            </td>
+    
+            <td class="score-cell future-score">
+              —
+            </td>
+    
+            <td class="total-cell">
+              ${player.total}
+            </td>
           </tr>
         `)
         .join("");
     }
 
-    function renderDay1Table(results) {
+   function renderDay1Table(results) {
       const tableBody = document.getElementById("day1TableBody");
-
+    
+      const placeLabels = getTiedPlaceLabels(
+        results,
+        player => player.total
+      );
+    
       tableBody.innerHTML = results
         .map((player, index) => `
           <tr>
-            <td class="place-cell">${getPlaceLabel(index)}</td>
-            <td class="player-cell">${escapeHtml(player.name)}</td>
-            <td class="score-cell">${player.games.alias ?? "—"}</td>
-            <td class="score-cell">${player.games.wwh2 ?? "—"}</td>
-            <td class="score-cell">${player.games.repo ?? "—"}</td>
-            <td class="total-cell">${player.total}</td>
+            <td class="place-cell">
+              ${placeLabels[index]}
+            </td>
+    
+            <td class="player-cell">
+              ${escapeHtml(player.name)}
+            </td>
+    
+            <td class="score-cell">
+              ${player.games.alias ?? "—"}
+            </td>
+    
+            <td class="score-cell">
+              ${player.games.wwh2 ?? "—"}
+            </td>
+    
+            <td class="score-cell">
+              ${player.games.repo ?? "—"}
+            </td>
+    
+            <td class="total-cell">
+              ${player.total}
+            </td>
           </tr>
         `)
         .join("");
