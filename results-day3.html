@@ -801,6 +801,42 @@
     .betrayed-note {
       color: #8c3f32;
     }
+
+    .infinity-cell {
+      color: #a15e19;
+    
+      font-family: Oswald, sans-serif;
+      font-size: 26px !important;
+      font-weight: 700 !important;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .betrayal-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    
+      min-width: 42px;
+      padding: 5px 10px;
+    
+      border-radius: 999px;
+    
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    
+    .betrayal-status.yes {
+      color: #854b3e;
+      background: rgba(133, 75, 62, 0.12);
+    }
+    
+    .betrayal-status.no {
+      color: #536844;
+      background: rgba(83, 104, 68, 0.12);
+    }
   </style>
 </head>
 
@@ -958,8 +994,6 @@
                       <th>Счёт</th>
                       <th>PEAK</th>
                       <th>Предательство</th>
-                      <th>Первые 2 дня</th>
-                      <th>Итог</th>
                     </tr>
                   </thead>
                   <tbody id="day3StandingsBody"></tbody>
@@ -1462,23 +1496,69 @@
       `).join("");
     }
 
-    function renderDay3Standings(day3Data) {
-      const ranked = buildFinalRanking(day3Data);
-      document.getElementById("day3StandingsBody").innerHTML = ranked.map(player => `
-        <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
-          <td class="player-cell" data-label="Участник">
-            ${escapeHtml(player.name)}
-            ${player.idealBro ? `<span class="ideal-partner">Пара: ${escapeHtml(player.idealPartner)}</span><span class="ideal-bro-badge">Идеальный бро</span>` : ""}
-          </td>
-          <td class="score-cell" data-label="Счёт">${player.idealBro ? "∞" : escapeHtml(player.rawScore || player.peakScore)}</td>
-          <td class="${player.idealBro ? "infinity-cell" : "score-cell"}" data-label="PEAK">${player.idealBro ? "∞" : player.peakScore}</td>
-          <td class="score-cell" data-label="Предательство">${player.idealBro ? `<span class="no-betrayal-mark">Не предал</span>` : player.betrayed ? `<span class="betrayal-mark">Да</span>` : "Нет"}</td>
-          <td class="score-cell" data-label="Первые 2 дня">
-            ${player.day1Total + player.day2Total}
-          </td>
-          <td class="${player.idealBro ? "infinity-cell" : "total-cell"}" data-label="Итог">${player.idealBro ? "∞" : player.calculatedTotal}</td>
-        </tr>
-      `).join("");
+   function renderDay3Standings(players) {
+      const tableBody = document.getElementById(
+        "day3StandingsBody"
+      );
+    
+      tableBody.innerHTML = players
+        .map(player => `
+          <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
+            <td
+              class="player-cell"
+              data-label="Участник"
+            >
+              ${escapeHtml(player.name)}
+    
+              ${player.idealBro
+                ? `
+                  <span class="ideal-partner">
+                    Пара: ${escapeHtml(player.idealPartner)}
+                  </span>
+    
+                  <span class="ideal-bro-badge">
+                    ИДЕАЛЬНЫЙ БРО
+                  </span>
+                `
+                : ""
+              }
+            </td>
+    
+            <td
+              class="${player.idealBro ? "infinity-cell" : "score-cell"}"
+              data-label="Счёт"
+            >
+              ${player.idealBro ? "∞" : player.rawScore}
+            </td>
+    
+            <td
+              class="${player.idealBro ? "infinity-cell" : "score-cell"}"
+              data-label="PEAK"
+            >
+              ${player.idealBro ? "∞" : player.peakScore}
+            </td>
+    
+            <td
+              class="score-cell"
+              data-label="Предательство"
+            >
+              ${
+                player.idealBro
+                  ? `<span class="betrayal-status no">
+                       Не предал
+                     </span>`
+                  : player.betrayed
+                    ? `<span class="betrayal-status yes">
+                         Да
+                       </span>`
+                    : `<span class="betrayal-status no">
+                         Нет
+                       </span>`
+              }
+            </td>
+          </tr>
+        `)
+        .join("");
     }
 
     async function loadDay3Data() {
