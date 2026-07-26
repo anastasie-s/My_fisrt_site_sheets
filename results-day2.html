@@ -827,6 +827,181 @@
         min-height: 360px;
       }
     }
+    @media (max-width: 760px) {
+      /*
+        На телефоне таблица превращается
+        в отдельные карточки участников.
+      */
+    
+      .results-table-wrapper {
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+      }
+    
+      .results-table {
+        min-width: 0;
+        background: transparent;
+      }
+    
+      .results-table,
+      .results-table thead,
+      .results-table tbody,
+      .results-table tr,
+      .results-table th,
+      .results-table td {
+        display: block;
+        width: 100%;
+      }
+    
+      .results-table thead {
+        display: none;
+      }
+    
+      .results-table tbody {
+        display: grid;
+        gap: 12px;
+      }
+    
+      .results-table tbody tr {
+        position: relative;
+    
+        padding: 15px 16px;
+    
+        border: 1px solid rgba(21, 18, 13, 0.17);
+        border-radius: 10px;
+    
+        background: rgba(255, 255, 255, 0.14);
+      }
+    
+      .results-table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+    
+      .results-table td {
+        min-width: 0;
+    
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    
+        padding: 7px 0;
+    
+        border: 0;
+    
+        text-align: right;
+        font-size: 14px;
+        line-height: 1.35;
+      }
+    
+      .results-table td::before {
+        content: attr(data-label);
+    
+        flex-shrink: 0;
+    
+        color: #776a55;
+    
+        font-family: Oswald, sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-align: left;
+        text-transform: uppercase;
+      }
+    
+      /*
+        Место и участник выводятся
+        одной верхней строкой карточки.
+      */
+    
+      .results-table .place-cell {
+        position: absolute;
+        top: 17px;
+        left: 16px;
+    
+        width: auto;
+    
+        padding: 0;
+    
+        color: #a15e19;
+    
+        font-size: 20px !important;
+        line-height: 1;
+        text-align: left;
+      }
+    
+      .results-table .place-cell::before {
+        display: none;
+      }
+    
+      .results-table .player-cell {
+        display: block;
+    
+        min-width: 0;
+        margin: 0 0 9px;
+        padding:
+          0
+          0
+          14px
+          47px;
+    
+        border-bottom: 1px solid rgba(21, 18, 13, 0.14);
+    
+        overflow-wrap: anywhere;
+    
+        font-size: 18px !important;
+        line-height: 1.2;
+        text-align: left;
+      }
+    
+      .results-table .player-cell::before {
+        display: none;
+      }
+    
+      .results-table .score-cell {
+        text-align: right;
+        font-size: 15px;
+      }
+    
+      .results-table .total-cell {
+        margin-top: 3px;
+        padding-top: 11px;
+    
+        border-top: 1px solid rgba(21, 18, 13, 0.12);
+    
+        font-size: 20px !important;
+      }
+    
+      .results-table .total-cell::before {
+        color: #8d5015;
+      }
+    
+      .results-table .future-score {
+        color: #9d927f;
+      }
+    
+      /*
+        Уменьшаем шапку светлой панели,
+        чтобы она не занимала пол-экрана.
+      */
+    
+      .panel-heading {
+        margin-bottom: 22px;
+        padding-bottom: 20px;
+      }
+    
+      .panel-heading h2 {
+        font-size: clamp(34px, 11vw, 46px);
+      }
+    
+      .panel-stamp {
+        margin-top: 18px;
+        padding: 8px 12px;
+    
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 
@@ -1527,7 +1702,9 @@
     }
 
     function renderOverallTable(results) {
-      const tableBody = document.getElementById("overallTableBody");
+      const tableBody = document.getElementById(
+        "overallTableBody"
+      );
     
       const placeLabels = getTiedPlaceLabels(
         results,
@@ -1537,27 +1714,45 @@
       tableBody.innerHTML = results
         .map((player, index) => `
           <tr>
-            <td class="place-cell">
+            <td
+              class="place-cell"
+              data-label="Место"
+            >
               ${placeLabels[index]}
             </td>
     
-            <td class="player-cell">
+            <td
+              class="player-cell"
+              data-label="Участник"
+            >
               ${escapeHtml(player.name)}
             </td>
     
-            <td class="score-cell">
+            <td
+              class="score-cell"
+              data-label="День 1"
+            >
               ${player.day1Total}
             </td>
     
-            <td class="score-cell">
+            <td
+              class="score-cell"
+              data-label="День 2"
+            >
               ${player.day2Total}
             </td>
     
-            <td class="score-cell future-score">
+            <td
+              class="score-cell future-score"
+              data-label="День 3"
+            >
               —
             </td>
     
-            <td class="total-cell">
+            <td
+              class="total-cell"
+              data-label="Итого"
+            >
               ${player.total}
             </td>
           </tr>
@@ -1566,7 +1761,9 @@
     }
 
    function renderDay1Table(results) {
-      const tableBody = document.getElementById("day1TableBody");
+      const tableBody = document.getElementById(
+        "day1TableBody"
+      );
     
       const placeLabels = getTiedPlaceLabels(
         results,
@@ -1576,27 +1773,45 @@
       tableBody.innerHTML = results
         .map((player, index) => `
           <tr>
-            <td class="place-cell">
+            <td
+              class="place-cell"
+              data-label="Место"
+            >
               ${placeLabels[index]}
             </td>
     
-            <td class="player-cell">
+            <td
+              class="player-cell"
+              data-label="Участник"
+            >
               ${escapeHtml(player.name)}
             </td>
     
-            <td class="score-cell">
+            <td
+              class="score-cell"
+              data-label="Игра 1"
+            >
               ${player.games.alias ?? "—"}
             </td>
     
-            <td class="score-cell">
+            <td
+              class="score-cell"
+              data-label="Игра 2"
+            >
               ${player.games.wwh2 ?? "—"}
             </td>
     
-            <td class="score-cell">
+            <td
+              class="score-cell"
+              data-label="Игра 3"
+            >
               ${player.games.repo ?? "—"}
             </td>
     
-            <td class="total-cell">
+            <td
+              class="total-cell"
+              data-label="Итого"
+            >
               ${player.total}
             </td>
           </tr>
