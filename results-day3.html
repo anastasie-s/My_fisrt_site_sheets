@@ -1577,7 +1577,10 @@
         loadedDay3Data = data;
         renderFirstBiomes(data.firstBiomes || []);
         renderFinalBiomes(data.finalBiomes || []);
-        renderDay3Standings(data);
+        
+        const rankedPlayers = buildFinalRanking(data);
+        
+        renderDay3Standings(rankedPlayers);
         renderFinalOverall(data);
 
         loading.hidden = true;
