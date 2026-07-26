@@ -1506,11 +1506,8 @@
       return playerResults;
     }
 
-    function formatPlaceNumber(start, end) {
-      const from = String(start);
-      const to = String(end);
-    
-      return start === end ? from : `${from}-${to}`;
+    function formatPlaceNumber(place) {
+      return String(place);
     }
     
     function getTiedPlaceLabels(results, scoreGetter) {
