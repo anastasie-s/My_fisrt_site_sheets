@@ -418,6 +418,11 @@
       place-items: center;
       text-align: center;
     }
+    .day3-loading[hidden],
+    .day3-error[hidden],
+    #day3Content[hidden] {
+      display: none !important;
+    }
 
     .day3-status-box {
       width: min(620px, 100%);
@@ -776,6 +781,25 @@
       .day3-standings-table .player-cell {
         padding-left: 0;
       }
+    }
+
+    .betrayal-note,
+    .betrayed-note {
+      display: block;
+      margin-top: 7px;
+    
+      font-family: Inter, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+    
+    .betrayal-note {
+      color: #9c5a17;
+    }
+    
+    .betrayed-note {
+      color: #8c3f32;
     }
   </style>
 </head>
@@ -1244,37 +1268,166 @@
 
     function buildFinalRanking(day3Data) {
       const previousMap = getPreviousResultsMap();
-
+    
       const players = day3Data.standings.map((standing, index) => {
-        const previous = previousMap.get(normalizeName(standing.name));
+        const previous = previousMap.get(
+          normalizeName(standing.name)
+        );
+    
         return {
           ...standing,
-          originalIndex: previous?.originalIndex ?? standing.originalIndex ?? index,
-          day1Total: previous?.day1Total ?? 0,
-          day2Total: previous?.day2Total ?? 0,
-          firstPlaces: previous?.firstPlaces ?? 0,
-          secondPlaces: previous?.secondPlaces ?? 0,
-          wwh2Points: previous?.wwh2Points ?? 0
+    
+          originalIndex:
+            previous?.originalIndex ??
+            standing.originalIndex ??
+            index,
+    
+          originalDay1Total:
+            previous?.day1Total ?? 0,
+    
+          originalDay2Total:
+            previous?.day2Total ?? 0,
+    
+          day1Total:
+            previous?.day1Total ?? 0,
+    
+          day2Total:
+            previous?.day2Total ?? 0,
+    
+          firstPlaces:
+            previous?.firstPlaces ?? 0,
+    
+          secondPlaces:
+            previous?.secondPlaces ?? 0,
+    
+          wwh2Points:
+            previous?.wwh2Points ?? 0
         };
       });
-
-      players.sort((a,b) => {
-        if (a.idealBro !== b.idealBro) return a.idealBro ? -1 : 1;
-        if (a.idealBro && b.idealBro) return a.originalIndex - b.originalIndex;
-        if (b.eventTotal !== a.eventTotal) return b.eventTotal - a.eventTotal;
-        if (b.firstPlaces !== a.firstPlaces) return b.firstPlaces - a.firstPlaces;
-        if (b.secondPlaces !== a.secondPlaces) return b.secondPlaces - a.secondPlaces;
-        if (b.wwh2Points !== a.wwh2Points) return b.wwh2Points - a.wwh2Points;
+    
+      const playerMap = new Map(
+        players.map(player => [
+          normalizeName(player.name),
+          player
+        ])
+      );
+    
+      /*
+        Обрабатываем предательство
+        внутри пар последних биомов.
+      */
+    
+      day3Data.finalBiomes.forEach(pair => {
+        const player1 = playerMap.get(
+          normalizeName(pair.player1)
+        );
+    
+        const player2 = playerMap.get(
+          normalizeName(pair.player2)
+        );
+    
+        if (!player1 || !player2) {
+          return;
+        }
+    
+        /*
+          Если пара стала идеальными бро,
+          передача очков не применяется.
+        */
+    
+        if (pair.noBetrayal) {
+          return;
+        }
+    
+        const player1Betrayed = player1.betrayed === true;
+        const player2Betrayed = player2.betrayed === true;
+    
+        /*
+          Игрок 1 предал Игрока 2.
+        */
+    
+        if (player1Betrayed && !player2Betrayed) {
+          player1.day1Total += player2.originalDay1Total;
+          player1.day2Total += player2.originalDay2Total;
+    
+          player2.day1Total = 0;
+          player2.day2Total = 0;
+    
+          player1.betrayedPartner = player2.name;
+          player2.betrayedBy = player1.name;
+        }
+    
+        /*
+          Игрок 2 предал Игрока 1.
+        */
+    
+        if (player2Betrayed && !player1Betrayed) {
+          player2.day1Total += player1.originalDay1Total;
+          player2.day2Total += player1.originalDay2Total;
+    
+          player1.day1Total = 0;
+          player1.day2Total = 0;
+    
+          player2.betrayedPartner = player1.name;
+          player1.betrayedBy = player2.name;
+        }
+      });
+    
+      /*
+        Пересчитываем числовой итог.
+        Для идеальных бро всё равно будет ∞.
+      */
+    
+      players.forEach(player => {
+        if (player.idealBro) {
+          player.calculatedTotal = null;
+          return;
+        }
+    
+        player.calculatedTotal =
+          player.day1Total +
+          player.day2Total +
+          (Number(player.peakScore) || 0);
+      });
+    
+      players.sort((a, b) => {
+        if (a.idealBro !== b.idealBro) {
+          return a.idealBro ? -1 : 1;
+        }
+    
+        if (a.idealBro && b.idealBro) {
+          return a.originalIndex - b.originalIndex;
+        }
+    
+        if (b.calculatedTotal !== a.calculatedTotal) {
+          return b.calculatedTotal - a.calculatedTotal;
+        }
+    
+        if (b.firstPlaces !== a.firstPlaces) {
+          return b.firstPlaces - a.firstPlaces;
+        }
+    
+        if (b.secondPlaces !== a.secondPlaces) {
+          return b.secondPlaces - a.secondPlaces;
+        }
+    
+        if (b.wwh2Points !== a.wwh2Points) {
+          return b.wwh2Points - a.wwh2Points;
+        }
+    
         return a.originalIndex - b.originalIndex;
       });
-
+    
       let nextRegularPlace = 2;
+    
       return players.map(player => ({
         ...player,
-        displayPlace: player.idealBro ? "1" : String(nextRegularPlace++)
+    
+        displayPlace: player.idealBro
+          ? "1"
+          : String(nextRegularPlace++)
       }));
     }
-
     function renderFinalOverall(day3Data) {
       const ranked = buildFinalRanking(day3Data);
       document.getElementById("overallTableBody").innerHTML = ranked.map(player => `
@@ -1283,11 +1436,28 @@
           <td class="player-cell" data-label="Участник">
             <span class="ideal-player-name">${escapeHtml(player.name)}</span>
             ${player.idealBro ? `<span class="ideal-partner">Пара: ${escapeHtml(player.idealPartner)}</span><span class="ideal-bro-badge">Идеальный бро</span>` : ""}
+            ${player.betrayedPartner
+              ? `
+                <span class="betrayal-note">
+                  Получены очки: ${escapeHtml(player.betrayedPartner)}
+                </span>
+              `
+              : ""
+            }
+            
+            ${player.betrayedBy
+              ? `
+                <span class="betrayed-note">
+                  Очки переданы: ${escapeHtml(player.betrayedBy)}
+                </span>
+              `
+              : ""
+            }
           </td>
           <td class="score-cell" data-label="День 1">${player.day1Total}</td>
           <td class="score-cell" data-label="День 2">${player.day2Total}</td>
           <td class="${player.idealBro ? "infinity-cell" : "score-cell"}" data-label="День 3">${player.idealBro ? "∞" : player.peakScore}</td>
-          <td class="${player.idealBro ? "infinity-cell" : "total-cell"}" data-label="Итого">${player.idealBro ? "∞" : player.eventTotal}</td>
+          <td class="${player.idealBro ? "infinity-cell" : "total-cell"}" data-label="Итого">${player.idealBro ? "∞" : player.calculatedTotal}</td>
         </tr>
       `).join("");
     }
@@ -1303,8 +1473,10 @@
           <td class="score-cell" data-label="Счёт">${player.idealBro ? "∞" : escapeHtml(player.rawScore || player.peakScore)}</td>
           <td class="${player.idealBro ? "infinity-cell" : "score-cell"}" data-label="PEAK">${player.idealBro ? "∞" : player.peakScore}</td>
           <td class="score-cell" data-label="Предательство">${player.idealBro ? `<span class="no-betrayal-mark">Не предал</span>` : player.betrayed ? `<span class="betrayal-mark">Да</span>` : "Нет"}</td>
-          <td class="score-cell" data-label="Первые 2 дня">${player.previousDaysScore}</td>
-          <td class="${player.idealBro ? "infinity-cell" : "total-cell"}" data-label="Итог">${player.idealBro ? "∞" : player.eventTotal}</td>
+          <td class="score-cell" data-label="Первые 2 дня">
+            ${player.day1Total + player.day2Total}
+          </td>
+          <td class="${player.idealBro ? "infinity-cell" : "total-cell"}" data-label="Итог">${player.idealBro ? "∞" : player.calculatedTotal}</td>
         </tr>
       `).join("");
     }
