@@ -755,7 +755,8 @@
       letter-spacing: 0.13em;
       text-transform: uppercase;
     }
-
+    .results-table th:nth-child(1),
+    .results-table td:nth-child(1),
     .results-table th:nth-child(3),
     .results-table td:nth-child(3),
     .results-table th:nth-child(4),
@@ -1505,8 +1506,11 @@
       return playerResults;
     }
 
-    function formatPlaceNumber(place) {
-      return String(place).padStart(2, "0");
+    function formatPlaceLabel(start, end) {
+      const from = String(start);
+      const to = String(end);
+    
+      return start === end ? from : `${from}-${to}`;
     }
     
     function getTiedPlaceLabels(results, scoreGetter) {
