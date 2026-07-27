@@ -1,32 +1,51 @@
 // ========================================
-// РАСПИСАНИЕ ИВЕНТА
-// ПОТОМ МЕНЯЕШЬ ТОЛЬКО ЭТИ ДАТЫ
+// СОСТОЯНИЕ ИВЕНТА
+// меняется вручную перед каждым этапом
 // ========================================
 
-const EVENT_DAYS = [
-  {
-    day: 1,
-    date: null,
-    title: "ПЕРВЫЙ ЭТАП"
-  },
-  {
-    day: 2,
-    date: new Date("2030-10-16T18:00:00"),
-    title: "ВТОРОЙ ЭТАП"
-  },
-  {
-    day: 3,
-    date: new Date("2030-10-17T18:00:00"),
-    title: "ФИНАЛЬНЫЙ ЭТАП"
-  }
-];
+const EVENT_STATE = "date-tba";
 
-// Сколько часов считаем этап активным после начала стрима
+/*
+Варианты:
+
+date-tba
+before-day-1
+day-1-live
+before-day-2
+day-2-live
+before-day-3
+day-3-live
+finished
+
+*/
+
+
+// ========================================
+// ДАТЫ ЭТАПОВ
+// ========================================
+
+const EVENT_DATES = {
+
+  day1: new Date("2030-10-15T18:00:00"),
+
+  day2: new Date("2030-10-16T18:00:00"),
+
+  day3: new Date("2030-10-17T18:00:00")
+
+};
+
+
+// Сколько часов длится стрим
 const STAGE_DURATION_HOURS = 6;
 
 const $ = (id) => document.getElementById(id);
 
 function pad(value) {
+
+  if (value === "--") {
+    return "--";
+  }
+
   return String(value).padStart(2, "0");
 }
 
@@ -34,6 +53,55 @@ function setTime(days, hours, minutes) {
   $("days").textContent = pad(days);
   $("hours").textContent = pad(hours);
   $("minutes").textContent = pad(minutes);
+}
+
+function setPlaceButton(text, link = "https://www.twitch.tv/krusheri") {
+  const button = document.querySelector(".place-button");
+
+  if (!button) return;
+
+  button.textContent = text;
+  button.href = link;
+}
+
+
+function showWaiting(title, note, status, targetDate) {
+
+  $("countdownTitle").textContent = title;
+
+  $("countdownNote").textContent = note;
+
+  $("countdownStatus").innerHTML = `
+    <span class="status-dot"></span>
+    ${status}
+  `;
+
+
+  if (targetDate) {
+
+    const now = new Date();
+    const difference = targetDate - now;
+
+
+    const days = Math.max(
+      0,
+      Math.floor(difference / 86400000)
+    );
+
+    const hours = Math.max(
+      0,
+      Math.floor((difference / 3600000) % 24)
+    );
+
+    const minutes = Math.max(
+      0,
+      Math.floor((difference / 60000) % 60)
+    );
+
+
+    setTime(days, hours, minutes);
+
+  }
 }
 
 function showCountdown(targetDate, title, note, status) {
@@ -84,63 +152,191 @@ function showFinished() {
 }
 
 function updateCountdown() {
-  const now = new Date();
 
-  const firstStage = EVENT_DAYS[0];
 
-  // ДО НАЧАЛА ИВЕНТА
-  if (now < firstStage.date) {
-    showCountdown(
-      firstStage.date,
-      "ДО НАЧАЛА ЭКСПЕРИМЕНТА",
-      firstStage.date.toLocaleString("ru-RU", {
-        day: "numeric",
-        month: "long",
-        hour: "2-digit",
-        minute: "2-digit"
-      }),
-      "СИСТЕМА В РЕЖИМЕ ОЖИДАНИЯ"
-    );
+  switch(EVENT_STATE) {
 
-    return;
-  }
+    case "date-tba":
+  
+      setTime("--", "--", "--");
+    
+      $("countdownTitle").textContent =
+        "ДАТА НЕ ОПРЕДЕЛЕНА";
+    
+    
+      $("countdownNote").textContent =
+        "Следите за обновлениями";
+    
+    
+      $("countdownStatus").innerHTML = `
+        <span class="status-dot"></span>
+        ДАТА ЭКСПЕРИМЕНТА УТОЧНЯЕТСЯ
+      `;
+    
+    
+      setPlaceButton(
+        "ПЕРЕЙТИ НА КАНАЛ →"
+      );
+    
+    
+      break;
+      
+    case "before-day-1":
 
-  // ДНИ ИВЕНТА
-  for (let i = 0; i < EVENT_DAYS.length; i++) {
-    const stage = EVENT_DAYS[i];
-
-    const stageEnd = new Date(
-      stage.date.getTime() +
-      STAGE_DURATION_HOURS * 60 * 60 * 1000
-    );
-
-    // СТРИМ ИДЁТ
-    if (now >= stage.date && now < stageEnd) {
-      showActiveStage(stage);
-      return;
-    }
-
-    // ЖДЁМ СЛЕДУЮЩИЙ ДЕНЬ
-    const nextStage = EVENT_DAYS[i + 1];
-
-    if (
-      nextStage &&
-      now >= stageEnd &&
-      now < nextStage.date
-    ) {
-      showCountdown(
-        nextStage.date,
-        `ДЕНЬ ${pad(nextStage.day)} / ${pad(EVENT_DAYS.length)}`,
-        `До начала: ${nextStage.title.toLowerCase()}`,
-        "ОЖИДАНИЕ СЛЕДУЮЩЕГО ЭТАПА"
+      showWaiting(
+        "ДО НАЧАЛА ЭКСПЕРИМЕНТА",
+        "Первый этап уже скоро",
+        "СИСТЕМА В РЕЖИМЕ ОЖИДАНИЯ",
+        EVENT_DATES.day1
       );
 
-      return;
-    }
+      setPlaceButton(
+        "ПЕРЕЙТИ НА КАНАЛ →"
+      );
+
+      break;
+
+
+
+    case "day-1-live":
+
+      setTime(0,0,0);
+
+      $("countdownTitle").textContent =
+        "ПЕРВЫЙ ЭТАП / LIVE";
+
+
+      $("countdownNote").textContent =
+        "Эксперимент начался";
+
+
+      $("countdownStatus").innerHTML = `
+        <span class="status-dot"></span>
+        ЭТАП 01 ИДЁТ
+      `;
+
+
+      setPlaceButton(
+        "СМОТРЕТЬ СТРИМ →"
+      );
+
+      break;
+
+
+
+    case "before-day-2":
+
+      showWaiting(
+        "ДО ВТОРОГО ЭТАПА",
+        "Следующее испытание уже скоро",
+        "ОЖИДАНИЕ СЛЕДУЮЩЕГО ЭТАПА",
+        EVENT_DATES.day2
+      );
+
+      setPlaceButton(
+        "ПЕРЕЙТИ НА КАНАЛ →"
+      );
+
+      break;
+
+
+
+    case "day-2-live":
+
+      setTime(0,0,0);
+
+      $("countdownTitle").textContent =
+        "ВТОРОЙ ЭТАП / LIVE";
+
+
+      $("countdownNote").textContent =
+        "Новое испытание началось";
+
+
+      $("countdownStatus").innerHTML = `
+        <span class="status-dot"></span>
+        ЭТАП 02 ИДЁТ
+      `;
+
+      setPlaceButton(
+        "СМОТРЕТЬ СТРИМ →"
+      );
+
+      break;
+
+
+
+    case "before-day-3":
+
+      showWaiting(
+        "ДО ФИНАЛЬНОГО ЭТАПА",
+        "Последнее испытание уже скоро",
+        "ОЖИДАНИЕ ФИНАЛА",
+        EVENT_DATES.day3
+      );
+
+      setPlaceButton(
+        "ПЕРЕЙТИ НА КАНАЛ →"
+      );
+
+      break;
+
+
+
+    case "day-3-live":
+
+      setTime(0,0,0);
+
+      $("countdownTitle").textContent =
+        "ФИНАЛ / LIVE";
+
+
+      $("countdownNote").textContent =
+        "Последний этап эксперимента";
+
+
+      $("countdownStatus").innerHTML = `
+        <span class="status-dot"></span>
+        ФИНАЛЬНЫЙ ЭТАП ИДЁТ
+      `;
+
+
+      setPlaceButton(
+        "СМОТРЕТЬ ФИНАЛ →"
+      );
+
+      break;
+
+
+
+    case "finished":
+
+      setTime(0,0,0);
+
+
+      $("countdownTitle").textContent =
+        "ЭКСПЕРИМЕНТ ЗАВЕРШЁН";
+
+
+      $("countdownNote").textContent =
+        "Финальный протокол сформирован";
+
+
+      $("countdownStatus").innerHTML = `
+        <span class="status-dot"></span>
+        РЕЗУЛЬТАТЫ ОПУБЛИКОВАНЫ
+      `;
+
+
+      setPlaceButton(
+        "ПОСМОТРЕТЬ РЕЗУЛЬТАТЫ →",
+        "results.html"
+      );
+
+      break;
+
   }
 
-  // ИВЕНТ ЗАКОНЧИЛСЯ
-  showFinished();
 }
 
 updateCountdown();
