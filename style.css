@@ -1627,117 +1627,122 @@ textarea {
   }
 }
 /* =========================
-   ФИНАЛЬНОЕ РАСПРЕДЕЛЕНИЕ ПАР
+   ФИНАЛЬНЫЕ ПАРЫ — ДЕНЬ 3
 ========================= */
 
-.final-pairs-box {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 20px;
-  width: 100%;
+.final-admin {
+  height: min(780px, calc(100vh - 56px));
 }
 
-
-.final-pair-card {
-  min-height: 210px;
-  padding: 28px 20px;
+.final-admin .final-animation {
+  min-height: 0;
+  flex: 1;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  width: 100%;
+}
+
+.final-admin #pairsBox.final-pairs-box {
+  width: 100%;
+  max-width: 1080px;
+
+  min-height: 0;
+  margin: 0 auto;
+
+  flex: none;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-content: stretch;
+}
+
+.final-admin .final-pair-card {
+  min-height: 260px;
+  margin: 0;
+  padding: 34px 24px;
+
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(228, 214, 189, 0.25);
+  border-radius: 18px;
 
   text-align: center;
 
-  border: 1px solid var(--line);
-  border-radius: 18px;
-
   background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(215, 144, 47, 0.1),
+      transparent 13rem
+    ),
     linear-gradient(
       145deg,
-      rgba(255,255,255,0.05),
-      rgba(255,255,255,0.015)
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.018)
     );
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025);
 }
 
-
-.final-pair-number {
-  margin-bottom: 22px;
+.final-admin .final-pair-number {
+  margin-bottom: 27px;
 
   color: var(--gold2);
 
   font-family: Oswald, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  line-height: 1;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-
-.final-pair-player {
+.final-admin .final-player {
   color: var(--paper);
 
   font-family: Oswald, sans-serif;
-  font-size: 34px;
+  font-size: clamp(28px, 2.5vw, 38px);
   font-weight: 700;
-  letter-spacing: 0.02em;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
-
-.final-pair-plus {
-  margin: 10px 0;
+.final-admin .final-plus {
+  margin: 17px 0;
 
   color: var(--gold2);
 
   font-family: Oswald, sans-serif;
-  font-size: 26px;
+  font-size: 32px;
   font-weight: 700;
+  line-height: 1;
 }
-
 
 @media (max-width: 900px) {
-  .final-pairs-box {
+  .final-admin {
+    height: auto;
+    min-height: calc(100vh - 36px);
+  }
+
+  .final-admin .final-animation {
+    justify-content: flex-start;
+  }
+
+  .final-admin #pairsBox.final-pairs-box {
     grid-template-columns: 1fr;
   }
-}
 
-.final-status {
-  margin-top: 26px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-
-  color: var(--gold2);
-
-  font:
-    700 14px Oswald,
-    sans-serif;
-
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.final-status span {
-  font-size: 18px;
-}
-
-.final-status h2 {
-  margin: 0;
-
-  font:
-    700 38px Oswald,
-    sans-serif;
-
-  text-transform: uppercase;
-}
-
-
-.final-status p {
-  margin-top: 10px;
-
-  color: var(--muted);
+  .final-admin .final-pair-card {
+    min-height: 220px;
+  }
 }
