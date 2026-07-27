@@ -1641,7 +1641,7 @@ textarea {
 
 .final-pair-card {
   min-height: 210px;
-  padding: 26px 18px;
+  padding: 28px 20px;
 
   display: flex;
   flex-direction: column;
@@ -1659,8 +1659,6 @@ textarea {
       rgba(255,255,255,0.05),
       rgba(255,255,255,0.015)
     );
-
-  animation: revealCard 0.5s ease forwards;
 }
 
 
@@ -1669,44 +1667,63 @@ textarea {
 
   color: var(--gold2);
 
-  font:
-    900 12px Oswald,
-    sans-serif;
-
+  font-family: Oswald, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
   letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
 
 .final-pair-player {
   color: var(--paper);
 
-  font:
-    700 28px Oswald,
-    sans-serif;
-
+  font-family: Oswald, sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
 
 .final-pair-plus {
-  margin: 12px 0;
+  margin: 10px 0;
+
+  color: var(--gold2);
+
+  font-family: Oswald, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+
+@media (max-width: 900px) {
+  .final-pairs-box {
+    grid-template-columns: 1fr;
+  }
+}
+
+.final-status {
+  margin-top: 26px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 
   color: var(--gold2);
 
   font:
-    700 28px Oswald,
+    700 14px Oswald,
     sans-serif;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-
-.final-status {
-  margin-top: 28px;
-
-  text-align: center;
-
-  color: var(--paper);
+.final-status span {
+  font-size: 18px;
 }
-
 
 .final-status h2 {
   margin: 0;
@@ -1723,11 +1740,4 @@ textarea {
   margin-top: 10px;
 
   color: var(--muted);
-}
-
-
-@media (max-width: 900px) {
-  .final-pairs-box {
-    grid-template-columns: 1fr;
-  }
 }
