@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<title>Final Pairs · IDEAL BRO</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+<div class="grain"></div>
+
+
+<main class="admin-screen">
+
+
+<section class="lock-card" id="lock">
+
+<span class="lock-icon">🔒</span>
+
+<h2>
+Final access
+</h2>
+
+<p class="sub">
+Введи пароль хоста.
+</p>
+
+
+<input
+id="password"
+class="input code"
+type="password"
+placeholder="Пароль"
+>
+
+
+<button
+class="btn primary full"
+id="unlock"
+>
+Открыть протокол →
+</button>
+
+
+<p
+id="error"
+class="error hidden"
+>
+Пароль неверный.
+</p>
+
+
+</section>
+
+
+
+<section
+class="admin-dashboard hidden"
+id="panel"
+>
+
+
+<header class="admin-dashboard-head">
+
+<div>
+
+<p class="kicker">
+ФИНАЛЬНЫЙ ПРОТОКОЛ
+</p>
+
+<h1>
+РАСПРЕДЕЛЕНИЕ ПАР
+</h1>
+
+</div>
+
+</header>
+
+
+
+<div class="admin-toolbar">
+
+<button
+class="btn primary"
+id="startBtn"
+>
+Запустить формирование →
+</button>
+
+
+<button
+class="btn ghost"
+id="resetBtn"
+>
+Сбросить
+</button>
+
+
+</div>
+
+
+
+<section
+class="final-animation"
+id="animationBox"
+>
+
+
+<div class="admin-loader hidden" id="loader">
+
+<div class="loader-ring"></div>
+
+<p id="loaderText">
+Анализируем протокол...
+</p>
+
+</div>
+
+
+<div id="pairsBox"></div>
+
+
+</section>
+
+
+
+</section>
+
+</main>
+
+
+<script src="final-pairs-admin.js"></script>
+
+</body>
+</html>
