@@ -235,29 +235,6 @@ async function revealPairs() {
 
   }
 
-
-  const done =
-    document.createElement(
-      "div"
-    );
-
-
-  done.className =
-    "final-complete";
-
-
-  done.innerHTML = `
-
-    <div class="final-status">
-      <span>✦</span>
-      ФИНАЛЬНЫЕ ПАРЫ СФОРМИРОВАНЫ
-    </div>
-
-  `;
-
-
-  box.appendChild(done);
-
 }
 
 
@@ -284,23 +261,21 @@ $("showBtn")?.addEventListener(
 
 
       card.innerHTML = `
-
         <div class="final-pair-number">
-          ПАРА ${pair.pair}
+          ПАРА ${String(pair.pair).padStart(2, "0")}
         </div>
-
+      
         <div class="final-player">
           ${pair.players[0]}
         </div>
-
+      
         <div class="final-plus">
           +
         </div>
-
+      
         <div class="final-player">
           ${pair.players[1]}
         </div>
-
       `;
 
 
