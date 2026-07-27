@@ -79,6 +79,17 @@ $("unlock").addEventListener(
   }
 );
 
+$("password").addEventListener(
+  "keydown",
+  (event) => {
+
+    if (event.key === "Enter") {
+      $("unlock").click();
+    }
+
+  }
+);
+
 
 
 // ===============================
