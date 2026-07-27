@@ -45,8 +45,16 @@ function pad(value) {
   if (value === "--") {
     return "--";
   }
-
   return String(value).padStart(2, "0");
+}
+
+function formatEventDate(date) {
+  return date.toLocaleString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
 }
 
 function setTime(days, hours, minutes) {
@@ -185,7 +193,7 @@ function updateCountdown() {
 
       showWaiting(
         "ДО НАЧАЛА ЭКСПЕРИМЕНТА",
-        "Первый этап уже скоро",
+        formatEventDate(EVENT_DATES.day1),
         "СИСТЕМА В РЕЖИМЕ ОЖИДАНИЯ",
         EVENT_DATES.day1
       );
@@ -228,7 +236,7 @@ function updateCountdown() {
 
       showWaiting(
         "ДО ВТОРОГО ЭТАПА",
-        "Следующее испытание уже скоро",
+        formatEventDate(EVENT_DATES.day2),
         "ОЖИДАНИЕ СЛЕДУЮЩЕГО ЭТАПА",
         EVENT_DATES.day2
       );
@@ -270,7 +278,7 @@ function updateCountdown() {
 
       showWaiting(
         "ДО ФИНАЛЬНОГО ЭТАПА",
-        "Последнее испытание уже скоро",
+        formatEventDate(EVENT_DATES.day3),
         "ОЖИДАНИЕ ФИНАЛА",
         EVENT_DATES.day3
       );
