@@ -248,17 +248,10 @@ async function revealPairs() {
 
   done.innerHTML = `
 
-    <span>
-      ◈
-    </span>
-
-    <h2>
+    <div class="final-status">
+      <span>✦</span>
       ФИНАЛЬНЫЕ ПАРЫ СФОРМИРОВАНЫ
-    </h2>
-
-    <p>
-      Протокол распределения завершён
-    </p>
+    </div>
 
   `;
 
