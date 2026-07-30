@@ -804,7 +804,9 @@
             <button
               class="game-rule-tab"
               type="button"
-              disabled
+              role="tab"
+              aria-selected="false"
+              data-rule-tab="game2"
             >
               Испытание 2
             </button>
@@ -812,7 +814,9 @@
             <button
               class="game-rule-tab"
               type="button"
-              disabled
+              role="tab"
+              aria-selected="false"
+              data-rule-tab="game3"
             >
               Испытание 3
             </button>
@@ -1091,6 +1095,317 @@
                 <p>
                   Результат дополнительного раунда используется
                   только для определения итогового места команд.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section
+            class="game-rule-panel"
+            data-rule-panel="game2"
+          >
+            <div class="rule-intro-card">
+              <h3>
+                Испытание №2 — We Were Here Too
+              </h3>
+          
+              <p>
+                Командам предстоит пройти серию совместных головоломок,
+                полагаясь на коммуникацию, внимательность и способность
+                быстро передавать друг другу информацию.
+              </p>
+            </div>
+          
+            <div class="rules-sections">
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">01</span>
+          
+                  <h3>
+                    Начало испытания
+                  </h3>
+                </div>
+          
+                <p>
+                  Все команды начинают прохождение одновременно
+                  по команде хоста.
+                </p>
+          
+           
+              </article>
+          
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">02</span>
+          
+                  <h3>
+                    Ограничение времени
+                  </h3>
+                </div>
+          
+                <p>
+                  На прохождение испытания каждой команде отводится
+                  <strong>1 час</strong>.
+                </p>
+          
+                <p>
+                  По истечении времени прохождение останавливается,
+                  а хост фиксирует достигнутый каждой командой
+                  прогресс.
+                </p>
+              </article>
+          
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">03</span>
+          
+                  <h3>
+                    Контрольные точки
+                  </h3>
+                </div>
+          
+                <p>
+                  Прогресс команды определяется по количеству
+                  полностью завершённых контрольных точек.
+                </p>
+          
+                <p>
+                  Контрольной точкой считается не только целая комната,
+                  но и отдельная самостоятельная головоломка
+                  или завершённый этап внутри комнаты.
+                </p>
+          
+                <p>
+                  Например, если одна комната содержит несколько
+                  независимых механизмов, каждый полностью решённый
+                  механизм может считаться отдельной контрольной точкой.
+                </p>
+              </article>
+          
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">04</span>
+          
+                  <h3>
+                    Определение результата
+                  </h3>
+                </div>
+          
+                <p>
+                  Выше располагается команда, завершившая большее
+                  количество контрольных точек к моменту окончания
+                  испытания.
+                </p>
+          
+                <p>
+                  Если несколько команд завершили одинаковое количество
+                  контрольных точек, преимущество получает команда,
+                  которая раньше завершила свою последнюю засчитанную
+                  головоломку.
+                </p>
+              </article>
+          
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">05</span>
+          
+                  <h3>
+                    Полное прохождение
+                  </h3>
+                </div>
+          
+                <p>
+                  Если команда полностью проходит игру до окончания
+                  выделенного времени, фиксируется время завершения. 
+                </p>
+
+                <p>
+                  Любая концовка считается полным прохождением.
+                </p>
+          
+                <p>
+                  Команда, завершившая игру, располагается выше команд,
+                  которые не успели пройти её полностью. Если игру
+                  завершили несколько команд, выше располагается команда
+                  с меньшим временем прохождения.
+                </p>
+              </article>
+          
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">06</span>
+          
+                  <h3>
+                    Начисление очков
+                  </h3>
+                </div>
+          
+                <p>
+                  После определения результатов команды занимают первое,
+                  второе и третье место.
+                </p>
+          
+                <div class="points-grid">
+                  <div class="points-card">
+                    <span>🥇</span>
+                    <strong>1 место</strong>
+                    <small>3 очка</small>
+                  </div>
+          
+                  <div class="points-card">
+                    <span>🥈</span>
+                    <strong>2 место</strong>
+                    <small>2 очка</small>
+                  </div>
+          
+                  <div class="points-card">
+                    <span>🥉</span>
+                    <strong>3 место</strong>
+                    <small>1 очко</small>
+                  </div>
+                </div>
+          
+                <p>
+                  Очки начисляются каждому участнику команды
+                  индивидуально и добавляются в общий рейтинг
+                  эксперимента.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section
+            class="game-rule-panel"
+            data-rule-panel="game3"
+          >
+            <div class="rule-intro-card">
+              <h3>
+                Испытание №3 — An Eggstremely Hard Game
+              </h3>
+          
+              <p>
+                Командам предстоит достичь подной синхронизации, чтобы справиться с этим испытанием.
+              </p>
+            </div>
+          
+            <div class="rules-sections">
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">01</span>
+          
+                  <h3>
+                    Начало испытания
+                  </h3>
+                </div>
+          
+                <p>
+                  Все команды начинают испытание одновременно
+                  по команде хоста.
+                </p>
+          
+              </article>
+          
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">02</span>
+          
+                  <h3>
+                    Ограничение времени
+                  </h3>
+                </div>
+          
+                <p>
+                  На прохождение испытания каждой команде отводится
+                  <strong>2 часа</strong>.
+                </p>
+          
+                <p>
+                  После окончания таймера новые достижения
+                  в результат команды не засчитываются.
+                </p>
+              </article>
+          
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">03</span>
+          
+                  <h3>
+                    Подсчёт достижений
+                  </h3>
+                </div>
+          
+                <p>
+                  Основным результатом команды является количество
+                  достижений, полученных в течение данного прохождения.
+                </p>
+          
+                <p>
+                  Достижения, связанные с разбиванием яиц,
+                  <strong>не учитываются</strong> при подсчёте
+                  итогового результата. Получение таких достижений не запрещено, но они
+                  не увеличивают количество зачётных достижений команды.
+                </p>
+              </article>
+          
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">04</span>
+          
+                  <h3>
+                    Определение результата
+                  </h3>
+                </div>
+          
+                <p>
+                  Выше располагается команда, получившая большее
+                  количество зачётных достижений.
+                </p>
+          
+                <p>
+                  Если несколько команд получили одинаковое количество
+                  достижений, преимущество получает команда, которая
+                  раньше получила своё последнее зачётное достижение.
+                </p>
+              </article>
+          
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">05</span>
+          
+                  <h3>
+                    Начисление очков
+                  </h3>
+                </div>
+          
+                <p>
+                  По итогам испытания команды занимают первое,
+                  второе и третье место.
+                </p>
+          
+                <div class="points-grid">
+                  <div class="points-card">
+                    <span>🥇</span>
+                    <strong>1 место</strong>
+                    <small>3 очка</small>
+                  </div>
+          
+                  <div class="points-card">
+                    <span>🥈</span>
+                    <strong>2 место</strong>
+                    <small>2 очка</small>
+                  </div>
+          
+                  <div class="points-card">
+                    <span>🥉</span>
+                    <strong>3 место</strong>
+                    <small>1 очко</small>
+                  </div>
+                </div>
+          
+                <p>
+                  Полученные очки начисляются каждому участнику
+                  индивидуально и учитываются в общем рейтинге
+                  эксперимента.
                 </p>
               </article>
             </div>
