@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Правила — День 1 — IDEAL BRO</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* =========================
+       СТРАНИЦА ПРАВИЛ
+    ========================= */
+
+    .rules-stage-page {
+      min-height: calc(100vh - 145px);
+      padding:
+        42px
+        clamp(18px, 7vw, 110px)
+        90px;
+
+      display: block;
+    }
+
+    .rules-stage-shell {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    /* =========================
+       ЗАГОЛОВОК
+    ========================= */
+
+    .rules-stage-heading {
+      max-width: 850px;
+      margin-bottom: 34px;
+    }
+
+    .rules-stage-heading h1 {
+      margin: 12px 0 0;
+
+      color: var(--paper);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(50px, 7vw, 92px);
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: -0.035em;
+      text-transform: uppercase;
+    }
+
+    .rules-stage-heading h1 span {
+      display: block;
+      margin-top: 12px;
+
+      color: var(--gold2);
+
+      font-family: Caveat, cursive;
+      font-size: 0.72em;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .rules-stage-lead {
+      max-width: 720px;
+      margin: 24px 0 0;
+
+      color: var(--muted);
+
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* =========================
+       ВНЕШНИЙ ПРОТОКОЛ
+    ========================= */
+
+    .rules-protocol {
+      position: relative;
+      overflow: hidden;
+
+      padding: clamp(16px, 3vw, 30px);
+
+      border: 1px solid var(--line);
+      border-radius: 18px;
+
+      background:
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(215, 144, 47, 0.1),
+          transparent 24rem
+        ),
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.055),
+          rgba(255, 255, 255, 0.018)
+        );
+
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
+    }
+
+    .rules-protocol::before {
+      content: "";
+
+      position: absolute;
+      top: -170px;
+      right: -130px;
+
+      width: 340px;
+      height: 340px;
+
+      border: 1px solid rgba(228, 214, 189, 0.1);
+      border-radius: 50%;
+
+      pointer-events: none;
+    }
+
+    .rules-protocol-head {
+      position: relative;
+      z-index: 1;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+
+      margin-bottom: 22px;
+      padding: 0 4px 20px;
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .rules-protocol-head span {
+      color: var(--muted);
+
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+    }
+
+    .rules-protocol-head strong {
+      color: var(--gold2);
+
+      font: 700 12px Oswald, sans-serif;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       ВКЛАДКИ ДНЕЙ
+    ========================= */
+
+    .day-tabs {
+      position: relative;
+      z-index: 1;
+
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+
+      margin-bottom: 14px;
+    }
+
+    .day-tab {
+      min-height: 54px;
+      padding: 12px 18px;
+
+      border: 1px solid var(--line);
+      border-radius: 8px;
+
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.025);
+
+      font-family: Oswald, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .day-tab.active {
+      color: var(--ink);
+      border-color: var(--paper);
+      background: var(--paper);
+    }
+
+    .day-tab.locked {
+      cursor: not-allowed;
+      opacity: 0.48;
+    }
+
+    .day-tab small {
+      display: block;
+      margin-bottom: 4px;
+
+      font-size: 9px;
+      letter-spacing: 0.13em;
+      opacity: 0.72;
+    }
+
+    /* =========================
+       СВЕТЛАЯ ПАНЕЛЬ
+    ========================= */
+
+    .rules-panel {
+      position: relative;
+      z-index: 1;
+
+      padding: clamp(27px, 5vw, 52px);
+
+      border-radius: 7px;
+
+      color: var(--ink);
+      background: var(--paper);
+
+      box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.32),
+        inset 0 0 0 1px rgba(21, 18, 13, 0.08);
+    }
+
+    .rules-panel-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+
+      margin-bottom: 28px;
+      padding-bottom: 26px;
+
+      border-bottom: 1px solid rgba(21, 18, 13, 0.18);
+    }
+
+    .rules-panel-heading small {
+      display: block;
+      margin-bottom: 10px;
+
+      color: #746650;
+
+      font: 700 10px Oswald, sans-serif;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .rules-panel-heading h2 {
+      margin: 0;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 0.98;
+      text-transform: uppercase;
+    }
+
+    .rules-panel-stamp {
+      flex-shrink: 0;
+
+      padding: 9px 14px;
+
+      border: 3px solid #b46f1f;
+      border-radius: 5px;
+
+      color: #9e5e1b;
+
+      font: 700 14px Oswald, sans-serif;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+
+      transform: rotate(-5deg);
+      opacity: 0.88;
+    }
+
+    /* =========================
+       ВКЛАДКИ ИСПЫТАНИЙ
+    ========================= */
+
+    .game-rule-tabs {
+      display: flex;
+      gap: 8px;
+
+      margin-bottom: 24px;
+
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #a15e19 transparent;
+    }
+
+    .game-rule-tab {
+      min-width: 145px;
+      min-height: 48px;
+
+      padding: 11px 16px;
+
+      border: 1px solid rgba(21, 18, 13, 0.18);
+      border-radius: 7px;
+
+      color: #746650;
+      background: rgba(21, 18, 13, 0.025);
+
+      cursor: pointer;
+
+      font-family: Oswald, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+
+      transition:
+        color 0.18s ease,
+        background 0.18s ease,
+        border-color 0.18s ease;
+    }
+
+    .game-rule-tab:hover:not(:disabled) {
+      color: var(--ink);
+      border-color: rgba(21, 18, 13, 0.4);
+    }
+
+    .game-rule-tab.active {
+      color: var(--paper);
+      border-color: var(--ink);
+      background: var(--ink);
+    }
+
+    .game-rule-tab:disabled {
+      cursor: not-allowed;
+      opacity: 0.46;
+    }
+
+    /* =========================
+       СОДЕРЖИМОЕ ИСПЫТАНИЙ
+    ========================= */
+
+    .game-rule-panel {
+      display: none;
+      animation: showRulePanel 0.25s ease;
+    }
+
+    .game-rule-panel.active {
+      display: block;
+    }
+
+    @keyframes showRulePanel {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .rule-intro-card {
+      margin-bottom: 20px;
+      padding: 22px;
+
+      border: 1px solid rgba(21, 18, 13, 0.17);
+      border-radius: 9px;
+
+      background: rgba(21, 18, 13, 0.025);
+    }
+
+    .rule-intro-card h3 {
+      margin: 0 0 11px;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: 29px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .rule-intro-card p {
+      margin: 0;
+
+      color: #655946;
+
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .rules-sections {
+      display: grid;
+      gap: 14px;
+    }
+
+    .rules-section {
+      padding: 22px;
+
+      border: 1px solid rgba(21, 18, 13, 0.16);
+      border-radius: 9px;
+
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .rules-section-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      margin-bottom: 13px;
+    }
+
+    .rules-section-number {
+      width: 30px;
+      height: 30px;
+
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+
+      border-radius: 50%;
+
+      color: var(--paper);
+      background: var(--ink);
+
+      font: 700 10px Oswald, sans-serif;
+    }
+
+    .rules-section h3 {
+      margin: 0;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: 21px;
+      text-transform: uppercase;
+    }
+
+    .rules-section p {
+      margin: 0;
+
+      color: #655946;
+
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .rules-section p + p {
+      margin-top: 11px;
+    }
+
+    .rules-section strong {
+      color: var(--ink);
+    }
+
+    .forbidden-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+
+      margin: 15px 0 0;
+      padding: 0;
+
+      list-style: none;
+    }
+
+    .forbidden-list li {
+      position: relative;
+
+      padding: 11px 12px 11px 32px;
+
+      border-radius: 6px;
+
+      color: #655946;
+      background: rgba(140, 63, 50, 0.07);
+
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .forbidden-list li::before {
+      content: "×";
+
+      position: absolute;
+      top: 9px;
+      left: 12px;
+
+      color: #8c3f32;
+
+      font-weight: 900;
+    }
+
+    /* =========================
+       ОЧКИ
+    ========================= */
+
+    .points-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+
+      margin-top: 16px;
+    }
+
+    .points-card {
+      padding: 17px 12px;
+
+      border: 1px solid rgba(21, 18, 13, 0.15);
+      border-radius: 8px;
+
+      text-align: center;
+
+      background: rgba(21, 18, 13, 0.025);
+    }
+
+    .points-card span {
+      display: block;
+      margin-bottom: 7px;
+
+      font-size: 24px;
+    }
+
+    .points-card strong {
+      display: block;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: 18px;
+      text-transform: uppercase;
+    }
+
+    .points-card small {
+      display: block;
+      margin-top: 4px;
+
+      color: #746650;
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* =========================
+       ЗАГЛУШКИ
+    ========================= */
+
+    .classified-game {
+      min-height: 360px;
+
+      display: grid;
+      place-items: center;
+
+      text-align: center;
+    }
+
+    .classified-game-content {
+      width: min(560px, 100%);
+    }
+
+    .classified-game-mark {
+      margin-bottom: 18px;
+
+      color: #a15e19;
+
+      font-size: 45px;
+      line-height: 1;
+    }
+
+    .classified-game h3 {
+      margin: 0;
+
+      color: var(--ink);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(34px, 5vw, 50px);
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .classified-game p {
+      margin: 18px auto 0;
+
+      color: #655946;
+
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .classified-status {
+      width: fit-content;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+
+      margin-top: 23px;
+      padding: 10px 15px;
+
+      border: 1px solid rgba(21, 18, 13, 0.18);
+      border-radius: 999px;
+
+      color: #75674f;
+
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       МОБИЛЬНАЯ ВЕРСИЯ
+    ========================= */
+
+    @media (max-width: 760px) {
+      .rules-stage-page {
+        padding:
+          24px
+          15px
+          70px;
+      }
+
+      .rules-stage-heading h1 {
+        font-size: clamp(44px, 15vw, 66px);
+      }
+
+      .rules-protocol {
+        padding: 8px;
+        border-radius: 13px;
+      }
+
+      .rules-protocol-head {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+
+        padding: 10px 8px 18px;
+      }
+
+      .day-tabs {
+        display: flex;
+        overflow-x: auto;
+      }
+
+      .day-tab {
+        min-width: 135px;
+      }
+
+      .rules-panel {
+        padding: 27px 19px;
+      }
+
+      .rules-panel-heading {
+        display: block;
+      }
+
+      .rules-panel-stamp {
+        width: fit-content;
+        margin-top: 22px;
+      }
+
+      .game-rule-tab {
+        min-width: 135px;
+      }
+
+      .forbidden-list {
+        grid-template-columns: 1fr;
+      }
+
+      .points-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grain"></div>
+
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <span>✦</span>
+      IDEAL BRO
+    </a>
+
+    <nav>
+      <a href="index.html">ГЛАВНАЯ</a>
+      <a href="about.html">ОБ ИВЕНТЕ</a>
+      <a href="participants.html">УЧАСТНИКИ</a>
+      <a class="active" href="rules.html">ПРАВИЛА</a>
+      <a href="results.html">РЕЗУЛЬТАТЫ</a>
+      <a href="feedback.html">ФИДБЕК</a>
+    </nav>
+  </header>
+
+  <main class="rules-stage-page">
+    <div class="rules-stage-shell">
+      <header class="rules-stage-heading">
+        <p class="kicker">
+          PROTOCOL // DAY 01
+        </p>
+
+        <h1>
+          Правила
+          <span>эксперимента</span>
+        </h1>
+
+        <p class="rules-stage-lead">
+          Протокол первого игрового дня открыт.
+          Правила следующих этапов будут опубликованы
+          непосредственно перед их началом.
+        </p>
+      </header>
+
+      <section class="rules-protocol">
+        <div class="rules-protocol-head">
+          <span>
+            PROTOCOL // RULES DATABASE
+          </span>
+
+          <strong>
+            Доступ: день 01
+          </strong>
+        </div>
+
+        <div
+          class="day-tabs"
+          role="tablist"
+          aria-label="Правила игровых дней"
+        >
+          <button
+            class="day-tab active"
+            type="button"
+          >
+            <small>ПРОТОКОЛ ОТКРЫТ</small>
+            День 1
+          </button>
+
+          <button
+            class="day-tab locked"
+            type="button"
+            disabled
+          >
+            <small>ЗАСЕКРЕЧЕНО</small>
+            День 2
+          </button>
+
+          <button
+            class="day-tab locked"
+            type="button"
+            disabled
+          >
+            <small>ЗАСЕКРЕЧЕНО</small>
+            День 3
+          </button>
+        </div>
+
+        <section class="rules-panel">
+          <header class="rules-panel-heading">
+            <div>
+              <small>
+                Игровой протокол 01
+              </small>
+
+              <h2>
+                Первый день
+              </h2>
+            </div>
+
+            <div class="rules-panel-stamp">
+              Доступ<br>
+              открыт
+            </div>
+          </header>
+
+          <div
+            class="game-rule-tabs"
+            role="tablist"
+            aria-label="Испытания первого дня"
+          >
+            <button
+              class="game-rule-tab active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-rule-tab="general"
+            >
+              Общий протокол
+            </button>
+
+            <button
+              class="game-rule-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-rule-tab="alias"
+            >
+              Испытание 1
+            </button>
+
+            <button
+              class="game-rule-tab"
+              type="button"
+              disabled
+            >
+              Испытание 2
+            </button>
+
+            <button
+              class="game-rule-tab"
+              type="button"
+              disabled
+            >
+              Испытание 3
+            </button>
+          </div>
+
+          <!-- ОБЩИЙ ПРОТОКОЛ -->
+
+          <section
+            class="game-rule-panel active"
+            data-rule-panel="general"
+          >
+            <div class="rule-intro-card">
+              <h3>
+                Подготовка к первому дню
+              </h3>
+
+              <p>
+                Перед началом игровых испытаний каждый участник
+                должен пройти предварительный тест по персональной
+                ссылке, предоставленной организатором.
+              </p>
+            </div>
+
+            <div class="rules-sections">
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">01</span>
+
+                  <h3>
+                    Предварительный тест
+                  </h3>
+                </div>
+
+                <p>
+                  Участник проходит тест самостоятельно и выбирает
+                  наиболее подходящие ему варианты ответов.
+                  Повторное прохождение теста без разрешения
+                  организатора не допускается.
+                </p>
+              </article>
+
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">02</span>
+
+                  <h3>
+                    Формирование групп
+                  </h3>
+                </div>
+
+                <p>
+                  После прохождения теста всеми участниками
+                  приложение анализирует результаты и автоматически
+                  разделяет шесть участников на
+                  <strong>две экспериментальные группы</strong>.
+                </p>
+
+                <p>
+                  Состав групп определяется приложением и не может
+                  быть изменён участниками.
+                </p>
+              </article>
+
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">03</span>
+
+                  <h3>
+                    Формирование команд
+                  </h3>
+                </div>
+
+                <p>
+                  В каждом испытании команда состоит из одного
+                  участника первой группы и одного участника
+                  второй группы.
+                </p>
+
+                <p>
+                  Перед каждым новым испытанием приложение формирует
+                  новые команды. За первый игровой день один и тот же
+                  состав команды не может повториться.
+                </p>
+              </article>
+
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">04</span>
+
+                  <h3>
+                    Индивидуальный рейтинг
+                  </h3>
+                </div>
+
+                <p>
+                  Очки, заработанные командой, начисляются каждому
+                  её участнику индивидуально и добавляются в общий
+                  рейтинг эксперимента.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <!-- ALIAS -->
+
+          <section
+            class="game-rule-panel"
+            data-rule-panel="alias"
+          >
+            <div class="rule-intro-card">
+              <h3>
+                Испытание №1 — Alias
+              </h3>
+
+              <p>
+                Командам предстоит по очереди объяснять и отгадывать
+                слова из специального набора, подготовленного
+                организатором.
+              </p>
+            </div>
+
+            <div class="rules-sections">
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">01</span>
+
+                  <h3>
+                    Формирование команд
+                  </h3>
+                </div>
+
+                <p>
+                  Команды формируются приложением на основании
+                  результатов предварительного теста.
+                  Состав команд не может быть изменён участниками.
+                </p>
+              </article>
+
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">02</span>
+
+                  <h3>
+                    Порядок проведения
+                  </h3>
+                </div>
+
+                <p>
+                  Команды проходят испытание последовательно.
+                  Пока одна команда играет, остальные участники
+                  наблюдают и не имеют права подсказывать или
+                  любым другим способом помогать игрокам.
+                </p>
+              </article>
+
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">03</span>
+
+                  <h3>
+                    Раунды
+                  </h3>
+                </div>
+
+                <p>
+                  Каждая команда проходит <strong>два раунда</strong>.
+                  В первом раунде один участник объясняет слова,
+                  а второй их отгадывает. Во втором раунде участники
+                  меняются ролями.
+                </p>
+
+                <p>
+                  На каждый раунд отводится
+                  <strong>1 минута</strong>.
+                  После правильного ответа команда сразу переходит
+                  к следующему слову.
+                </p>
+              </article>
+
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">04</span>
+
+                  <h3>
+                    Ограничения
+                  </h3>
+                </div>
+
+                <p>
+                  Во время объяснения запрещается:
+                </p>
+
+                <ul class="forbidden-list">
+                  <li>
+                    использовать однокоренные слова;
+                  </li>
+
+                  <li>
+                    называть часть загаданного слова;
+                  </li>
+
+                  <li>
+                    произносить слово по буквам или слогам;
+                  </li>
+
+                  <li>
+                    переводить слово на другой язык.
+                  </li>
+                </ul>
+              </article>
+
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">05</span>
+
+                  <h3>
+                    Подсчёт результата
+                  </h3>
+                </div>
+
+                <p>
+                  После завершения двух раундов суммируется
+                  количество правильно отгаданных слов.
+                  Полученная сумма является итоговым результатом
+                  команды.
+                </p>
+
+                <p>
+                  После выступления всех команд они распределяются
+                  по количеству отгаданных слов и занимают первое,
+                  второе или третье место.
+                </p>
+              </article>
+
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">06</span>
+
+                  <h3>
+                    Начисление очков
+                  </h3>
+                </div>
+
+                <p>
+                  Каждый участник команды получает одинаковое
+                  количество очков в зависимости от занятого места.
+                </p>
+
+                <div class="points-grid">
+                  <div class="points-card">
+                    <span>🥇</span>
+                    <strong>1 место</strong>
+                    <small>3 очка</small>
+                  </div>
+
+                  <div class="points-card">
+                    <span>🥈</span>
+                    <strong>2 место</strong>
+                    <small>2 очка</small>
+                  </div>
+
+                  <div class="points-card">
+                    <span>🥉</span>
+                    <strong>3 место</strong>
+                    <small>1 очко</small>
+                  </div>
+                </div>
+
+                <p>
+                  Полученные очки начисляются каждому участнику
+                  индивидуально и учитываются в общем рейтинге
+                  эксперимента.
+                </p>
+              </article>
+
+              <article class="rules-section">
+                <div class="rules-section-heading">
+                  <span class="rules-section-number">07</span>
+
+                  <h3>
+                    Равный результат
+                  </h3>
+                </div>
+
+                <p>
+                  Если после двух основных раундов несколько команд
+                  набрали одинаковое количество слов и результат
+                  влияет на распределение мест, между этими командами
+                  проводится <strong>дополнительный раунд</strong>.
+                </p>
+
+                <p>
+                  Результат дополнительного раунда используется
+                  только для определения итогового места команд.
+                </p>
+              </article>
+            </div>
+          </section>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <b>✦ IDEAL BRO</b>
+  </footer>
+
+  <script>
+    function openRuleTab(tabName) {
+      document
+        .querySelectorAll("[data-rule-tab]")
+        .forEach(tab => {
+          const isActive =
+            tab.dataset.ruleTab === tabName;
+
+          tab.classList.toggle(
+            "active",
+            isActive
+          );
+
+          tab.setAttribute(
+            "aria-selected",
+            String(isActive)
+          );
+        });
+
+      document
+        .querySelectorAll("[data-rule-panel]")
+        .forEach(panel => {
+          panel.classList.toggle(
+            "active",
+            panel.dataset.rulePanel === tabName
+          );
+        });
+    }
+
+    document
+      .querySelectorAll("[data-rule-tab]")
+      .forEach(tab => {
+        tab.addEventListener("click", () => {
+          openRuleTab(tab.dataset.ruleTab);
+        });
+      });
+  </script>
+</body>
+</html>
