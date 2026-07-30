@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Правила — IDEAL BRO</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* =========================
+       ПРАВИЛА ПО ДНЯМ
+    ========================= */
+
+    .rules-stage-page {
+      align-items: start;
+    }
+
+    .protocol-tab.locked {
+      cursor: not-allowed;
+      opacity: 0.48;
+    }
+
+    .protocol-tab.locked:hover {
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.15);
+      background: transparent;
+      transform: none;
+    }
+
+    .classified-rules-card {
+      min-height: 400px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+    }
+
+    .classified-rules-mark {
+      margin-bottom: 20px;
+
+      color: var(--gold2);
+
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .classified-rules-card h2 {
+      margin: 0;
+
+      color: var(--paper);
+
+      font-family: Oswald, sans-serif;
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .classified-rules-card > p:not(.protocol-number) {
+      max-width: 580px;
+      margin: 22px auto 0;
+
+      color: var(--muted);
+
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .classified-rules-card .rules-state {
+      margin-top: 28px;
+      padding: 12px 18px;
+
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    @media (max-width: 900px) {
+      .rules-stage-page {
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grain"></div>
+
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <span>✦</span>
+      IDEAL BRO
+    </a>
+
+    <nav>
+      <a href="index.html">ГЛАВНАЯ</a>
+      <a href="about.html">ОБ ИВЕНТЕ</a>
+      <a href="participants.html">УЧАСТНИКИ</a>
+      <a class="active" href="rules.html">ПРАВИЛА</a>
+      <a href="results.html">РЕЗУЛЬТАТЫ</a>
+      <a href="feedback.html">ФИДБЕК</a>
+    </nav>
+  </header>
+
+  <main class="rules-page rules-stage-page">
+    <section class="rules-intro">
+      <p class="kicker">
+        PROTOCOL // CLASSIFIED
+      </p>
+
+      <h1>
+        ПРАВИЛА<br>
+        <span>эксперимента</span>
+      </h1>
+
+      <p class="lead">
+        Протокол каждого игрового дня будет опубликован
+        непосредственно перед началом соответствующего этапа.
+      </p>
+    </section>
+
+    <section class="rules-content">
+      <div
+        class="protocol-tabs"
+        role="tablist"
+        aria-label="Правила игровых дней"
+      >
+        <button
+          class="protocol-tab locked"
+          type="button"
+          disabled
+        >
+          <span>ПРОТОКОЛ 01</span>
+          День 1
+        </button>
+
+        <button
+          class="protocol-tab locked"
+          type="button"
+          disabled
+        >
+          <span>ПРОТОКОЛ 02</span>
+          День 2
+        </button>
+
+        <button
+          class="protocol-tab locked"
+          type="button"
+          disabled
+        >
+          <span>ПРОТОКОЛ 03</span>
+          День 3
+        </button>
+      </div>
+
+      <article class="protocol-card classified-rules-card">
+        <div class="classified-rules-mark">
+          ◈
+        </div>
+
+        <p class="protocol-number">
+          PROTOCOL // ACCESS DENIED
+        </p>
+
+        <h2>
+          Все протоколы засекречены
+        </h2>
+
+        <p>
+          Правила испытаний пока недоступны.
+          Информация будет раскрыта поэтапно
+          в начале каждого игрового дня.
+        </p>
+
+        <div class="rules-state">
+          <span class="status-dot"></span>
+          ОЖИДАНИЕ НАЧАЛА ЭКСПЕРИМЕНТА
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <b>✦ IDEAL BRO</b>
+  </footer>
+</body>
+</html>
