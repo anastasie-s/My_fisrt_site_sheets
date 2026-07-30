@@ -611,6 +611,15 @@
       text-transform: uppercase;
     }
 
+    .day-rule-panel {
+      display: none;
+    }
+    
+    .day-rule-panel.active {
+      display: block;
+      animation: showRulePanel 0.25s ease;
+    }
+
     /* =========================
        МОБИЛЬНАЯ ВЕРСИЯ
     ========================= */
@@ -749,11 +758,10 @@
           </button>
 
           <button
-            class="day-tab locked"
+            class="day-tab "
             type="button"
-            disabled
           >
-            <small>ЗАСЕКРЕЧЕНО</small>
+            <small>ПРОТОКОЛ ОТКРЫТ</small>
             День 3
           </button>
         </div>
@@ -1410,6 +1418,286 @@
             </div>
           </section>
         </section>
+        <section class="game-rule-panel active">
+          <div class="rule-intro-card">
+            <h3>Испытание третьего дня — PEAK</h3>
+        
+            <p>
+              Финальное испытание состоит из нескольких биомов.
+              Каждый биом оценивается отдельно, а заработанные командами
+              очки суммируются по итогам всего прохождения.
+            </p>
+          </div>
+        
+          <div class="rules-sections">
+        
+            <article class="rules-section">
+              <div class="rules-section-heading">
+                <span class="rules-section-number">01</span>
+                <h3>Подсчёт очков</h3>
+              </div>
+        
+              <p>
+                Каждый биом оценивается отдельно. По результатам прохождения
+                команды занимают первое, второе или третье место.
+              </p>
+        
+              <div class="points-grid">
+                <div class="points-card">
+                  <span>🥇</span>
+                  <strong>1 место</strong>
+                  <small>3 очка</small>
+                </div>
+        
+                <div class="points-card">
+                  <span>🥈</span>
+                  <strong>2 место</strong>
+                  <small>2 очка</small>
+                </div>
+        
+                <div class="points-card">
+                  <span>🥉</span>
+                  <strong>3 место</strong>
+                  <small>1 очко</small>
+                </div>
+              </div>
+        
+              <p>
+                Дополнительно команда получает <strong>3 очка</strong>,
+                если оба её участника добрались до костра.
+              </p>
+        
+              <p>
+                За каждое выполненное секретное задание команда получает
+                ещё <strong>1 очко</strong>. Максимальный результат команды
+                за один биом составляет <strong>8 очков</strong>.
+              </p>
+            </article>
+        
+            <article class="rules-section">
+              <div class="rules-section-heading">
+                <span class="rules-section-number">02</span>
+                <h3>Как определяется место</h3>
+              </div>
+        
+              <p>
+                Место команды определяется по последнему участнику,
+                добравшемуся до костра.
+              </p>
+        
+              <p>
+                Например, если один участник команды пришёл первым,
+                а второй — последним, команда занимает третье место.
+              </p>
+        
+              <p>
+                Если один участник дошёл до костра, а второй погиб,
+                место команды определяется по дошедшему участнику.
+                При этом команда не получает дополнительные 3 очка
+                за сохранение напарника.
+              </p>
+            </article>
+        
+            <article class="rules-section">
+              <div class="rules-section-heading">
+                <span class="rules-section-number">03</span>
+                <h3>Если погибли оба участника</h3>
+              </div>
+        
+              <p>
+                Если оба участника команды погибли, команда занимает
+                последнее из доступных мест на момент смерти второго игрока.
+              </p>
+        
+              <p>
+                Если в этот момент две другие команды всё ещё представлены
+                хотя бы одним живым участником, погибшая команда занимает
+                третье место.
+              </p>
+        
+              <p>
+                Если в этот момент в игре остаётся только одна другая команда,
+                погибшая команда занимает второе место.
+              </p>
+        
+              <p>
+                Если погибли все участники, первое место занимает команда,
+                чей последний участник умер позже остальных. Второе и третье
+                места также распределяются по времени смерти последнего
+                участника каждой команды.
+              </p>
+        
+              <p>
+                После фиксации результатов организатор возрождает всех
+                участников у костра.
+              </p>
+            </article>
+        
+            <article class="rules-section">
+              <div class="rules-section-heading">
+                <span class="rules-section-number">04</span>
+                <h3>Секретные задания</h3>
+              </div>
+        
+              <p>
+                В каждом биоме участники получают индивидуальные секретные
+                задания. Задания двух напарников могут отличаться.
+              </p>
+        
+              <p>
+                Несмотря на то что задания выдаются индивидуально,
+                заработанные за них очки добавляются в общий результат команды.
+              </p>
+        
+              <p>
+                За каждое задание, выполнение которого подтверждено
+                организатором, команда получает <strong>1 очко</strong>.
+              </p>
+            </article>
+        
+            <article class="rules-section">
+              <div class="rules-section-heading">
+                <span class="rules-section-number">05</span>
+                <h3>Во время прохождения запрещено</h3>
+              </div>
+        
+              <ul class="forbidden-list">
+                <li>брать рюкзаки;</li>
+        
+                <li>открывать статуи;</li>
+        
+                <li>брать сигнальную шашку со старта;</li>
+        
+                <li>
+                  переносить предметы между биомами: каждый новый биом
+                  начинается с пустым инвентарём;
+                </li>
+        
+                <li>
+                  выбрасывать предметы из чемоданов, кустов и других мест,
+                  чтобы они не достались остальным участникам;
+                </li>
+        
+                <li>
+                  намеренно саботировать прохождение собственной команды;
+                </li>
+        
+                <li>
+                  съедать участников других команд;
+                </li>
+        
+                <li>
+                  покидать костёр после того, как участник добрался до него.
+                </li>
+              </ul>
+        
+              <p>
+                Исключением для переноса предметов является вулкан:
+                перед его началом организатор выдаст участникам
+                установленный стартовый набор.
+              </p>
+        
+              <p>
+                Намеренный саботаж разрешается только в случаях,
+                когда он прямо предусмотрен механикой ивента
+                или заданием организатора.
+              </p>
+            </article>
+        
+            <article class="rules-section">
+              <div class="rules-section-heading">
+                <span class="rules-section-number">06</span>
+                <h3>Ресурсы и честная игра</h3>
+              </div>
+        
+              <p>
+                Участникам крайне не рекомендуется без необходимости
+                съедать всю найденную еду и оставлять других игроков
+                без ресурсов.
+              </p>
+        
+              <p>
+                Полностью проконтролировать соблюдение этого правила
+                невозможно, поэтому оно остаётся на совести участников.
+              </p>
+            </article>
+        
+            <article class="rules-section">
+              <div class="rules-section-heading">
+                <span class="rules-section-number">07</span>
+                <h3>Разрешённые действия</h3>
+              </div>
+        
+              <p>
+                Участникам разрешается кидаться кокосами
+                и другими найденными предметами.
+              </p>
+        
+              <p>
+                Также разрешается съесть собственного напарника.
+                Съедать соперников запрещено.
+              </p>
+            </article>
+        
+            <article class="rules-section">
+              <div class="rules-section-heading">
+                <span class="rules-section-number">08</span>
+                <h3>Общение</h3>
+              </div>
+        
+              <p>
+                Во время прохождения общение между участниками разрешено
+                только через внутриигровой голосовой чат.
+              </p>
+            </article>
+        
+            <article class="rules-section">
+              <div class="rules-section-heading">
+                <span class="rules-section-number">09</span>
+                <h3>Финал</h3>
+              </div>
+        
+              <p>
+                После прохождения вулкана все участники должны оставаться
+                на его вершине и не заходить на Пик до отдельной команды
+                организатора.
+              </p>
+        
+              <p>
+                Сначала суммируются очки, заработанные командами за места
+                во всех биомах, сохранение напарников и выполнение секретных
+                заданий.
+              </p>
+        
+              <p>
+                Затем отдельно определяются места команд по результатам
+                прохождения Пика. На основании этих мест начисляются очки,
+                которые пойдут в общий рейтинг всего ивента.
+              </p>
+        
+              <div class="points-grid">
+                <div class="points-card">
+                  <span>🥇</span>
+                  <strong>1 место</strong>
+                  <small>3 очка</small>
+                </div>
+        
+                <div class="points-card">
+                  <span>🥈</span>
+                  <strong>2 место</strong>
+                  <small>2 очка</small>
+                </div>
+        
+                <div class="points-card">
+                  <span>🥉</span>
+                  <strong>3 место</strong>
+                  <small>1 очко</small>
+                </div>
+              </div>
+            </article>
+        
+          </div>
+        </section>
       </section>
     </div>
   </main>
@@ -1454,6 +1742,33 @@
           openRuleTab(tab.dataset.ruleTab);
         });
       });
+  function openDay(dayName) {
+    document
+      .querySelectorAll("[data-day-tab]")
+      .forEach(tab => {
+        const isActive =
+          tab.dataset.dayTab === dayName;
+
+        tab.classList.toggle("active", isActive);
+      });
+
+    document
+      .querySelectorAll("[data-day-panel]")
+      .forEach(panel => {
+        panel.classList.toggle(
+          "active",
+          panel.dataset.dayPanel === dayName
+        );
+      });
+  }
+
+  document
+    .querySelectorAll("[data-day-tab]")
+    .forEach(tab => {
+      tab.addEventListener("click", () => {
+        openDay(tab.dataset.dayTab);
+      });
+    });
   </script>
 </body>
 </html>
