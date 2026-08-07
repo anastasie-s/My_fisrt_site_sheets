@@ -235,22 +235,28 @@ async function copyResultBackup() {
 }
 
 async function submitResult(result) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+  const request = fetch(SHEETS_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain"
+    },
+    body: JSON.stringify(result)
+  }).then(() => "accepted");
 
-  try {
-    await fetch(SHEETS_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain"
-      },
-      body: JSON.stringify(result),
-      signal: controller.signal
+  const timeout = new Promise(resolve => {
+    setTimeout(() => resolve("pending"), REQUEST_TIMEOUT);
+  });
+
+  const status = await Promise.race([request, timeout]);
+
+  if (status === "pending") {
+    request.catch(error => {
+      console.warn("Поздняя ошибка отправки результата.", error);
     });
-  } finally {
-    clearTimeout(timer);
   }
+
+  return status;
 }
 
 $("testUnlockBtn").onclick = async () => {
@@ -363,11 +369,17 @@ async function showResult(){
   $("resultText").textContent = "Секунду, бро.";
 
   try {
-    await submitResult(result);
+    const submitStatus = await submitResult(result);
 
-    $("resultTitle").textContent = "Ответы отправлены";
-    $("resultText").textContent =
-      ``;
+    if (submitStatus === "pending") {
+      $("resultTitle").textContent = "Протокол отправлен, но не закрывай пока страницу";
+      $("resultText").textContent =
+        ``;
+    } else {
+      $("resultTitle").textContent = "Похоже, отправка прошла";
+      $("resultText").textContent =
+        ``;
+    }
 
   } catch (error) {
     console.error(error);
