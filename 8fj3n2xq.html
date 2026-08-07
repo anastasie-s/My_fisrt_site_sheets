@@ -70,7 +70,18 @@
           <p class="kicker">test completed</p>
           <h2 id="resultTitle">Протокол составлен</h2>
           <p id="resultText" class="sub"></p>
-        
+
+          <div id="resultBackup" class="result-backup hidden">
+            <h3>Резервная копия ответа</h3>
+            <p id="resultBackupText" class="sub">
+              Если хост попросит, скопируй этот JSON и отправь ему.
+            </p>
+            <textarea id="resultJson" readonly></textarea>
+            <button class="btn ghost full" id="copyResultBtn">
+              Скопировать JSON
+            </button>
+          </div>
+
           <button class="btn ghost" id="restartBtn">
             Пройти заново
           </button>
@@ -83,3 +94,4 @@
     <script src="test.js"></script>
   </body>
 </html>
+
