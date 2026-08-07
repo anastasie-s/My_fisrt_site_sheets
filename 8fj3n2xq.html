@@ -74,17 +74,19 @@
           <div id="resultBackup" class="result-backup hidden">
             <h3>Резервная копия ответа</h3>
             <p id="resultBackupText" class="sub">
-              Если хост попросит, скопируй этот JSON и отправь ему.
+              Если админ попросит, скопируй этот JSON и отправь ему.
             </p>
             <textarea id="resultJson" readonly></textarea>
-            <button class="btn ghost full" id="copyResultBtn">
-              Скопировать JSON
-            </button>
           </div>
 
-          <button class="btn ghost" id="restartBtn">
-            Пройти заново
-          </button>
+          <div class="result-actions">
+            <button class="btn ghost" id="copyResultBtn">
+              Скопировать JSON
+            </button>
+            <button class="btn ghost" id="restartBtn">
+              Пройти заново
+            </button>
+          </div>
         </div>
       </section>
     </main>
@@ -94,4 +96,3 @@
     <script src="test.js"></script>
   </body>
 </html>
-
