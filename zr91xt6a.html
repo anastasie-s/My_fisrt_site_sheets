@@ -28,15 +28,10 @@
           <h1>РАСПРЕДЕЛЕНИЕ</h1>
         </div>
 
-        <div class="source-toggle">
-          <button class="source-btn active" data-source="real">Боевой режим</button>
-          <button class="source-btn" data-source="sandbox">Запуск теста</button>
-        </div>
       </header>
 
       <div class="admin-toolbar">
         <button class="btn primary" id="loadBtn">Загрузить результаты</button>
-        <button class="btn ghost" id="seedBtn">Заполнить sandbox</button>
         <button class="btn ghost" id="resetBtn">Начать сначала</button>
       </div>
 
@@ -53,6 +48,26 @@
 
           <div id="playersBox"></div>
           <div id="groupsBox"></div>
+
+          <div class="compact-block manual-import">
+            <h3>Ручное добавление ответа</h3>
+            <p class="admin-muted">
+              Вставь JSON, который участник скопировал после теста.
+            </p>
+            <textarea
+              id="manualResultInput"
+              placeholder='{"type":"idealbro-day1-test-result", ...}'
+            ></textarea>
+            <div class="manual-actions">
+              <button class="btn ghost" id="importResultBtn">
+                Добавить ответ
+              </button>
+              <button class="btn ghost" id="clearManualInputBtn">
+                Очистить
+              </button>
+            </div>
+            <p id="manualImportStatus" class="admin-muted"></p>
+          </div>
 
           <button class="btn primary full hidden" id="createGroupsBtn">
             Разделить на две группы →
