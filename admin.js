@@ -691,7 +691,22 @@ async function loadAdminState() {
 async function createGroups() {
   if (hasManualPlayers()) {
     try {
-      createLocalGroups();
+      await runLoader(
+        "groupsBox",
+        (async () => {
+          createLocalGroups();
+          return { ok: true };
+        })(),
+        [
+          "Считываем результаты тестирования...",
+          "Ищем закономерности...",
+          "Анализируем совместимость...",
+          "Балансируем состав...",
+          "Формируем экспериментальные группы..."
+        ],
+        6000
+      );
+
       saveAdminCache();
       renderAll();
       $("leftStatus").textContent =
@@ -758,7 +773,23 @@ async function generatePairs() {
 
   if (hasManualPlayers()) {
     try {
-      createLocalPairs(selectedGame);
+      await runLoader(
+        "pairsBox",
+        (async () => {
+          createLocalPairs(selectedGame);
+          return { ok: true };
+        })(),
+        [
+          "Проверяем предыдущие встречи...",
+          "Исключаем повторения...",
+          "Ищем оптимальные сочетания...",
+          "Анализируем совместимость...",
+          "Проводим финальную проверку...",
+          "Утверждаем протокол..."
+        ],
+        7000
+      );
+
       saveAdminCache();
       renderGamePanel();
       $("gameStatus").textContent =
