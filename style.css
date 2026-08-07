@@ -1852,3 +1852,43 @@ textarea {
     min-height: 220px;
   }
 }
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.social-icons a {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(212, 160, 50, 0.45);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.025);
+  text-decoration: none;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.social-icons a:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 184, 74, 0.9);
+  background: rgba(212, 160, 50, 0.08);
+  box-shadow: 0 0 0 4px rgba(212, 160, 50, 0.08);
+}
+
+.social-icons svg {
+  width: 19px;
+  height: 19px;
+  display: block;
+  fill: #d4a032;
+}
