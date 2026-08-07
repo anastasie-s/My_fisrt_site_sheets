@@ -356,7 +356,7 @@ async function showResult(){
   saveResultBackup(result);
   renderResultBackup(
     result,
-    "Резервная копия уже сохранена. Если хост попросит, скопируй JSON отсюда."
+    "Если хост попросит, скопируй JSON отсюда."
   );
 
   $("resultTitle").textContent = "Отправляем протокол...";
@@ -365,9 +365,9 @@ async function showResult(){
   try {
     await submitResult(result);
 
-    $("resultTitle").textContent = "Похоже, отправка прошла";
+    $("resultTitle").textContent = "Ответы отправлены";
     $("resultText").textContent =
-      `${state.name}, резервная копия ответа всё равно осталась ниже.`;
+      ``;
 
   } catch (error) {
     console.error(error);
