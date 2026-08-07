@@ -376,7 +376,7 @@ async function showResult(){
       $("resultText").textContent =
         ``;
     } else {
-      $("resultTitle").textContent = "Похоже, отправка прошла";
+      $("resultTitle").textContent = "Протокол отправлен, но не закрывай пока страницу";
       $("resultText").textContent =
         ``;
     }
