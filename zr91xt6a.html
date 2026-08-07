@@ -32,6 +32,7 @@
 
       <div class="admin-toolbar">
         <button class="btn primary" id="loadBtn">Загрузить результаты</button>
+        <button class="btn ghost" id="openManualImportBtn">Добавить JSON</button>
         <button class="btn ghost" id="resetBtn">Начать сначала</button>
       </div>
 
@@ -48,26 +49,6 @@
 
           <div id="playersBox"></div>
           <div id="groupsBox"></div>
-
-          <div class="compact-block manual-import">
-            <h3>Ручное добавление ответа</h3>
-            <p class="admin-muted">
-              Вставь JSON, который участник скопировал после теста.
-            </p>
-            <textarea
-              id="manualResultInput"
-              placeholder='{"type":"idealbro-day1-test-result", ...}'
-            ></textarea>
-            <div class="manual-actions">
-              <button class="btn ghost" id="importResultBtn">
-                Добавить ответ
-              </button>
-              <button class="btn ghost" id="clearManualInputBtn">
-                Очистить
-              </button>
-            </div>
-            <p id="manualImportStatus" class="admin-muted"></p>
-          </div>
 
           <button class="btn primary full hidden" id="createGroupsBtn">
             Разделить на две группы →
@@ -102,6 +83,44 @@
               Сформировать пары для игры 1 →
             </button>
           </div>
+        </section>
+      </div>
+
+      <div
+        class="modal-backdrop hidden"
+        id="manualImportModal"
+        aria-hidden="true"
+      >
+        <section class="manual-modal" role="dialog" aria-modal="true">
+          <div class="modal-head">
+            <div>
+              <p class="kicker">резервный ответ</p>
+              <h2>Добавить JSON</h2>
+            </div>
+            <button class="modal-close" id="closeManualImportBtn" type="button">
+              ×
+            </button>
+          </div>
+
+          <p class="admin-muted">
+            Вставь JSON, который участник скопировал после теста.
+          </p>
+
+          <textarea
+            id="manualResultInput"
+            placeholder='{"type":"idealbro-day1-test-result", ...}'
+          ></textarea>
+
+          <div class="manual-actions">
+            <button class="btn primary" id="importResultBtn">
+              Добавить ответ
+            </button>
+            <button class="btn ghost" id="clearManualInputBtn">
+              Очистить
+            </button>
+          </div>
+
+          <p id="manualImportStatus" class="admin-muted"></p>
         </section>
       </div>
     </section>
