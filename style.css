@@ -1859,15 +1859,16 @@ textarea {
   align-items: center;
   gap: 12px;
   margin-top: 16px;
-  flex-wrap: wrap;
 }
 
 .social-icons a {
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  line-height: 0;
   border: 1px solid rgba(212, 160, 50, 0.45);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.025);
@@ -1887,8 +1888,15 @@ textarea {
 }
 
 .social-icons svg {
-  width: 19px;
-  height: 19px;
+  width: 22px;
+  height: 22px;
   display: block;
+  flex-shrink: 0;
   fill: #d4a032;
+}
+
+.social-icons .discord svg {
+  width: 20px;
+  height: 20px;
+  transform: translateY(0.5px);
 }
