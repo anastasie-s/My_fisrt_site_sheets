@@ -3,6 +3,68 @@ const SHEETS_URL = "https://script.google.com/macros/s/AKfycbybdZ7saSVOPyAm5TdZP
 const REQUIRED_PLAYERS = 6;
 const ADMIN_CACHE_KEY = "idealbro-admin-day1-cache-v1";
 const REQUEST_TIMEOUT = 15000;
+const ANSWER_WEIGHTS = {
+  bread_baguette: { skill: 1, social: 0 },
+  bread_toast: { skill: 1, social: 1 },
+  bread_croissant: { skill: 0, social: 1 },
+  bread_pita: { skill: 0, social: 2 },
+  bread_pretzel: { skill: 0, social: 1 },
+  bread_cracker: { skill: 1, social: 0 },
+  silence_professional: { skill: 1, social: 0 },
+  silence_question: { skill: 0, social: 2 },
+  silence_story: { skill: 0, social: 2 },
+  silence_wait: { skill: 0, social: 0 },
+  silence_noise: { skill: 0, social: 1 },
+  silence_didnt_notice: { skill: 1, social: 0 },
+  newgame_mastered: { skill: 3, social: 0 },
+  newgame_tutorial: { skill: 2, social: 0 },
+  newgame_buttons: { skill: 1, social: 0 },
+  newgame_ask: { skill: 0, social: 2 },
+  newgame_settings: { skill: 1, social: 0 },
+  newgame_wander: { skill: 1, social: 0 },
+  button_press: { skill: 1, social: 0 },
+  button_manual: { skill: 2, social: 0 },
+  button_friend: { skill: 0, social: 1 },
+  button_audience: { skill: 0, social: 2 },
+  button_google: { skill: 2, social: 0 },
+  button_hide: { skill: 1, social: 0 },
+  food_link: { skill: 2, social: 0 },
+  food_anything: { skill: 0, social: 1 },
+  food_poll: { skill: 1, social: 2 },
+  food_reject: { skill: 1, social: 0 },
+  food_support: { skill: 0, social: 2 },
+  food_discuss: { skill: 0, social: 2 },
+  tutorial_skip: { skill: 2, social: 0 },
+  tutorial_read: { skill: 2, social: 0 },
+  tutorial_suffer: { skill: 1, social: 0 },
+  tutorial_friend: { skill: 0, social: 2 },
+  tutorial_test: { skill: 3, social: 0 },
+  tutorial_group_confusion: { skill: 0, social: 2 },
+  rules_short: { skill: 2, social: 0 },
+  rules_lore: { skill: 0, social: 1 },
+  rules_play: { skill: 2, social: 0 },
+  rules_delegate: { skill: 0, social: 1 },
+  rules_diagram: { skill: 2, social: 1 },
+  rules_60: { skill: 0, social: 1 },
+  idea_no: { skill: 1, social: 0 },
+  idea_listen: { skill: 0, social: 1 },
+  idea_join: { skill: 0, social: 2 },
+  idea_legal: { skill: 1, social: 0 },
+  idea_improve: { skill: 2, social: 0 },
+  idea_call_everyone: { skill: 0, social: 2 },
+  deadline_done: { skill: 3, social: 0 },
+  deadline_part: { skill: 2, social: 0 },
+  deadline_people: { skill: 1, social: 2 },
+  deadline_table: { skill: 2, social: 1 },
+  deadline_memes: { skill: 0, social: 2 },
+  deadline_surprise: { skill: 0, social: 0 },
+  bro_understands: { skill: 0, social: 1 },
+  bro_online: { skill: 0, social: 2 },
+  bro_not_annoying: { skill: 0, social: 1 },
+  bro_silence: { skill: 1, social: 0 },
+  bro_chaos: { skill: 0, social: 2 },
+  bro_truth: { skill: 1, social: 1 }
+};
 
 let currentSource = "real";
 let selectedGame = 1;
@@ -10,7 +72,8 @@ let selectedGame = 1;
 let state = {
   players: [],
   groups: [],
-  pairs: []
+  pairs: [],
+  pairPlan: []
 };
 
 const $ = (id) => document.getElementById(id);
@@ -105,7 +168,8 @@ function normalizeState(data = {}) {
   return {
     players: Array.isArray(data.players) ? data.players : [],
     groups: Array.isArray(data.groups) ? data.groups : [],
-    pairs: Array.isArray(data.pairs) ? data.pairs : []
+    pairs: Array.isArray(data.pairs) ? data.pairs : [],
+    pairPlan: Array.isArray(data.pairPlan) ? data.pairPlan : []
   };
 }
 
@@ -317,7 +381,8 @@ function mergeManualPlayers(baseState, manualPlayers = getManualPlayers()) {
     ...baseState,
     players,
     groups: [],
-    pairs: []
+    pairs: [],
+    pairPlan: []
   };
 }
 
@@ -375,6 +440,7 @@ function importManualResult() {
 
     state.groups = [];
     state.pairs = [];
+    state.pairPlan = [];
     saveAdminCache();
     renderAll();
 
@@ -410,48 +476,54 @@ function closeManualImportModal() {
 
 function answerValues(player) {
   return Array.isArray(player.answers)
-    ? player.answers.map(answer => String(answer.value || ""))
+    ? player.answers.map(answer => String(answer.value || answer || ""))
     : [];
 }
 
-function pairSimilarity(playerA, playerB) {
-  const first = answerValues(playerA);
-  const second = answerValues(playerB);
-  const length = Math.min(first.length, second.length);
-  let score = 0;
-
-  for (let i = 0; i < length; i++) {
-    if (first[i] && first[i] === second[i]) score++;
-  }
-
-  return score;
+function shuffle(array) {
+  return [...array].sort(() => Math.random() - 0.5);
 }
 
-function groupSimilarity(players) {
-  let score = 0;
+function calculateProfile(player) {
+  let skill = 0;
+  let social = 0;
+  let chaos = 0;
 
-  for (let i = 0; i < players.length; i++) {
-    for (let j = i + 1; j < players.length; j++) {
-      score += pairSimilarity(players[i], players[j]);
-    }
-  }
+  answerValues(player).forEach(answer => {
+    const weight = ANSWER_WEIGHTS[answer];
+    if (!weight) return;
 
-  return score;
+    skill += weight.skill || 0;
+    social += weight.social || 0;
+    chaos += weight.chaos || 0;
+  });
+
+  return {
+    skill,
+    social,
+    chaos,
+    score: skill * 2 - social
+  };
 }
 
-function getGroupCombinations(players, size, start = 0, current = [], result = []) {
-  if (current.length === size) {
-    result.push([...current]);
-    return result;
-  }
+function createLocalPairPlan(groups) {
+  const groupA = shuffle(groups.filter(player => player.group === "A"));
+  const groupB = shuffle(groups.filter(player => player.group === "B"));
+  const schedules = [
+    [0, 1, 2],
+    [1, 2, 0],
+    [2, 0, 1]
+  ];
 
-  for (let i = start; i < players.length; i++) {
-    current.push(players[i]);
-    getGroupCombinations(players, size, i + 1, current, result);
-    current.pop();
-  }
-
-  return result;
+  state.pairPlan = schedules.flatMap((pattern, gameIndex) => {
+    return pattern.map((bIndex, pairIndex) => ({
+      game: gameIndex + 1,
+      pair: pairIndex + 1,
+      player1: groupA[pairIndex].name,
+      player2: groupB[bIndex].name,
+      manual: true
+    }));
+  });
 }
 
 function createLocalGroups() {
@@ -461,48 +533,49 @@ function createLocalGroups() {
     throw new Error(validationError);
   }
 
-  const combinations = getGroupCombinations(state.players, REQUIRED_PLAYERS / 2)
-    .filter(group => group.includes(state.players[0]));
-  let bestSplit = null;
-  let bestScore = Infinity;
+  const rankedPlayers = state.players
+    .map(player => ({
+      ...player,
+      profile: calculateProfile(player)
+    }))
+    .sort((a, b) => {
+      if (b.profile.score !== a.profile.score) {
+        return b.profile.score - a.profile.score;
+      }
 
-  combinations.forEach(groupA => {
-    const groupB = state.players.filter(player => !groupA.includes(player));
-    const score = Math.abs(groupSimilarity(groupA) - groupSimilarity(groupB));
+      if (b.profile.skill !== a.profile.skill) {
+        return b.profile.skill - a.profile.skill;
+      }
 
-    if (score < bestScore) {
-      bestScore = score;
-      bestSplit = { groupA, groupB };
-    }
-  });
+      return Math.random() - 0.5;
+    });
 
-  if (!bestSplit) {
-    throw new Error("Не получилось создать локальные группы.");
-  }
-
-  state.groups = [
-    ...bestSplit.groupA.map(player => ({ ...player, group: "A" })),
-    ...bestSplit.groupB.map(player => ({ ...player, group: "B" }))
-  ];
+  state.groups = rankedPlayers.map((player, index) => ({
+    ...player,
+    group: index < 3 ? "A" : "B",
+    skill: player.profile.skill,
+    social: player.profile.social,
+    chaos: player.profile.chaos,
+    score: player.profile.score
+  }));
   state.pairs = [];
+  createLocalPairPlan(state.groups);
 }
 
 function createLocalPairs(game) {
-  const groupA = state.groups.filter(player => player.group === "A");
-  const groupB = state.groups.filter(player => player.group === "B");
-
-  if (groupA.length !== 3 || groupB.length !== 3) {
-    throw new Error("Для локальной генерации нужны две группы по 3 участника.");
+  if (state.groups.length !== REQUIRED_PLAYERS) {
+    throw new Error("Сначала нужно создать группы.");
   }
 
-  const shift = Number(game) - 1;
-  const pairs = groupA.map((player, index) => ({
-    game: Number(game),
-    pair: index + 1,
-    player1: player.name,
-    player2: groupB[(index + shift) % groupB.length].name,
-    manual: true
-  }));
+  if (!state.pairPlan.length) {
+    createLocalPairPlan(state.groups);
+  }
+
+  const pairs = state.pairPlan.filter(pair => Number(pair.game) === Number(game));
+
+  if (pairs.length !== 3) {
+    throw new Error("План пар для этой игры не найден.");
+  }
 
   state.pairs = [
     ...state.pairs.filter(pair => Number(pair.game) !== Number(game)),
@@ -911,7 +984,8 @@ async function resetCurrentSource() {
     state = {
       players: [],
       groups: [],
-      pairs: []
+      pairs: [],
+      pairPlan: []
     };
 
     clearAdminCache();
@@ -985,7 +1059,8 @@ document.querySelectorAll(".source-btn").forEach(button => {
     state = {
       players: [],
       groups: [],
-      pairs: []
+      pairs: [],
+      pairPlan: []
     };
 
     renderAll();
