@@ -1900,19 +1900,19 @@ textarea {
 }
 
 .social-icons .twitch svg {
-  width: 22px;
-  height: 22px;
-  transform: translate(0.5px, 1px);
+  width: 25px;
+  height: 25px;
+  transform: translate(-0.5px, 1px);
 }
 
 .social-icons .telegram svg {
-  width: 22px;
-  height: 22px;
+  width: 25px;
+  height: 25px;
   transform: translate(-2px, 0.5px);
 }
 
 .social-icons .discord svg {
-  width: 23px;
-  height: 23px;
-  transform: translate(2px, 1px);
+  width: 26px;
+  height: 26px;
+  transform: translate(3px, 1px);
 }
