@@ -1,4 +1,6 @@
 const SHEETS_URL = "https://script.google.com/macros/s/AKfycbybdZ7saSVOPyAm5TdZP0qz1eFQg_wJO_-eAV3J8PnKfqecP8PCktjeUNWUMP7wWkc/exec";
+const TEST_RESULT_KEY = "idealbro-test-result";
+const REQUEST_TIMEOUT = 15000;
 
 const questions = [
   {
@@ -128,47 +130,159 @@ let state = {
   answers: [],
 };
 const $ = (id) => document.getElementById(id);
-function checkPasswordViaJsonp(password) {
-  return new Promise((resolve, reject) => {
-    const callbackName = "idealbroCallback_" + Date.now();
 
-    window[callbackName] = (response) => {
+function jsonp(action, params = {}, timeoutMs = REQUEST_TIMEOUT) {
+  return new Promise((resolve, reject) => {
+    const callbackName =
+      "idealbroTest_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const script = document.createElement("script");
+    let settled = false;
+
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("Apps Script не ответил вовремя."));
+    }, timeoutMs);
+
+    function cleanup() {
+      if (settled) return;
+
+      settled = true;
+      clearTimeout(timer);
       delete window[callbackName];
       script.remove();
-      resolve(response.ok === true);
+    }
+
+    window[callbackName] = (response) => {
+      cleanup();
+      resolve(response);
     };
 
-    const script = document.createElement("script");
-    const url =
-      SHEETS_URL +
-      "?action=checkPassword" +
-      "&password=" + encodeURIComponent(password) +
-      "&callback=" + callbackName;
+    const searchParams = new URLSearchParams({
+      action,
+      callback: callbackName,
+      ...params
+    });
 
-    script.src = url;
-    script.onerror = reject;
+    script.src = SHEETS_URL + "?" + searchParams.toString();
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("Не удалось подключиться к Apps Script."));
+    };
     document.body.appendChild(script);
   });
+}
+
+async function requestTest(action, params = {}, attempts = 2) {
+  let lastError;
+
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    try {
+      return await jsonp(action, params);
+    } catch (error) {
+      lastError = error;
+
+      if (attempt < attempts - 1) {
+        await new Promise(resolve => setTimeout(resolve, 700 + attempt * 500));
+      }
+    }
+  }
+
+  throw lastError || new Error("Apps Script недоступен.");
+}
+
+async function checkPasswordViaJsonp(password) {
+  const response = await requestTest("checkPassword", { password });
+  return response.ok === true;
+}
+
+function createResultPayload() {
+  return {
+    type: "idealbro-day1-test-result",
+    version: 1,
+    player: state.name,
+    date: new Date().toISOString(),
+    answers: state.answers
+  };
+}
+
+function saveResultBackup(result) {
+  localStorage.setItem(TEST_RESULT_KEY, JSON.stringify(result));
+}
+
+function renderResultBackup(result, message) {
+  if (!$("resultBackup")) return;
+
+  $("resultBackup").classList.remove("hidden");
+  $("resultBackupText").textContent = message;
+  $("resultJson").value = JSON.stringify(result, null, 2);
+}
+
+async function copyResultBackup() {
+  const textarea = $("resultJson");
+  textarea.focus();
+  textarea.select();
+
+  try {
+    await navigator.clipboard.writeText(textarea.value);
+  } catch (error) {
+    document.execCommand("copy");
+  }
+
+  $("copyResultBtn").textContent = "Скопировано";
+  setTimeout(() => {
+    $("copyResultBtn").textContent = "Скопировать JSON";
+  }, 1800);
+}
+
+async function submitResult(result) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+
+  try {
+    await fetch(SHEETS_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: JSON.stringify(result),
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 $("testUnlockBtn").onclick = async () => {
   const password = $("testCodeInput").value.trim();
 
   $("testErrorText").classList.add("hidden");
+  $("testErrorText").textContent = "Код неверный.";
   $("testUnlockBtn").textContent = "Проверяем...";
+  $("testUnlockBtn").disabled = true;
 
-  const ok = await checkPasswordViaJsonp(password);
+  let ok = false;
+
+  try {
+    ok = await checkPasswordViaJsonp(password);
+  } catch (error) {
+    console.error(error);
+    $("testErrorText").textContent =
+      "Apps Script не ответил. Попробуй ещё раз чуть позже.";
+    $("testErrorText").classList.remove("hidden");
+  }
+
+  $("testUnlockBtn").textContent = "Открыть тест →";
+  $("testUnlockBtn").disabled = false;
 
   if (!ok) {
     $("testErrorText").classList.remove("hidden");
-    $("testUnlockBtn").textContent = "Открыть тест →";
     return;
   }
 
   sessionStorage.setItem("idealbro-test-unlocked", "yes");
   $("testLockScreen").classList.add("hidden");
   $("startScreen").classList.remove("hidden");
-  $("testUnlockBtn").textContent = "Открыть тест →";
 };
 
 $("testCodeInput").addEventListener("keydown", (e) => {
@@ -237,40 +351,36 @@ async function showResult(){
   $("questionScreen").classList.add("hidden");
   $("resultScreen").classList.remove("hidden");
 
-  const result = {
-    player: state.name,
-    date: new Date().toISOString(),
-    answers: state.answers
-  };
+  const result = createResultPayload();
 
-  localStorage.setItem(
-    "idealbro-test-result",
-    JSON.stringify(result)
+  saveResultBackup(result);
+  renderResultBackup(
+    result,
+    "Резервная копия уже сохранена. Если хост попросит, скопируй JSON отсюда."
   );
 
   $("resultTitle").textContent = "Отправляем протокол...";
   $("resultText").textContent = "Секунду, бро.";
 
   try {
-    await fetch(SHEETS_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain"
-      },
-      body: JSON.stringify(result)
-    });
+    await submitResult(result);
 
-    $("resultTitle").textContent = "Протокол составлен";
+    $("resultTitle").textContent = "Похоже, отправка прошла";
     $("resultText").textContent =
-      `${state.name}, твои ответы приняты. Наука сделала своё дело.`;
+      `${state.name}, резервная копия ответа всё равно осталась ниже.`;
 
   } catch (error) {
+    console.error(error);
     $("resultTitle").textContent = "Что-то пошло не так";
     $("resultText").textContent =
-      "Ответы не отправились. Позови организатора.";
+      "Ответы сохранены на этом устройстве. Скопируй JSON ниже и отправь хосту.";
+    renderResultBackup(
+      result,
+      "Отправка не прошла. Скопируй этот JSON и отправь хосту."
+    );
   }
 }
+$("copyResultBtn").onclick = copyResultBackup;
 $("restartBtn").onclick = () => {
   state = {
     name: "",
