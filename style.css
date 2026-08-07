@@ -289,6 +289,37 @@ textarea {
   font-size: 13px;
 }
 
+.result-backup,
+.manual-import {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.result-backup h3,
+.manual-import h3 {
+  margin: 0 0 8px;
+  color: var(--gold2);
+  font-size: 18px;
+}
+
+.result-backup textarea,
+.manual-import textarea {
+  min-height: 150px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.manual-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.manual-actions .btn {
+  flex: 1 1 180px;
+}
+
 .label {
   display: block;
   margin-bottom: 9px;
