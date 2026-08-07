@@ -382,11 +382,30 @@ function importManualResult() {
     status.textContent = existingIndex >= 0
       ? `Ответ ${result.name} обновлён. Группы и пары нужно создать заново.`
       : `Ответ ${result.name} добавлен. Сейчас участников: ${state.players.length}.`;
+    $("leftStatus").textContent = status.textContent;
   } catch (error) {
     console.error(error);
     status.textContent =
       "Не получилось прочитать JSON. Проверь, что участник скопировал весь блок целиком.";
   }
+}
+
+function openManualImportModal() {
+  const modal = $("manualImportModal");
+  if (!modal) return;
+
+  modal.classList.remove("hidden");
+  modal.setAttribute("aria-hidden", "false");
+  $("manualImportStatus").textContent = "";
+  $("manualResultInput").focus();
+}
+
+function closeManualImportModal() {
+  const modal = $("manualImportModal");
+  if (!modal) return;
+
+  modal.classList.add("hidden");
+  modal.setAttribute("aria-hidden", "true");
 }
 
 function answerValues(player) {
@@ -957,6 +976,8 @@ if ($("seedBtn")) $("seedBtn").onclick = seedSandbox;
 $("resetBtn").onclick = resetCurrentSource;
 $("createGroupsBtn").onclick = createGroups;
 $("generatePairsBtn").onclick = generatePairs;
+if ($("openManualImportBtn")) $("openManualImportBtn").onclick = openManualImportModal;
+if ($("closeManualImportBtn")) $("closeManualImportBtn").onclick = closeManualImportModal;
 if ($("importResultBtn")) $("importResultBtn").onclick = importManualResult;
 if ($("clearManualInputBtn")) {
   $("clearManualInputBtn").onclick = () => {
@@ -964,5 +985,17 @@ if ($("clearManualInputBtn")) {
     $("manualImportStatus").textContent = "";
   };
 }
+if ($("manualImportModal")) {
+  $("manualImportModal").addEventListener("click", (event) => {
+    if (event.target === $("manualImportModal")) {
+      closeManualImportModal();
+    }
+  });
+}
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeManualImportModal();
+  }
+});
 
 renderAll();
