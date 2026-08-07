@@ -316,6 +316,18 @@ textarea {
   gap: 10px;
 }
 
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.result-actions .btn {
+  flex: 1 1 220px;
+  margin-top: 0;
+}
+
 .manual-actions .btn {
   flex: 1 1 180px;
 }
