@@ -1899,22 +1899,20 @@ textarea {
   fill: #d4a032;
 }
 
-/* Twitch */
 .social-icons .twitch svg {
   width: 18px;
   height: 18px;
+  transform: translate(1px, 1px);
 }
 
-/* Telegram */
 .social-icons .telegram svg {
   width: 18px;
   height: 18px;
-  transform: translate(-0.5px, 0.5px);
+  transform: translate(-1px, 0.5px);
 }
 
-/* Discord */
 .social-icons .discord svg {
   width: 19px;
   height: 19px;
-  transform: translateY(0.5px);
+  transform: translate(-1px, 1px);
 }
