@@ -653,6 +653,48 @@
       transform: rotate(-2deg);
     }
 
+    .overall-score-award {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .ideal-score-medal {
+      position: relative;
+      isolation: isolate;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 64px;
+      height: 64px;
+      margin: 0 0 10px;
+      padding: 9px 5px;
+      box-sizing: border-box;
+      border: 3px double #9e5e1b;
+      border-radius: 50%;
+      color: #70400f;
+      background: radial-gradient(circle at 35% 25%, #ffe4a0, #d99a3e);
+      box-shadow: inset 0 0 0 3px rgba(255,239,190,.55), 0 2px 4px rgba(80,45,10,.16);
+      font: 700 10px/1.15 Oswald, sans-serif;
+      letter-spacing: .04em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .ideal-score-medal::before,
+    .ideal-score-medal::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      bottom: -12px;
+      width: 18px;
+      height: 23px;
+      background: #b46f1f;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 76%, 0 100%);
+    }
+    .ideal-score-medal::before { left: 10px; transform: rotate(14deg); }
+    .ideal-score-medal::after { right: 10px; transform: rotate(-14deg); }
+
     .infinity-cell {
       color: #9c5a17;
       font-family: Oswald, sans-serif;
@@ -998,15 +1040,7 @@
 
           <div id="day3Content" hidden>
             <section class="day3-block">
-              <h3 class="day3-section-heading">Первые три биома</h3>
-              <p class="day3-block-lead">На первом этапе пары проходили три биома вместе, набирая очки за место, совместное выживание и дополнительные задания.</p>
-              <div class="biome-pairs-grid" id="firstBiomesGrid"></div>
-            </section>
-
-            <section class="day3-block">
-              <h3 class="day3-section-heading">Последние биомы</h3>
-              <p class="day3-block-lead">Пары сохраняли свой состав на протяжении всех пяти биомов и вместе дошли до финального решения.</p>
-              <div class="final-pairs-grid" id="finalBiomesGrid"></div>
+              <div class="biome-pairs-grid" id="biomesGrid"></div>
             </section>
 
             <section class="day3-block">
@@ -1017,7 +1051,7 @@
                     <tr>
                       <th>Участник</th>
                       <th>Счёт</th>
-                      <th>PEAK</th>
+                      <th>Итог за третий день</th>
                       <th>Предательство</th>
                     </tr>
                   </thead>
@@ -1267,24 +1301,41 @@
       return place ? `${place} место` : "—";
     }
 
-    function renderFirstBiomes(data) {
-      document.getElementById("firstBiomesGrid").innerHTML = data.map(pair => `
-        <article class="biome-pair-card">
-          <header class="biome-pair-head">
-            <small>Первая часть маршрута</small>
-            <h4 class="pair-title">
-              <span>${escapeHtml(pair.player1)}</span>
-              <span>${escapeHtml(pair.player2)}</span>
-            </h4>
-          </header>
-          <div class="biome-list">
-            ${renderBiomeRow("Биом 1", pair.biome1.place, pair.biome1.bothSurvived, [pair.biome1.mission1, pair.biome1.mission2], 1)}
-            ${renderBiomeRow("Биом 2", pair.biome2.place, pair.biome2.bothSurvived, [pair.biome2.mission3, pair.biome2.mission4], 3)}
-            ${renderBiomeRow("Биом 3", pair.biome3.place, pair.biome3.bothSurvived, [pair.biome3.mission5, pair.biome3.mission6], 5)}
-          </div>
-          <div class="pair-total-line"><span>Сумма</span><strong>${pair.score}</strong></div>
-        </article>
-      `).join("");
+    function pairIdentity(pair) {
+      return [normalizeName(pair.player1), normalizeName(pair.player2)].sort().join("::");
+    }
+
+    function renderAllBiomes(firstBiomes, finalBiomes) {
+      const firstMap = new Map(firstBiomes.map(pair => [pairIdentity(pair), pair]));
+      const finalMap = new Map(finalBiomes.map(pair => [pairIdentity(pair), pair]));
+      const keys = [...new Set([...firstMap.keys(), ...finalMap.keys()])];
+      document.getElementById("biomesGrid").innerHTML = keys.map(key => {
+        const first = firstMap.get(key);
+        const final = finalMap.get(key);
+        const pair = first || final;
+        return `
+          <article class="biome-pair-card">
+            <header class="biome-pair-head">
+              <small>PEAK · Все пять биомов</small>
+              <h4 class="pair-title"><span>${escapeHtml(pair.player1)}</span><span>${escapeHtml(pair.player2)}</span></h4>
+            </header>
+            <div class="biome-list">
+              ${first ? [
+                renderBiomeRow("Биом 1", first.biome1.place, first.biome1.bothSurvived, [first.biome1.mission1, first.biome1.mission2], 1),
+                renderBiomeRow("Биом 2", first.biome2.place, first.biome2.bothSurvived, [first.biome2.mission3, first.biome2.mission4], 3),
+                renderBiomeRow("Биом 3", first.biome3.place, first.biome3.bothSurvived, [first.biome3.mission5, first.biome3.mission6], 5)
+              ].join("") : '<div class="biome-row">Данные биомов 1–3 ещё не получены</div>'}
+              ${final ? `
+                ${renderBiomeRow("Биом 4", final.biome4.place, final.biome4.bothSurvived, [final.biome4.mission7, final.biome4.mission8], 7)}
+                <div class="biome-row">
+                  <div class="biome-row-head"><b>Биом 5</b><span class="biome-place">${placeText(final.biome5.place)}</span></div>
+                  <div class="biome-flags">${booleanFlag("Оба выжили", final.biome5.bothSurvived)}</div>
+                </div>` : '<div class="biome-row">Данные биомов 4–5 ещё не получены</div>'}
+            </div>
+            <div class="pair-total-line"><span>Сумма за все биомы</span><strong>${(numericScore(first?.score) ?? 0) + (numericScore(final?.score) ?? 0)}</strong></div>
+            ${final ? `<div class="final-decision ${final.noBetrayal ? "ideal" : "betrayal"}"><small>Финальное решение</small><strong>${final.noBetrayal ? "🏅 Идеальный бро" : "Предательство"}</strong></div>` : ""}
+          </article>`;
+      }).join("");
     }
 
     function renderBiomeRow(title, place, bothSurvived, missions, firstMissionNumber) {
@@ -1298,32 +1349,6 @@
           </div>
         </div>
       `;
-    }
-
-    function renderFinalBiomes(data) {
-      document.getElementById("finalBiomesGrid").innerHTML = data.map(pair => `
-        <article class="final-pair-card">
-          <header class="final-pair-head">
-            <small>Финальная пара</small>
-            <h4 class="pair-title">
-              <span>${escapeHtml(pair.player1)}</span>
-              <span>${escapeHtml(pair.player2)}</span>
-            </h4>
-          </header>
-          <div class="biome-list">
-            ${renderBiomeRow("Биом 4", pair.biome4.place, pair.biome4.bothSurvived, [pair.biome4.mission7, pair.biome4.mission8], 7)}
-            <div class="biome-row">
-              <div class="biome-row-head"><b>Биом 5</b><span class="biome-place">${placeText(pair.biome5.place)}</span></div>
-              <div class="biome-flags">${booleanFlag("Оба выжили", pair.biome5.bothSurvived)}</div>
-            </div>
-          </div>
-          <div class="pair-total-line"><span>Сумма</span><strong>${pair.score}</strong></div>
-          <div class="final-decision ${pair.noBetrayal ? "ideal" : "betrayal"}">
-            <small>Финальное решение</small>
-            <strong>${pair.noBetrayal ? "Идеальный бро" : "Предательство"}</strong>
-          </div>
-        </article>
-      `).join("");
     }
 
     function getPreviousResultsMap() {
@@ -1357,6 +1382,8 @@
       players.forEach(player => {
         player.previousTotal = player.originalPrevious;
         player.peakScore = player.originalPeak;
+        player.retainedPeak = player.originalPeak;
+        player.receivedPeak = 0;
       });
 
       (day3Data.finalBiomes || []).forEach(pair => {
@@ -1373,8 +1400,9 @@
         for (const [player, partner] of [[a, b], [b, a]]) {
           player.previousTotal = (partner.betrayed ? 0 : player.originalPrevious)
             + (player.betrayed ? partner.originalPrevious : 0);
-          player.peakScore = (partner.betrayed ? 0 : player.originalPeak)
-            + (player.betrayed ? partner.originalPeak : 0);
+          player.retainedPeak = partner.betrayed ? 0 : player.originalPeak;
+          player.receivedPeak = player.betrayed ? partner.originalPeak : 0;
+          player.peakScore = player.retainedPeak + player.receivedPeak;
           if (player.betrayed) player.betrayedPartner = partner.name;
           if (partner.betrayed) player.betrayedBy = partner.name;
         }
@@ -1395,9 +1423,9 @@
       }));
     }
 
-    function renderPlayerName(player) {
+    function renderPlayerName(player, plainStamp = false) {
       return `<span class="ideal-player-name">${escapeHtml(player.name)}</span>
-        ${player.idealBro ? `<span class="ideal-bro-badge" title="Оба участника пары сохранили верность"><span aria-hidden="true">🏅</span> Идеальный бро</span><span class="ideal-partner">Пара: ${escapeHtml(player.idealPartner)}</span>` : ""}
+        ${player.idealBro ? `<span class="ideal-bro-badge" title="Оба участника пары сохранили верность">${plainStamp ? "" : '<span aria-hidden="true">🏅</span> '}Идеальный бро</span><span class="ideal-partner">Пара: ${escapeHtml(player.idealPartner)}</span>` : ""}
         ${player.betrayedPartner ? `<span class="betrayal-note">Получены очки: ${escapeHtml(player.betrayedPartner)}</span>` : ""}
         ${player.betrayedBy ? `<span class="betrayed-note">Очки переданы: ${escapeHtml(player.betrayedBy)}</span>` : ""}`;
     }
@@ -1407,10 +1435,10 @@
       document.getElementById("overallTableBody").innerHTML = ranked.map(player => `
         <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
           <td class="place-cell" data-label="Место">${player.displayPlace}</td>
-          <td class="player-cell" data-label="Участник">${renderPlayerName(player)}</td>
+          <td class="player-cell" data-label="Участник">${renderPlayerName(player, true)}</td>
           <td class="score-cell" data-label="Предыдущие 2 дня">${player.previousTotal}</td>
           <td class="score-cell" data-label="PEAK">${player.peakScore}</td>
-          <td class="total-cell" data-label="Всего">${player.calculatedTotal}</td>
+          <td class="total-cell" data-label="Всего"><span class="overall-score-award"><span>${player.calculatedTotal}</span>${player.idealBro ? '<span class="ideal-score-medal" title="Оба участника пары сохранили верность">Идеальный<br>бро</span>' : ""}</span></td>
         </tr>
       `).join("");
     }
@@ -1422,7 +1450,7 @@
         <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
           <td class="player-cell" data-label="Участник">${renderPlayerName(player)}</td>
           <td class="score-cell" data-label="Счёт">${escapeHtml(player.rawScore ?? "—")}</td>
-          <td class="score-cell" data-label="PEAK">${player.peakScore}</td>
+          <td class="score-cell" data-label="Итог за третий день">${player.betrayedPartner ? `<span title="Свои баллы + баллы напарника" aria-label="Свои баллы: ${player.retainedPeak}; от напарника: ${player.receivedPeak}">${player.retainedPeak} + ${player.receivedPeak}</span>` : player.peakScore}</td>
           <td class="score-cell" data-label="Предательство"><span class="betrayal-status ${player.betrayed ? "yes" : "no"}">${player.betrayed ? "Да" : "Нет"}</span></td>
         </tr>
       `).join("");
@@ -1442,8 +1470,7 @@
         if (!data?.ok) throw new Error(data?.error || "Apps Script вернул ошибку");
 
         loadedDay3Data = data;
-        renderFirstBiomes(data.firstBiomes || []);
-        renderFinalBiomes(data.finalBiomes || []);
+        renderAllBiomes(data.firstBiomes || [], data.finalBiomes || []);
         
         const rankedPlayers = buildFinalRanking(data);
         
