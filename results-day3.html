@@ -630,7 +630,7 @@
       background: linear-gradient(90deg, rgba(255,184,74,.18), rgba(255,184,74,.035));
     }
 
-    .ideal-player-name { display: block; }
+    .ideal-player-name { display: inline; }
 
     .ideal-partner {
       display: block;
@@ -642,7 +642,7 @@
 
     .ideal-bro-badge {
       display: inline-block;
-      margin-top: 8px;
+      margin: 4px 0 4px 8px;
       padding: 5px 8px;
       border: 2px solid #b46f1f;
       border-radius: 4px;
@@ -909,9 +909,8 @@
                 <tr>
                   <th>Место</th>
                   <th>Участник</th>
-                  <th>День 1</th>
-                  <th>День 2</th>
-                  <th>День 3</th>
+                  <th>Предыдущие 2 дня</th>
+                  <th>PEAK</th>
                   <th>Всего</th>
                 </tr>
               </thead>
@@ -1006,7 +1005,7 @@
 
             <section class="day3-block">
               <h3 class="day3-section-heading">Последние биомы</h3>
-              <p class="day3-block-lead">Перед заключительной частью состав пар изменился. Именно эти пары принимали финальное решение.</p>
+              <p class="day3-block-lead">Пары сохраняли свой состав на протяжении всех пяти биомов и вместе дошли до финального решения.</p>
               <div class="final-pairs-grid" id="finalBiomesGrid"></div>
             </section>
 
@@ -1029,15 +1028,15 @@
 
             <section class="day-summary">
               <h3>Что происходило в этот день?</h3>
-              <p>В финале участники сначала проходили PEAK в одних парах, а затем самостоятельно сформировали новые пары для последних биомов. После завершения испытания каждая финальная пара принимала решение: остаться вместе или предать напарника. Те, кто не предал друг друга, выполнили главное условие эксперимента и получили бесконечное количество очков.</p>
+              <p>Участники прошли все пять биомов PEAK в постоянных парах. После завершения испытания каждый принимал решение: остаться вместе или предать напарника. При предательстве передавались баллы за PEAK и предыдущие два дня. Если оба сохранили верность, каждый получил медаль «Идеальный бро», сохранив свои баллы.</p>
               <details class="day-rules">
                 <summary>Показать полный протокол дня</summary>
                 <div class="rules-content"><ol>
                   <li><span class="rule-number">01</span><span>За место в каждом биоме, совместное выживание и выполнение дополнительных заданий пары получали очки.</span></li>
-                  <li><span class="rule-number">02</span><span>Перед последними биомами участники самостоятельно сформировали новые пары.</span></li>
+                  <li><span class="rule-number">02</span><span>Состав пар оставался неизменным на протяжении всех пяти биомов.</span></li>
                   <li><span class="rule-number">03</span><span>После завершения этапа участники принимали финальное решение отдельно от напарника.</span></li>
-                  <li><span class="rule-number">04</span><span>При предательстве участник мог получить очки напарника, заработанные за предыдущие два дня.</span></li>
-                  <li><span class="rule-number">05</span><span>Если оба участника пары не предали друг друга, они получали <strong>∞ очков</strong> и статус <strong>«Идеальный бро»</strong>.</span></li>
+                  <li><span class="rule-number">04</span><span>Предавший получал баллы напарника за PEAK и предыдущие два дня. Если предавали оба, они обменивались баллами.</span></li>
+                  <li><span class="rule-number">05</span><span>Если оба участника пары не предали друг друга, они сохраняли свои баллы и получали медаль <strong>«Идеальный бро»</strong>.</span></li>
                 </ol></div>
               </details>
             </section>
@@ -1332,297 +1331,101 @@
       return new Map(combined.map(player => [normalizeName(player.name), player]));
     }
 
+    function numericScore(...values) {
+      for (const value of values) {
+        if (value === null || value === undefined || String(value).trim() === "") continue;
+        const number = Number(String(value).trim().replace(",", "."));
+        if (Number.isFinite(number)) return number;
+      }
+      return null;
+    }
+
     function buildFinalRanking(day3Data) {
       const previousMap = getPreviousResultsMap();
-    
-      const players = day3Data.standings.map((standing, index) => {
-        const previous = previousMap.get(
-          normalizeName(standing.name)
-        );
-    
+      const players = (day3Data.standings || []).map((standing, index) => {
+        const previous = previousMap.get(normalizeName(standing.name));
         return {
           ...standing,
-    
-          originalIndex:
-            previous?.originalIndex ??
-            standing.originalIndex ??
-            index,
-    
-          originalDay1Total:
-            previous?.day1Total ?? 0,
-    
-          originalDay2Total:
-            previous?.day2Total ?? 0,
-    
-          day1Total:
-            previous?.day1Total ?? 0,
-    
-          day2Total:
-            previous?.day2Total ?? 0,
-    
-          firstPlaces:
-            previous?.firstPlaces ?? 0,
-    
-          secondPlaces:
-            previous?.secondPlaces ?? 0,
-    
-          wwh2Points:
-            previous?.wwh2Points ?? 0
+          originalIndex: standing.originalIndex ?? index,
+          originalPrevious: numericScore(standing.previousDaysScore) ?? previous?.total ?? 0,
+          originalPeak: numericScore(standing.peakScore, standing.rawPeakScore) ?? 0,
+          idealBro: false,
+          idealPartner: null
         };
       });
-    
-      const playerMap = new Map(
-        players.map(player => [
-          normalizeName(player.name),
-          player
-        ])
-      );
-    
-      /*
-        Обрабатываем предательство
-        внутри пар последних биомов.
-      */
-    
-      day3Data.finalBiomes.forEach(pair => {
-        const player1 = playerMap.get(
-          normalizeName(pair.player1)
-        );
-    
-        const player2 = playerMap.get(
-          normalizeName(pair.player2)
-        );
-    
-        if (!player1 || !player2) {
-          return;
-        }
-    
-        /*
-          Если пара стала идеальными бро,
-          передача очков не применяется.
-        */
-    
-        if (pair.noBetrayal) {
-          return;
-        }
-    
-        const player1Betrayed = player1.betrayed === true;
-        const player2Betrayed = player2.betrayed === true;
-    
-        /*
-          Игрок 1 предал Игрока 2.
-        */
-    
-        if (player1Betrayed && !player2Betrayed) {
-          player1.day1Total += player2.originalDay1Total;
-          player1.day2Total += player2.originalDay2Total;
-    
-          player2.day1Total = 0;
-          player2.day2Total = 0;
-    
-          player1.betrayedPartner = player2.name;
-          player2.betrayedBy = player1.name;
-        }
-    
-        /*
-          Игрок 2 предал Игрока 1.
-        */
-    
-        if (player2Betrayed && !player1Betrayed) {
-          player2.day1Total += player1.originalDay1Total;
-          player2.day2Total += player1.originalDay2Total;
-    
-          player1.day1Total = 0;
-          player1.day2Total = 0;
-    
-          player2.betrayedPartner = player1.name;
-          player1.betrayedBy = player2.name;
-        }
-      });
-    
-      /*
-        Пересчитываем числовой итог.
-        Для идеальных бро всё равно будет ∞.
-      */
-    
+      const playerMap = new Map(players.map(player => [normalizeName(player.name), player]));
       players.forEach(player => {
-        if (player.idealBro) {
-          player.calculatedTotal = null;
-          return;
-        }
-    
-        player.calculatedTotal =
-          player.day1Total +
-          player.day2Total +
-          (Number(player.peakScore) || 0);
+        player.previousTotal = player.originalPrevious;
+        player.peakScore = player.originalPeak;
       });
-    
-      players.sort((a, b) => {
-        if (a.idealBro !== b.idealBro) {
-          return a.idealBro ? -1 : 1;
+
+      (day3Data.finalBiomes || []).forEach(pair => {
+        const a = playerMap.get(normalizeName(pair.player1));
+        const b = playerMap.get(normalizeName(pair.player2));
+        if (!a || !b) return;
+        const aBetrayed = a.betrayed === true;
+        const bBetrayed = b.betrayed === true;
+        if (pair.noBetrayal === true && !aBetrayed && !bBetrayed) {
+          a.idealBro = b.idealBro = true;
+          a.idealPartner = b.name;
+          b.idealPartner = a.name;
         }
-    
-        if (a.idealBro && b.idealBro) {
-          return a.originalIndex - b.originalIndex;
+        for (const [player, partner] of [[a, b], [b, a]]) {
+          player.previousTotal = (partner.betrayed ? 0 : player.originalPrevious)
+            + (player.betrayed ? partner.originalPrevious : 0);
+          player.peakScore = (partner.betrayed ? 0 : player.originalPeak)
+            + (player.betrayed ? partner.originalPeak : 0);
+          if (player.betrayed) player.betrayedPartner = partner.name;
+          if (partner.betrayed) player.betrayedBy = partner.name;
         }
-    
-        if (b.calculatedTotal !== a.calculatedTotal) {
-          return b.calculatedTotal - a.calculatedTotal;
-        }
-    
-        if (b.firstPlaces !== a.firstPlaces) {
-          return b.firstPlaces - a.firstPlaces;
-        }
-    
-        if (b.secondPlaces !== a.secondPlaces) {
-          return b.secondPlaces - a.secondPlaces;
-        }
-    
-        if (b.wwh2Points !== a.wwh2Points) {
-          return b.wwh2Points - a.wwh2Points;
-        }
-    
-        return a.originalIndex - b.originalIndex;
       });
-    
-      let nextRegularPlace = 2;
-    
+      players.forEach(player => {
+        player.calculatedTotal = player.previousTotal + player.peakScore;
+      });
+      players.sort((a, b) => Number(b.idealBro) - Number(a.idealBro)
+        || b.calculatedTotal - a.calculatedTotal || a.originalIndex - b.originalIndex);
+      const regularPlayers = players.filter(player => !player.idealBro);
+      const offset = players.some(player => player.idealBro) ? 1 : 0;
+      const labels = getTiedPlaceLabels(regularPlayers, player => player.calculatedTotal)
+        .map(label => label.split("-").map(place => Number(place) + offset).join("-"));
+      let regularIndex = 0;
       return players.map(player => ({
         ...player,
-    
-        displayPlace: player.idealBro
-          ? "1"
-          : String(nextRegularPlace++)
+        displayPlace: player.idealBro ? "1" : labels[regularIndex++]
       }));
     }
+
+    function renderPlayerName(player) {
+      return `<span class="ideal-player-name">${escapeHtml(player.name)}</span>
+        ${player.idealBro ? `<span class="ideal-bro-badge" title="Оба участника пары сохранили верность"><span aria-hidden="true">🏅</span> Идеальный бро</span><span class="ideal-partner">Пара: ${escapeHtml(player.idealPartner)}</span>` : ""}
+        ${player.betrayedPartner ? `<span class="betrayal-note">Получены очки: ${escapeHtml(player.betrayedPartner)}</span>` : ""}
+        ${player.betrayedBy ? `<span class="betrayed-note">Очки переданы: ${escapeHtml(player.betrayedBy)}</span>` : ""}`;
+    }
+
     function renderFinalOverall(day3Data) {
       const ranked = buildFinalRanking(day3Data);
       document.getElementById("overallTableBody").innerHTML = ranked.map(player => `
         <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
           <td class="place-cell" data-label="Место">${player.displayPlace}</td>
-          <td class="player-cell" data-label="Участник">
-            <span class="ideal-player-name">${escapeHtml(player.name)}</span>
-            ${player.idealBro ? `<span class="ideal-partner">Пара: ${escapeHtml(player.idealPartner)}</span><span class="ideal-bro-badge">Идеальный бро</span>` : ""}
-            ${player.betrayedPartner
-              ? `
-                <span class="betrayal-note">
-                  Получены очки: ${escapeHtml(player.betrayedPartner)}
-                </span>
-              `
-              : ""
-            }
-            
-            ${player.betrayedBy
-              ? `
-                <span class="betrayed-note">
-                  Очки переданы: ${escapeHtml(player.betrayedBy)}
-                </span>
-              `
-              : ""
-            }
-          </td>
-          <td class="score-cell" data-label="День 1">${player.day1Total}</td>
-          <td class="score-cell" data-label="День 2">${player.day2Total}</td>
-          <td class="${player.idealBro ? "infinity-cell" : "score-cell"}" data-label="День 3">${player.idealBro ? "∞" : player.peakScore}</td>
-          <td class="${player.idealBro ? "infinity-cell" : "total-cell"}" data-label="Итого">${player.idealBro ? "∞" : player.calculatedTotal}</td>
+          <td class="player-cell" data-label="Участник">${renderPlayerName(player)}</td>
+          <td class="score-cell" data-label="Предыдущие 2 дня">${player.previousTotal}</td>
+          <td class="score-cell" data-label="PEAK">${player.peakScore}</td>
+          <td class="total-cell" data-label="Всего">${player.calculatedTotal}</td>
         </tr>
       `).join("");
     }
 
-   function renderDay3Standings(players) {
-      const sortedPlayers = [...players].sort((a, b) => {
-        if (a.idealBro !== b.idealBro) {
-          return a.idealBro ? -1 : 1;
-        }
-    
-        if (a.idealBro && b.idealBro) {
-          return a.originalIndex - b.originalIndex;
-        }
-    
-        const aScore = Number(a.rawScore) || 0;
-        const bScore = Number(b.rawScore) || 0;
-    
-        if (bScore !== aScore) {
-          return bScore - aScore;
-        }
-    
-        const aPeak = Number(a.peakScore) || 0;
-        const bPeak = Number(b.peakScore) || 0;
-    
-        if (bPeak !== aPeak) {
-          return bPeak - aPeak;
-        }
-    
-        return a.originalIndex - b.originalIndex;
-      });
-    
-      const tableBody = document.getElementById(
-        "day3StandingsBody"
-      );
-    
-      tableBody.innerHTML = sortedPlayers
-        .map(player => `
-          <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
-            <td
-              class="player-cell"
-              data-label="Участник"
-            >
-              ${escapeHtml(player.name)}
-    
-              ${player.idealBro
-                ? `
-                  <span class="ideal-partner">
-                    Пара: ${escapeHtml(player.idealPartner)}
-                  </span>
-    
-                  <span class="ideal-bro-badge">
-                    ИДЕАЛЬНЫЙ БРО
-                  </span>
-                `
-                : ""
-              }
-            </td>
-    
-            <td
-              class="${player.idealBro ? "infinity-cell" : "score-cell"}"
-              data-label="Счёт"
-            >
-              ${player.idealBro ? "∞" : player.rawScore}
-            </td>
-    
-            <td
-              class="${player.idealBro ? "infinity-cell" : "score-cell"}"
-              data-label="PEAK"
-            >
-              ${player.idealBro ? "∞" : player.peakScore}
-            </td>
-    
-            <td
-              class="score-cell"
-              data-label="Предательство"
-            >
-              ${
-                player.idealBro
-                  ? `
-                    <span class="betrayal-status no">
-                      Не предал
-                    </span>
-                  `
-                  : player.betrayed
-                    ? `
-                      <span class="betrayal-status yes">
-                        Да
-                      </span>
-                    `
-                    : `
-                      <span class="betrayal-status no">
-                        Нет
-                      </span>
-                    `
-              }
-            </td>
-          </tr>
-        `)
-        .join("");
+    function renderDay3Standings(players) {
+      const sorted = [...players].sort((a, b) => Number(b.idealBro) - Number(a.idealBro)
+        || b.peakScore - a.peakScore || a.originalIndex - b.originalIndex);
+      document.getElementById("day3StandingsBody").innerHTML = sorted.map(player => `
+        <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
+          <td class="player-cell" data-label="Участник">${renderPlayerName(player)}</td>
+          <td class="score-cell" data-label="Счёт">${escapeHtml(player.rawScore ?? "—")}</td>
+          <td class="score-cell" data-label="PEAK">${player.peakScore}</td>
+          <td class="score-cell" data-label="Предательство"><span class="betrayal-status ${player.betrayed ? "yes" : "no"}">${player.betrayed ? "Да" : "Нет"}</span></td>
+        </tr>
+      `).join("");
     }
 
     async function loadDay3Data() {
