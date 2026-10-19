@@ -654,38 +654,26 @@
     }
 
     #panel-overall .results-table th:last-child,
-    #panel-overall .results-table td:last-child { width: 156px; min-width: 156px; }
+    #panel-overall .results-table td:last-child { width: 206px; min-width: 206px; }
     .overall-score-award {
       display: inline-grid;
-      grid-template-columns: 4ch 60px;
+      grid-template-columns: 4ch 112px;
       align-items: center;
       column-gap: 10px;
-      min-height: 60px;
+      min-height: 32px;
       text-align: center;
       vertical-align: middle;
     }
     .overall-score-number { font-variant-numeric: tabular-nums; text-align: center; }
-    .ideal-score-medal {
-      position: relative;
-      display: grid;
-      place-items: center;
-      width: 60px;
-      height: 60px;
-      color: #60370d;
-      text-align: center;
+    .overall-score-award .ideal-bro-badge {
+      box-sizing: border-box;
+      width: 112px;
+      margin: 0;
+      padding: 5px 4px;
+      font-size: 9px;
+      letter-spacing: .03em;
+      white-space: nowrap;
     }
-    .ideal-score-medal img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-    .ideal-medal-lettering {
-      position: relative;
-      display: grid;
-      justify-items: center;
-      gap: 2px;
-      font: 700 9px/1.1 Oswald, sans-serif;
-      letter-spacing: -.02em;
-      text-transform: uppercase;
-      text-shadow: 0 1px 0 rgba(255,245,200,.7);
-    }
-    .ideal-medal-lettering strong { font: inherit; font-size: 17px; letter-spacing: .04em; }
     @media (max-width: 760px) {
       #panel-overall .results-table td:last-child { width: 100%; min-width: 0; }
       .overall-score-award { flex: 0 0 auto; margin-left: auto; }
@@ -1429,9 +1417,9 @@
       }));
     }
 
-    function renderPlayerName(player, plainStamp = false) {
+    function renderPlayerName(player, showStamp = true) {
       return `<span class="ideal-player-name">${escapeHtml(player.name)}</span>
-        ${player.idealBro ? `<span class="ideal-bro-badge" title="Оба участника пары сохранили верность">${plainStamp ? "" : '<span aria-hidden="true">🏅</span> '}Идеальный бро</span><span class="ideal-partner">Пара: ${escapeHtml(player.idealPartner)}</span>` : ""}
+        ${player.idealBro ? `${showStamp ? '<span class="ideal-bro-badge" title="Оба участника пары сохранили верность"><span aria-hidden="true">🏅</span> Идеальный бро</span>' : ""}<span class="ideal-partner">Пара: ${escapeHtml(player.idealPartner)}</span>` : ""}
         ${player.betrayedPartner ? `<span class="betrayal-note">Получены очки: ${escapeHtml(player.betrayedPartner)}</span>` : ""}
         ${player.betrayedBy ? `<span class="betrayed-note">Очки переданы: ${escapeHtml(player.betrayedBy)}</span>` : ""}`;
     }
@@ -1441,11 +1429,11 @@
       document.getElementById("overallTableBody").innerHTML = ranked.map(player => `
         <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
           <td class="place-cell" data-label="Место">${player.displayPlace}</td>
-          <td class="player-cell" data-label="Участник">${renderPlayerName(player, true)}</td>
+          <td class="player-cell" data-label="Участник">${renderPlayerName(player, false)}</td>
           <td class="score-cell" data-label="День 1">${player.day1Total}</td>
           <td class="score-cell" data-label="День 2">${player.day2Total}</td>
           <td class="score-cell" data-label="День 3">${player.peakScore}</td>
-          <td class="total-cell" data-label="Всего"><span class="overall-score-award"><span class="overall-score-number">${player.calculatedTotal}</span>${player.idealBro ? '<span class="ideal-score-medal" role="img" aria-label="Медаль «Идеальный бро»" title="Оба участника пары сохранили верность"><img src="ideal-bro-medal-gold.png" alt="" width="60" height="60"><span class="ideal-medal-lettering" aria-hidden="true"><span>Идеальный</span><strong>бро</strong></span></span>' : ""}</span></td>
+          <td class="total-cell" data-label="Всего"><span class="overall-score-award"><span class="overall-score-number">${player.calculatedTotal}</span>${player.idealBro ? '<span class="ideal-bro-badge" title="Оба участника пары сохранили верность"><span aria-hidden="true">🏅</span> Идеальный бро</span>' : ""}</span></td>
         </tr>
       `).join("");
     }
