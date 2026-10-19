@@ -8,7 +8,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Результаты — День 1 — IDEAL BRO</title>
+  <title>Результаты - День 1 - IDEAL BRO</title>
 
   <link rel="stylesheet" href="style.css">
 
@@ -1351,9 +1351,9 @@
       на настоящие ники участников.
 
       В каждой игре пары уже распределены по местам:
-      place: 1 — первое место
-      place: 2 — второе место
-      place: 3 — третье место
+      place: 1 - первое место
+      place: 2 - второе место
+      place: 3 - третье место
 
       Очки и общий рейтинг рассчитываются автоматически.
     */
@@ -1537,7 +1537,7 @@
         const label =
           startPlace === endPlace
             ? formatPlaceNumber(startPlace)
-            : `${formatPlaceNumber(startPlace)}–${formatPlaceNumber(endPlace)}`;
+            : `${formatPlaceNumber(startPlace)}-${formatPlaceNumber(endPlace)}`;
     
         for (let index = groupStart; index <= groupEnd; index += 1) {
           labels[index] = label;
@@ -1587,14 +1587,14 @@
               class="score-cell future-score"
               data-label="День 2"
             >
-              —
+              -
             </td>
     
             <td
               class="score-cell future-score"
               data-label="День 3"
             >
-              —
+              -
             </td>
     
             <td
@@ -1639,21 +1639,21 @@
               class="score-cell"
               data-label="Игра 1"
             >
-              ${player.games.alias ?? "—"}
+              ${player.games.alias ?? "-"}
             </td>
     
             <td
               class="score-cell"
               data-label="Игра 2"
             >
-              ${player.games.wwh2 ?? "—"}
+              ${player.games.wwh2 ?? "-"}
             </td>
     
             <td
               class="score-cell"
               data-label="Игра 3"
             >
-              ${player.games.repo ?? "—"}
+              ${player.games.repo ?? "-"}
             </td>
     
             <td

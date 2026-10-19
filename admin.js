@@ -4,67 +4,249 @@ const REQUIRED_PLAYERS = 6;
 const ADMIN_CACHE_KEY = "idealbro-admin-day1-cache-v1";
 const REQUEST_TIMEOUT = 15000;
 const ANSWER_WEIGHTS = {
-  bread_baguette: { skill: 1, social: 0 },
-  bread_toast: { skill: 1, social: 1 },
-  bread_croissant: { skill: 0, social: 1 },
-  bread_pita: { skill: 0, social: 2 },
-  bread_pretzel: { skill: 0, social: 1 },
-  bread_cracker: { skill: 1, social: 0 },
-  silence_professional: { skill: 1, social: 0 },
-  silence_question: { skill: 0, social: 2 },
-  silence_story: { skill: 0, social: 2 },
-  silence_wait: { skill: 0, social: 0 },
-  silence_noise: { skill: 0, social: 1 },
-  silence_didnt_notice: { skill: 1, social: 0 },
-  newgame_mastered: { skill: 3, social: 0 },
-  newgame_tutorial: { skill: 2, social: 0 },
-  newgame_buttons: { skill: 1, social: 0 },
-  newgame_ask: { skill: 0, social: 2 },
-  newgame_settings: { skill: 1, social: 0 },
-  newgame_wander: { skill: 1, social: 0 },
-  button_press: { skill: 1, social: 0 },
-  button_manual: { skill: 2, social: 0 },
-  button_friend: { skill: 0, social: 1 },
-  button_audience: { skill: 0, social: 2 },
-  button_google: { skill: 2, social: 0 },
-  button_hide: { skill: 1, social: 0 },
-  food_link: { skill: 2, social: 0 },
-  food_anything: { skill: 0, social: 1 },
-  food_poll: { skill: 1, social: 2 },
-  food_reject: { skill: 1, social: 0 },
-  food_support: { skill: 0, social: 2 },
-  food_discuss: { skill: 0, social: 2 },
-  tutorial_skip: { skill: 2, social: 0 },
-  tutorial_read: { skill: 2, social: 0 },
-  tutorial_suffer: { skill: 1, social: 0 },
-  tutorial_friend: { skill: 0, social: 2 },
-  tutorial_test: { skill: 3, social: 0 },
-  tutorial_group_confusion: { skill: 0, social: 2 },
-  rules_short: { skill: 2, social: 0 },
-  rules_lore: { skill: 0, social: 1 },
-  rules_play: { skill: 2, social: 0 },
-  rules_delegate: { skill: 0, social: 1 },
-  rules_diagram: { skill: 2, social: 1 },
-  rules_60: { skill: 0, social: 1 },
-  idea_no: { skill: 1, social: 0 },
-  idea_listen: { skill: 0, social: 1 },
-  idea_join: { skill: 0, social: 2 },
-  idea_legal: { skill: 1, social: 0 },
-  idea_improve: { skill: 2, social: 0 },
-  idea_call_everyone: { skill: 0, social: 2 },
-  deadline_done: { skill: 3, social: 0 },
-  deadline_part: { skill: 2, social: 0 },
-  deadline_people: { skill: 1, social: 2 },
-  deadline_table: { skill: 2, social: 1 },
-  deadline_memes: { skill: 0, social: 2 },
-  deadline_surprise: { skill: 0, social: 0 },
-  bro_understands: { skill: 0, social: 1 },
-  bro_online: { skill: 0, social: 2 },
-  bro_not_annoying: { skill: 0, social: 1 },
-  bro_silence: { skill: 1, social: 0 },
-  bro_chaos: { skill: 0, social: 2 },
-  bro_truth: { skill: 1, social: 1 }
+  bread_baguette: { lead: 3, soul: 0, chaos: 1 },
+  bread_toast: { lead: 2, soul: 1, chaos: 0 },
+  bread_cracker: { lead: 2, soul: 0, chaos: 1 },
+  bread_pita: { lead: 0, soul: 3, chaos: 0 },
+  bread_bagel: { lead: 0, soul: 3, chaos: 1 },
+  bread_croissant: { lead: 0, soul: 2, chaos: 3 },
+  silence_plan: { lead: 3, soul: 0, chaos: 0 },
+  silence_switch: { lead: 3, soul: 0, chaos: 1 },
+  silence_focus: { lead: 2, soul: 0, chaos: 1 },
+  silence_question: { lead: 0, soul: 3, chaos: 2 },
+  silence_story: { lead: 0, soul: 3, chaos: 1 },
+  silence_noise: { lead: 0, soul: 2, chaos: 3 },
+  ng_roles: { lead: 3, soul: 0, chaos: 0 },
+  ng_explain: { lead: 3, soul: 0, chaos: 2 },
+  ng_read: { lead: 2, soul: 1, chaos: 0 },
+  ng_lost: { lead: 1, soul: 3, chaos: 0 },
+  ng_comment: { lead: 0, soul: 3, chaos: 2 },
+  ng_follow: { lead: 0, soul: 2, chaos: 1 },
+  button_guard: { lead: 3, soul: 0, chaos: 0 },
+  button_press: { lead: 2, soul: 0, chaos: 3 },
+  button_manual: { lead: 2, soul: 0, chaos: 0 },
+  button_audience: { lead: 0, soul: 3, chaos: 1 },
+  button_together: { lead: 0, soul: 3, chaos: 2 },
+  button_friend: { lead: 0, soul: 2, chaos: 1 },
+  food_link: { lead: 3, soul: 0, chaos: 0 },
+  food_poll: { lead: 3, soul: 1, chaos: 0 },
+  food_veto: { lead: 2, soul: 0, chaos: 2 },
+  food_hungry: { lead: 0, soul: 3, chaos: 0 },
+  food_anything: { lead: 0, soul: 2, chaos: 1 },
+  food_discuss: { lead: 0, soul: 3, chaos: 2 },
+  decision_self: { lead: 3, soul: 0, chaos: 0 },
+  decision_expert: { lead: 3, soul: 0, chaos: 0 },
+  decision_calm: { lead: 2, soul: 1, chaos: 0 },
+  decision_vote: { lead: 0, soul: 3, chaos: 1 },
+  decision_random: { lead: 0, soul: 2, chaos: 3 },
+  decision_avoid: { lead: 0, soul: 2, chaos: 1 },
+  wrong_tell: { lead: 3, soul: 0, chaos: 0 },
+  wrong_takeover: { lead: 3, soul: 0, chaos: 1 },
+  wrong_check: { lead: 2, soul: 0, chaos: 0 },
+  wrong_hint: { lead: 0, soul: 3, chaos: 0 },
+  wrong_follow: { lead: 0, soul: 3, chaos: 1 },
+  wrong_fun: { lead: 0, soul: 2, chaos: 3 },
+  trust_backup: { lead: 3, soul: 0, chaos: 0 },
+  trust_no: { lead: 3, soul: 0, chaos: 1 },
+  trust_why: { lead: 2, soul: 1, chaos: 0 },
+  trust_yes: { lead: 0, soul: 3, chaos: 2 },
+  trust_cheer: { lead: 0, soul: 3, chaos: 1 },
+  trust_with: { lead: 0, soul: 3, chaos: 1 },
+  plan_adapt: { lead: 3, soul: 0, chaos: 0 },
+  plan_orders: { lead: 3, soul: 0, chaos: 1 },
+  plan_restore: { lead: 2, soul: 0, chaos: 0 },
+  plan_calm: { lead: 0, soul: 3, chaos: 0 },
+  plan_follow: { lead: 0, soul: 3, chaos: 0 },
+  plan_enjoy: { lead: 0, soul: 2, chaos: 3 },
+  deadline_split: { lead: 3, soul: 0, chaos: 0 },
+  deadline_table: { lead: 3, soul: 0, chaos: 0 },
+  deadline_done: { lead: 2, soul: 0, chaos: 1 },
+  deadline_memes: { lead: 0, soul: 3, chaos: 1 },
+  deadline_coffee: { lead: 0, soul: 3, chaos: 0 },
+  deadline_surprise: { lead: 0, soul: 2, chaos: 3 },
+  sheriff_patrol: { lead: 3, soul: 0, chaos: 0 },
+  sheriff_list: { lead: 3, soul: 0, chaos: 1 },
+  sheriff_curfew: { lead: 3, soul: 0, chaos: 2 },
+  sheriff_lemonade: { lead: 0, soul: 3, chaos: 1 },
+  sheriff_meet: { lead: 0, soul: 3, chaos: 0 },
+  sheriff_party: { lead: 0, soul: 2, chaos: 3 },
+  train_plan: { lead: 3, soul: 0, chaos: 0 },
+  train_roof: { lead: 3, soul: 0, chaos: 2 },
+  train_count: { lead: 2, soul: 1, chaos: 0 },
+  train_talk: { lead: 0, soul: 3, chaos: 1 },
+  train_friends: { lead: 0, soul: 3, chaos: 2 },
+  train_horses: { lead: 0, soul: 3, chaos: 0 },
+  toast_contest: { lead: 3, soul: 0, chaos: 2 },
+  toast_stand: { lead: 3, soul: 1, chaos: 1 },
+  toast_short: { lead: 2, soul: 0, chaos: 0 },
+  toast_story: { lead: 0, soul: 3, chaos: 2 },
+  toast_cry: { lead: 0, soul: 3, chaos: 0 },
+  toast_aunt: { lead: 0, soul: 2, chaos: 1 },
+  lost_review: { lead: 3, soul: 0, chaos: 0 },
+  lost_again: { lead: 3, soul: 0, chaos: 1 },
+  lost_onme: { lead: 2, soul: 1, chaos: 0 },
+  lost_beauty: { lead: 0, soul: 3, chaos: 1 },
+  lost_fall: { lead: 0, soul: 3, chaos: 2 },
+  lost_tea: { lead: 0, soul: 3, chaos: 0 },
+  pack_map: { lead: 3, soul: 0, chaos: 0 },
+  pack_radio: { lead: 3, soul: 0, chaos: 1 },
+  pack_firstaid: { lead: 2, soul: 1, chaos: 0 },
+  pack_guitar: { lead: 0, soul: 3, chaos: 1 },
+  pack_snacks: { lead: 0, soul: 3, chaos: 0 },
+  pack_fireworks: { lead: 0, soul: 2, chaos: 3 },
+  final_plan: { lead: 3, soul: 0, chaos: 0 },
+  final_carry: { lead: 3, soul: 0, chaos: 1 },
+  final_saw: { lead: 2, soul: 0, chaos: 0 },
+  final_fun: { lead: 0, soul: 3, chaos: 1 },
+  final_again: { lead: 0, soul: 3, chaos: 0 },
+  final_calm: { lead: 0, soul: 3, chaos: 0 }
 };
+const QUESTION_ANSWER_VALUES = [
+  [
+    "bread_baguette",
+    "bread_toast",
+    "bread_cracker",
+    "bread_pita",
+    "bread_bagel",
+    "bread_croissant"
+  ],
+  [
+    "silence_plan",
+    "silence_switch",
+    "silence_focus",
+    "silence_question",
+    "silence_story",
+    "silence_noise"
+  ],
+  [
+    "ng_roles",
+    "ng_explain",
+    "ng_read",
+    "ng_lost",
+    "ng_comment",
+    "ng_follow"
+  ],
+  [
+    "button_guard",
+    "button_press",
+    "button_manual",
+    "button_audience",
+    "button_together",
+    "button_friend"
+  ],
+  [
+    "food_link",
+    "food_poll",
+    "food_veto",
+    "food_hungry",
+    "food_anything",
+    "food_discuss"
+  ],
+  [
+    "decision_self",
+    "decision_expert",
+    "decision_calm",
+    "decision_vote",
+    "decision_random",
+    "decision_avoid"
+  ],
+  [
+    "wrong_tell",
+    "wrong_takeover",
+    "wrong_check",
+    "wrong_hint",
+    "wrong_follow",
+    "wrong_fun"
+  ],
+  [
+    "trust_backup",
+    "trust_no",
+    "trust_why",
+    "trust_yes",
+    "trust_cheer",
+    "trust_with"
+  ],
+  [
+    "plan_adapt",
+    "plan_orders",
+    "plan_restore",
+    "plan_calm",
+    "plan_follow",
+    "plan_enjoy"
+  ],
+  [
+    "deadline_split",
+    "deadline_table",
+    "deadline_done",
+    "deadline_memes",
+    "deadline_coffee",
+    "deadline_surprise"
+  ],
+  [
+    "sheriff_patrol",
+    "sheriff_list",
+    "sheriff_curfew",
+    "sheriff_lemonade",
+    "sheriff_meet",
+    "sheriff_party"
+  ],
+  [
+    "train_plan",
+    "train_roof",
+    "train_count",
+    "train_talk",
+    "train_friends",
+    "train_horses"
+  ],
+  [
+    "toast_contest",
+    "toast_stand",
+    "toast_short",
+    "toast_story",
+    "toast_cry",
+    "toast_aunt"
+  ],
+  [
+    "lost_review",
+    "lost_again",
+    "lost_onme",
+    "lost_beauty",
+    "lost_fall",
+    "lost_tea"
+  ],
+  [
+    "pack_map",
+    "pack_radio",
+    "pack_firstaid",
+    "pack_guitar",
+    "pack_snacks",
+    "pack_fireworks"
+  ],
+  [
+    "final_plan",
+    "final_carry",
+    "final_saw",
+    "final_fun",
+    "final_again",
+    "final_calm"
+  ]
+];
+const QUESTION_COUNT = QUESTION_ANSWER_VALUES.length;
+
+function getAnswersError(answers) {
+  if (!Array.isArray(answers) || answers.length !== QUESTION_COUNT) {
+    return `Нужен полный тест: ${QUESTION_COUNT} ответов. Получено: ${Array.isArray(answers) ? answers.length : 0}.`;
+  }
+  for (let index = 0; index < QUESTION_COUNT; index += 1) {
+    const answer = answers[index];
+    const value = String(answer?.value ?? answer ?? "");
+    if (!QUESTION_ANSWER_VALUES[index].includes(value)) {
+      return `Неверный или устаревший ответ на вопрос ${index + 1}. Нужен результат нового теста из ${QUESTION_COUNT} вопросов.`;
+    }
+  }
+  return null;
+}
+
 
 let currentSource = "real";
 let selectedGame = 1;
@@ -341,6 +523,10 @@ function validatePlayers(players) {
     return "Есть повторяющиеся имена. Проверь таблицу.";
   }
 
+  for (const player of players) {
+    const answersError = getAnswersError(player.answers);
+    if (answersError) return `${player.name}: ${answersError}`;
+  }
   return null;
 }
 
@@ -399,13 +585,16 @@ function parseManualResult(raw) {
     throw new Error("В JSON не найден список ответов.");
   }
 
+  const answersError = getAnswersError(result.answers);
+  if (answersError) throw new Error(answersError);
+
   return {
     name,
     player: name,
     date: result.date || new Date().toISOString(),
     answers: result.answers.map((answer, index) => ({
       question: String(answer.question || `Вопрос ${index + 1}`),
-      value: String(answer.value || ""),
+      value: String(answer?.value ?? answer ?? ""),
       title: String(answer.title || ""),
       note: String(answer.note || "")
     })),
@@ -452,7 +641,9 @@ function importManualResult() {
   } catch (error) {
     console.error(error);
     status.textContent =
-      "Не получилось прочитать JSON. Проверь, что участник скопировал весь блок целиком.";
+      error instanceof SyntaxError
+        ? "Не получилось прочитать JSON. Проверь, что участник скопировал весь блок целиком."
+        : error.message;
   }
 }
 
@@ -485,24 +676,24 @@ function shuffle(array) {
 }
 
 function calculateProfile(player) {
-  let skill = 0;
-  let social = 0;
+  let lead = 0;
+  let soul = 0;
   let chaos = 0;
 
   answerValues(player).forEach(answer => {
     const weight = ANSWER_WEIGHTS[answer];
     if (!weight) return;
 
-    skill += weight.skill || 0;
-    social += weight.social || 0;
+    lead += weight.lead || 0;
+    soul += weight.soul || 0;
     chaos += weight.chaos || 0;
   });
 
   return {
-    skill,
-    social,
+    lead,
+    soul,
     chaos,
-    score: skill * 2 - social
+    score: lead * 2 - soul
   };
 }
 
@@ -543,8 +734,8 @@ function createLocalGroups() {
         return b.profile.score - a.profile.score;
       }
 
-      if (b.profile.skill !== a.profile.skill) {
-        return b.profile.skill - a.profile.skill;
+      if (b.profile.lead !== a.profile.lead) {
+        return b.profile.lead - a.profile.lead;
       }
 
       return Math.random() - 0.5;
@@ -553,8 +744,8 @@ function createLocalGroups() {
   state.groups = rankedPlayers.map((player, index) => ({
     ...player,
     group: index < 3 ? "A" : "B",
-    skill: player.profile.skill,
-    social: player.profile.social,
+    lead: player.profile.lead,
+    soul: player.profile.soul,
     chaos: player.profile.chaos,
     score: player.profile.score
   }));
@@ -762,6 +953,12 @@ async function loadAdminState() {
 }
 
 async function createGroups() {
+  const validationError = validatePlayers(state.players);
+  if (validationError) {
+    $("leftStatus").textContent = validationError;
+    return;
+  }
+
   if (hasManualPlayers()) {
     try {
       await runLoader(
