@@ -655,9 +655,10 @@
 
     #panel-overall .results-table th:last-child,
     #panel-overall .results-table td:last-child { width: 206px; min-width: 206px; }
-    .overall-score-award {
+    .overall-score-award,
+    .overall-total-heading {
       display: inline-grid;
-      grid-template-columns: 4ch 112px;
+      grid-template-columns: 40px 112px;
       align-items: center;
       column-gap: 10px;
       min-height: 32px;
@@ -938,7 +939,7 @@
                   <th>День 1</th>
                   <th>День 2</th>
                   <th>День 3</th>
-                  <th>Всего</th>
+                  <th><span class="overall-total-heading"><span>Всего</span></span></th>
                 </tr>
               </thead>
               <tbody id="overallTableBody"></tbody>
