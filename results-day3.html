@@ -888,6 +888,22 @@
       content: "/ ";
       color: #8c7b62;
     }
+      @media (min-width: 761px) {
+      #panel-day1 .day1-results-table { table-layout: fixed; }
+      #panel-day1 .day1-results-table col:nth-child(1) { width: 10%; }
+      #panel-day1 .day1-results-table col:nth-child(2) { width: 24%; }
+      #panel-day1 .day1-results-table col:nth-child(3),
+      #panel-day1 .day1-results-table col:nth-child(4),
+      #panel-day1 .day1-results-table col:nth-child(5) { width: 18%; }
+      #panel-day1 .day1-results-table col:nth-child(6) { width: 12%; }
+      #panel-day1 .day1-results-table th,
+      #panel-day1 .day1-results-table td { min-width: 0; padding-left: 10px; padding-right: 10px; }
+      #panel-day1 .day1-results-table th { white-space: normal; vertical-align: middle; }
+      #panel-day1 .day1-results-table .player-cell { overflow-wrap: anywhere; }
+    }
+    @media (max-width: 760px) {
+      .day1-results-table colgroup { display: none; }
+    }
   </style>
 </head>
 
@@ -954,10 +970,11 @@
           </header>
 
           <div class="results-table-wrapper">
-            <table class="results-table">
+            <table class="results-table day1-results-table">
+              <colgroup><col><col><col><col><col><col></colgroup>
               <thead>
                 <tr>
-                  <th>Место</th><th>Участник</th><th>Игра 1</th><th>Игра 2</th><th>Игра 3</th><th>Итого</th>
+                  <th>Место</th><th>Участник</th><th>Alias</th><th>The Past Within</th><th>An Eggstremely Hard Game</th><th>Итого</th>
                 </tr>
               </thead>
               <tbody id="day1TableBody"></tbody>
@@ -968,17 +985,7 @@
 
           <section class="day-summary">
             <h3>Что происходило в этот день?</h3>
-            <p>В первый день участники прошли тест приложения, после чего были разделены на две экспериментальные группы. Затем они сыграли три игры в разных парах. Каждая новая игра проверяла другое сочетание участников, а повторение пар не допускалось.</p>
-            <details class="day-rules">
-              <summary>Показать полный протокол дня</summary>
-              <div class="rules-content"><ol>
-                <li><span class="rule-number">01</span><span>Перед началом игр участники прошли <strong>тест совместимости</strong>. На основании результатов приложение разделило их на две группы.</span></li>
-                <li><span class="rule-number">02</span><span>Каждая игровая пара состояла из одного участника первой группы и одного участника второй группы.</span></li>
-                <li><span class="rule-number">03</span><span>В каждой новой игре участники получали нового напарника. За первый день ни одна пара не могла повториться.</span></li>
-                <li><span class="rule-number">04</span><span>За первое место в игре каждый участник пары получал <strong>3 очка</strong>, за второе - <strong>2 очка</strong>, за третье - <strong>1 очко</strong>.</span></li>
-                <li><span class="rule-number">05</span><span>Очки, заработанные в трёх играх, складывались и формировали результат участника за первый день.</span></li>
-              </ol></div>
-            </details>
+            <p>В первый день участники прошли предварительный тест, а приложение разделило их на две группы и формировало новые пары для каждого испытания. В Alias команды объясняли и отгадывали слова в шести раундах по минуте. В The Past Within проходили головоломки на время, общаясь только словами и не видя экран напарника. В An Eggstremely Hard Game за два часа старались дойти до самой дальней контрольной точки. За каждое испытание участники получали 3, 2 или 1 очко в зависимости от места.</p>
           </section>
         </section>
 
@@ -993,22 +1000,6 @@
           <section class="day-summary">
             <h3>Что происходило в этот день?</h3>
             <p>Испытание второго дня - «Выбор». Новые пары в течение 4 часов выполняли шесть достижений на выбор в Gamble with your friends, Cuphead и Whisk. Места определялись количеством достижений и временем получения последнего из них.</p>
-            <details class="day-rules">
-              <summary>Показать полный протокол дня</summary>
-              <div class="rules-content"><ol>
-                <li><span class="rule-number">01</span><span>Перед началом испытания участники делятся на две группы в соответствии с результатами первого игрового дня. В первую группу входят участники, занявшие первое, второе и третье места. Во вторую - участники, занявшие четвёртое, пятое и шестое места. Участники второй группы по очереди выбирают, с кем из первой группы они хотят пройти испытание. Первым выбирает участник, занимающий шестое место, затем - пятое, после него - четвёртое.</span></li>
-                <li><span class="rule-number">02</span><span>После формирования пар все команды начинают одновременно по команде хоста. На испытание отводится <strong>4 часа</strong>.</span></li>
-                <li><span class="rule-number">03</span><span>Задача каждой команды - получить как можно больше достижений в представленных играх и сделать это как можно быстрее. Команда сама решает, где играть: в любой момент можно бросить игру, перейти в другую, вернуться обратно или выполнить все шесть достижений. Очки за уже выполненные достижения сохраняются.</span></li>
-                <li><span class="rule-number">04</span><span><strong>🎰 Gamble with your friends</strong><br>- Завершить квоту на сумму больше 500 000 $.<br>- Закрыть день с квотой больше 50 000 $, не проиграв ни одной ставки за этот день.</span></li>
-                <li><span class="rule-number">05</span><span><strong>☕ Cuphead</strong><br>- Перейти на Чернильный остров II.<br>- Пройти всех боссов Чернильного острова I на оценку не ниже «B».</span></li>
-                <li><span class="rule-number">06</span><span><strong>🐱 Whisk</strong><br>- Пройти все уровни минимум на золотую медаль.<br>- Спасти всех дополнительных котиков.</span></li>
-                <li><span class="rule-number">07</span><span>Засчитываются только достижения, выполненные на трансляции в день испытания, с нового сохранения или нового забега. Ранее полученный прогресс не учитывается.</span></li>
-                <li><span class="rule-number">08</span><span>По истечении 4 часов команды ранжируются по количеству выполненных достижений. Если у двух команд одинаковое количество достижений, выше располагается команда, которая раньше выполнила своё последнее достижение.</span></li>
-                <li><span class="rule-number">09</span><span>Если за 4 часа ни одна команда не выполнила ни одного достижения, таймер продолжается. Первая команда, выполнившая достижение, занимает первое место, вторая - второе, оставшаяся - третье. После этого испытание завершается.</span></li>
-                <li><span class="rule-number">10</span><span>Если по истечении 4 часов у двух команд нет ни одного достижения, таймер продолжается только для них. Первая из них, выполнившая достижение, занимает более высокое место из двух оставшихся. После этого испытание завершается.</span></li>
-                <li><span class="rule-number">11</span><span>Каждый участник команды получает одинаковое количество очков в зависимости от занятого места. За первое место - <strong>6 очков</strong>, за второе - <strong>4 очка</strong>, за третье - <strong>2 очка</strong>. Полученные очки начисляются каждому участнику индивидуально и добавляются в общий рейтинг эксперимента.</span></li>
-              </ol></div>
-            </details>
           </section>
         </section>
 
@@ -1055,16 +1046,6 @@
             <section class="day-summary">
               <h3>Что происходило в этот день?</h3>
               <p>Участники прошли все пять биомов PEAK в постоянных парах. После завершения испытания каждый принимал решение: остаться вместе или предать напарника. При предательстве передавались баллы за PEAK и предыдущие два дня. Если оба сохранили верность, каждый получил медаль «Идеальный бро», сохранив свои баллы.</p>
-              <details class="day-rules">
-                <summary>Показать полный протокол дня</summary>
-                <div class="rules-content"><ol>
-                  <li><span class="rule-number">01</span><span>За место в каждом биоме, совместное выживание и выполнение дополнительных заданий пары получали очки.</span></li>
-                  <li><span class="rule-number">02</span><span>Состав пар оставался неизменным на протяжении всех пяти биомов.</span></li>
-                  <li><span class="rule-number">03</span><span>После завершения этапа участники принимали финальное решение отдельно от напарника.</span></li>
-                  <li><span class="rule-number">04</span><span>Предавший получал баллы напарника за PEAK и предыдущие два дня. Если предавали оба, они обменивались баллами.</span></li>
-                  <li><span class="rule-number">05</span><span>Если оба участника пары не предали друг друга, они сохраняли свои баллы и получали медаль <strong>«Идеальный бро»</strong>.</span></li>
-                </ol></div>
-              </details>
             </section>
           </div>
         </section>
@@ -1080,17 +1061,17 @@
     const DAY1_DATA = {
       players: ["УЧАСТНИК 01","УЧАСТНИК 02","УЧАСТНИК 03","УЧАСТНИК 04","УЧАСТНИК 05","УЧАСТНИК 06"],
       games: [
-        { id:"alias", title:"Игра 1", protocol:"Испытание 01", pairs:[
+        { id:"alias", title:"Alias", protocol:"Испытание 01", pairs:[
           {place:1,players:["УЧАСТНИК 01","УЧАСТНИК 04"]},
           {place:2,players:["УЧАСТНИК 02","УЧАСТНИК 05"]},
           {place:3,players:["УЧАСТНИК 03","УЧАСТНИК 06"]}
         ]},
-        { id:"wwh2", title:"Игра 2", protocol:"Испытание 02", pairs:[
+        { id:"wwh2", title:"The Past Within", protocol:"Испытание 02", pairs:[
           {place:1,players:["УЧАСТНИК 02","УЧАСТНИК 06"]},
           {place:2,players:["УЧАСТНИК 03","УЧАСТНИК 04"]},
           {place:3,players:["УЧАСТНИК 01","УЧАСТНИК 05"]}
         ]},
-        { id:"repo", title:"Игра 3", protocol:"Испытание 03", pairs:[
+        { id:"repo", title:"An Eggstremely Hard Game", protocol:"Испытание 03", pairs:[
           {place:1,players:["УЧАСТНИК 03","УЧАСТНИК 05"]},
           {place:2,players:["УЧАСТНИК 01","УЧАСТНИК 06"]},
           {place:3,players:["УЧАСТНИК 02","УЧАСТНИК 04"]}
@@ -1229,9 +1210,9 @@
         <tr>
           <td class="place-cell" data-label="Место">${labels[index]}</td>
           <td class="player-cell" data-label="Участник">${escapeHtml(player.name)}</td>
-          <td class="score-cell" data-label="Игра 1">${player.games.alias ?? "-"}</td>
-          <td class="score-cell" data-label="Игра 2">${player.games.wwh2 ?? "-"}</td>
-          <td class="score-cell" data-label="Игра 3">${player.games.repo ?? "-"}</td>
+          <td class="score-cell" data-label="Alias">${player.games.alias ?? "-"}</td>
+          <td class="score-cell" data-label="The Past Within">${player.games.wwh2 ?? "-"}</td>
+          <td class="score-cell" data-label="An Eggstremely Hard Game">${player.games.repo ?? "-"}</td>
           <td class="total-cell" data-label="Итого">${player.total}</td>
         </tr>
       `).join("");
