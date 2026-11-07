@@ -1390,14 +1390,13 @@
       });
       players.sort((a, b) => Number(b.idealBro) - Number(a.idealBro)
         || b.calculatedTotal - a.calculatedTotal || a.originalIndex - b.originalIndex);
-      const regularPlayers = players.filter(player => !player.idealBro);
-      const offset = players.some(player => player.idealBro) ? 1 : 0;
-      const labels = getTiedPlaceLabels(regularPlayers, player => player.calculatedTotal)
-        .map(label => label.split("-").map(place => Number(place) + offset).join("-"));
-      let regularIndex = 0;
-      return players.map(player => ({
+      const labels = getTiedPlaceLabels(
+        players,
+        player => `${player.idealBro}:${player.calculatedTotal}`
+      );
+      return players.map((player, index) => ({
         ...player,
-        displayPlace: player.idealBro ? "1" : labels[regularIndex++]
+        displayPlace: labels[index]
       }));
     }
 
