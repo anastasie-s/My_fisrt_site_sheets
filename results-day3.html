@@ -904,6 +904,11 @@
     @media (max-width: 760px) {
       .day1-results-table colgroup { display: none; }
     }
+  
+    .results-rules-link-row { margin: 24px 0 0; text-align: right; }
+    .results-rules-link { display: inline-flex; align-items: center; gap: 8px; color: #8d5015; font-size: 14px; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
+    .results-rules-link:hover { color: var(--ink); }
+    .results-rules-link:focus-visible { outline: 2px solid #8d5015; outline-offset: 5px; border-radius: 2px; }
   </style>
 </head>
 
@@ -983,10 +988,7 @@
 
           <div class="games-grid" id="gamesGridDay1"></div>
 
-          <section class="day-summary">
-            <h3>Что происходило в этот день?</h3>
-            <p>В первый день участники прошли предварительный тест, а приложение разделило их на две группы и формировало новые пары для каждого испытания. В Alias команды объясняли и отгадывали слова в четырёх раундах по минуте. В The Past Within проходили головоломки на время, общаясь только словами и не видя экран напарника. В An Eggstremely Hard Game за 1,5 часа старались дойти до самой дальней контрольной точки. За каждое испытание участники получали 3, 2 или 1 очко в зависимости от места.</p>
-          </section>
+          <p class="results-rules-link-row"><a class="results-rules-link" href="rules_full.html#day1" aria-label="Правила первого дня">Правила дня <span aria-hidden="true">→</span></a></p>
         </section>
 
         <section class="results-panel" id="panel-day2" role="tabpanel" data-panel="day2" hidden>
@@ -997,10 +999,7 @@
 
           <div class="games-grid" id="gamesGridDay2" style="grid-template-columns:minmax(0,1fr);"></div>
 
-          <section class="day-summary">
-            <h3>Что происходило в этот день?</h3>
-            <p>Испытание второго дня - «Выбор». Первым напарника выбирал участник с шестого места, затем - участник с наименьшим количеством баллов за первый день среди ещё не вошедших в пары. Можно было выбрать любого свободного участника. За 4 часа команды старались выполнить как можно больше достижений из списка в Gamble with your friends, Cuphead и Whisk. Места определялись количеством достижений и временем получения последнего из них.</p>
-          </section>
+          <p class="results-rules-link-row"><a class="results-rules-link" href="rules_full.html#day2" aria-label="Правила второго дня">Правила дня <span aria-hidden="true">→</span></a></p>
         </section>
 
         <section class="results-panel active" id="panel-day3" role="tabpanel" data-panel="day3">
@@ -1043,10 +1042,7 @@
               </div>
             </section>
 
-            <section class="day-summary">
-              <h3>Что происходило в этот день?</h3>
-              <p>Пары проходили PEAK вместе: за место в каждом биоме - 3/2/1 очка, за секретное задание - +1, за совместный финиш только в четвёртом биоме - +2. Общались только через игровой голосовой чат, а после вулкана ждали у флажков перед Пиком. При предательстве передавались баллы за все три дня; сохранившие верность получали статус «Идеальный бро».</p>
-            </section>
+            <p class="results-rules-link-row"><a class="results-rules-link" href="rules_full.html#day3" aria-label="Правила третьего дня">Правила дня <span aria-hidden="true">→</span></a></p>
           </div>
         </section>
       </section>

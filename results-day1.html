@@ -1016,6 +1016,11 @@
     @media (max-width: 760px) {
       .day1-results-table colgroup { display: none; }
     }
+  
+    .results-rules-link-row { margin: 24px 0 0; text-align: right; }
+    .results-rules-link { display: inline-flex; align-items: center; gap: 8px; color: #8d5015; font-size: 14px; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
+    .results-rules-link:hover { color: var(--ink); }
+    .results-rules-link:focus-visible { outline: 2px solid #8d5015; outline-offset: 5px; border-radius: 2px; }
   </style>
 </head>
 
@@ -1202,10 +1207,7 @@
             id="gamesGrid"
           ></div>
 
-          <section class="day-summary">
-            <h3>Что происходило в этот день?</h3>
-            <p>В первый день участники прошли предварительный тест, а приложение разделило их на две группы и формировало новые пары для каждого испытания. В Alias команды объясняли и отгадывали слова в четырёх раундах по минуте. В The Past Within проходили головоломки на время, общаясь только словами и не видя экран напарника. В An Eggstremely Hard Game за 1,5 часа старались дойти до самой дальней контрольной точки. За каждое испытание участники получали 3, 2 или 1 очко в зависимости от места.</p>
-          </section>
+          <p class="results-rules-link-row"><a class="results-rules-link" href="rules_full.html#day1" aria-label="Правила первого дня">Правила дня <span aria-hidden="true">→</span></a></p>
         </section>
 
         <!-- ДЕНЬ 2 -->
