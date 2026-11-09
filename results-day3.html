@@ -1033,8 +1033,8 @@
                     <tr>
                       <th>Участник</th>
                       <th>Счёт</th>
-                      <th>Итог за третий день</th>
                       <th>Предательство</th>
+                      <th>Итог за третий день</th>
                     </tr>
                   </thead>
                   <tbody id="day3StandingsBody"></tbody>
@@ -1425,8 +1425,8 @@
         <tr class="${player.idealBro ? "ideal-bro-row" : ""}">
           <td class="player-cell" data-label="Участник">${renderPlayerName(player)}</td>
           <td class="score-cell" data-label="Счёт">${escapeHtml(player.rawScore ?? "-")}</td>
-          <td class="score-cell" data-label="Итог за третий день">${player.betrayedPartner ? `<span title="Свои баллы + баллы напарника" aria-label="Свои баллы: ${player.retainedPeak}; от напарника: ${player.receivedPeak}">${player.retainedPeak} + ${player.receivedPeak}</span>` : player.peakScore}</td>
           <td class="score-cell" data-label="Предательство"><span class="betrayal-status ${player.betrayed ? "yes" : "no"}">${player.betrayed ? "Да" : "Нет"}</span></td>
+          <td class="score-cell" data-label="Итог за третий день">${player.betrayedPartner ? `<span title="Свои баллы + баллы напарника" aria-label="Свои баллы: ${player.retainedPeak}; от напарника: ${player.receivedPeak}">${player.retainedPeak} + ${player.receivedPeak}</span>` : player.peakScore}</td>
         </tr>
       `).join("");
     }
