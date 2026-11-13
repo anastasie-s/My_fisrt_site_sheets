@@ -24,13 +24,14 @@ finished
 // ДАТЫ ЭТАПОВ
 // ========================================
 
+// Время этапов указано по Москве (UTC+3).
 const EVENT_DATES = {
 
-  day1: new Date("2026-11-27T18:00:00"),
+  day1: new Date("2026-11-27T18:00:00+03:00"),
 
-  day2: new Date("2026-11-28T18:00:00"),
+  day2: new Date("2026-11-28T18:00:00+03:00"),
 
-  day3: new Date("2026-11-29T18:00:00")
+  day3: new Date("2026-11-29T18:00:00+03:00")
 
 };
 
@@ -50,11 +51,12 @@ function pad(value) {
 
 function formatEventDate(date) {
   return date.toLocaleString("ru-RU", {
+    timeZone: "Europe/Moscow",
     day: "numeric",
     month: "long",
     hour: "2-digit",
     minute: "2-digit"
-  });
+  }) + " МСК";
 }
 
 function setTime(days, hours, minutes) {
