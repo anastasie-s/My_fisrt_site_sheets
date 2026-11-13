@@ -28,7 +28,36 @@
         justify-content: center;
       }
       .host-card h2 { margin: 0 0 12px; }
-      .host-card .social-icons { margin-top: 0; }
+      .host-card .social-icons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 0;
+      }
+      .host-card .social-icon {
+        display: grid;
+        place-items: center;
+        flex: 0 0 40px;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border: 1px solid rgba(212, 160, 50, 0.55);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.02);
+        transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      }
+      .host-card .social-icon:hover {
+        transform: translateY(-2px);
+        border-color: #d4a032;
+        background: rgba(212, 160, 50, 0.08);
+      }
+      .host-card .social-icon svg {
+        display: block;
+        width: 22px;
+        height: 22px;
+        fill: currentColor;
+      }
       .host-card .avatar-link {
         align-self: center;
         margin-bottom: 20px;
