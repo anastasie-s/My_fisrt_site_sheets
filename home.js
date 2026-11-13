@@ -59,10 +59,14 @@ function formatEventDate(date) {
   }) + " МСК";
 }
 
+const countdownFields = ["days", "hours", "minutes"].map($);
+
 function setTime(days, hours, minutes) {
-  $("days").textContent = pad(days);
-  $("hours").textContent = pad(hours);
-  $("minutes").textContent = pad(minutes);
+  [days, hours, minutes].forEach((value, index) => {
+    const field = countdownFields[index];
+    const next = pad(value);
+    if (field.textContent !== next) field.textContent = next;
+  });
 }
 
 function setPlaceButton(text, link = "https://www.twitch.tv/krusheri") {
@@ -87,50 +91,25 @@ function showWaiting(title, note, status, targetDate) {
   `;
 
 
-  if (targetDate) {
-
-    const now = new Date();
-    const difference = targetDate - now;
-
-
-    const days = Math.max(
-      0,
-      Math.floor(difference / 86400000)
-    );
-
-    const hours = Math.max(
-      0,
-      Math.floor((difference / 3600000) % 24)
-    );
-
-    const minutes = Math.max(
-      0,
-      Math.floor((difference / 60000) % 60)
-    );
-
-
-    setTime(days, hours, minutes);
-
-  }
+  startCountdown(targetDate);
 }
 
-function showCountdown(targetDate, title, note, status) {
-  const now = new Date();
-  const difference = targetDate - now;
+function startCountdown(targetDate) {
+  const minuteMs = 60_000;
 
-  const days = Math.floor(difference / 86400000);
-  const hours = Math.floor((difference / 3600000) % 24);
-  const minutes = Math.floor((difference / 60000) % 60);
+  function tick() {
+    const remaining = targetDate - Date.now();
+    const totalMinutes = Math.max(0, Math.ceil(remaining / minuteMs));
+    setTime(
+      Math.floor(totalMinutes / 1440),
+      Math.floor(totalMinutes / 60) % 24,
+      totalMinutes % 60
+    );
 
-  setTime(days, hours, minutes);
+    if (remaining > 0) setTimeout(tick, remaining % minuteMs || minuteMs);
+  }
 
-  $("countdownTitle").textContent = title;
-  $("countdownNote").textContent = note;
-
-  $("countdownStatus").innerHTML = `
-    <span class="status-dot"></span>
-    ${status}
-  `;
+  tick();
 }
 
 function showActiveStage(stage) {
@@ -161,7 +140,7 @@ function showFinished() {
   `;
 }
 
-function updateCountdown() {
+function initializeCountdown() {
 
 
   switch(EVENT_STATE) {
@@ -349,6 +328,4 @@ function updateCountdown() {
 
 }
 
-updateCountdown();
-
-setInterval(updateCountdown, 1000);
+initializeCountdown();

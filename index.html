@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>IDEAL BRO</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      #countdown {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr) auto) minmax(0, 1fr);
+        gap: clamp(3px, 0.55vw, 10px);
+      }
+      #countdown .countdown-unit { min-width: 0; }
+      #countdown .countdown-unit strong {
+        font-size: clamp(29px, 4.4vw, 72px);
+        font-variant-numeric: tabular-nums;
+      }
+      #countdown .countdown-unit span { letter-spacing: .08em; }
+      #countdown .countdown-divider { font-size: clamp(23px, 3.4vw, 48px); }
+    </style>
   </head>
   
   <body>

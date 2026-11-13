@@ -1855,15 +1855,16 @@ textarea {
 
 .social-icons {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   margin-top: 18px;
 }
 
 .social-icons a {
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
 
   display: flex;
   align-items: center;
@@ -1895,24 +1896,7 @@ textarea {
 
 .social-icons svg {
   display: block;
-  flex: none;
-  fill: #d4a032;
-}
-
-.social-icons .twitch svg {
-  width: 25px;
-  height: 25px;
-  transform: translate(-0.5px, 1px);
-}
-
-.social-icons .telegram svg {
-  width: 25px;
-  height: 25px;
-  transform: translate(-2px, 0.5px);
-}
-
-.social-icons .discord svg {
-  width: 26px;
-  height: 26px;
-  transform: translate(3px, 1px);
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
 }

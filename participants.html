@@ -5,6 +5,100 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Участники · IDEAL BRO</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      .participants-page {
+        --profile-card-width: 264px;
+        --profile-card-height: 288px;
+        --profile-card-gap: clamp(8px, 1.2vw, 18px);
+      }
+      .host-section .section-big-title { text-align: left; }
+      .host-card,
+      .participant-card {
+        width: 100%;
+        max-width: var(--profile-card-width);
+        min-height: var(--profile-card-height);
+      }
+      .host-card {
+        max-width: 220px;
+        min-height: 240px;
+        margin: 0;
+        padding-inline: 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .host-card h2 { margin: 0 0 12px; }
+      .host-card .social-icons { margin-top: 0; }
+      .host-card .avatar-link {
+        align-self: center;
+        margin-bottom: 20px;
+        border-radius: 50%;
+      }
+      .host-card .avatar-link .avatar { margin: 0; }
+      .participants-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--profile-card-width)), var(--profile-card-width)));
+        gap: var(--profile-card-gap);
+        max-width: calc(3 * var(--profile-card-width) + 2 * var(--profile-card-gap));
+      }
+      @media (min-width: 900px), (hover: hover) and (pointer: fine) {
+        .participants-grid {
+          grid-template-columns: repeat(6, minmax(128px, 1fr));
+          max-width: calc(6 * var(--profile-card-width) + 5 * var(--profile-card-gap));
+          overflow-x: auto;
+        }
+      }
+      .participant-card {
+        container-type: inline-size;
+        padding-inline: 8px;
+      }
+      .participant-reveal-timer {
+        display: grid;
+        align-content: center;
+        min-height: 62px;
+        gap: 6px;
+        margin-bottom: 15px;
+      }
+      .participant-reveal-timer .countdown {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr) auto) minmax(0, 1fr);
+        gap: 2px;
+        margin: 0;
+      }
+      .participant-reveal-timer .countdown-unit { min-width: 0; }
+      .participant-reveal-timer .countdown-unit strong {
+        font-size: clamp(22px, 18cqi, 32px);
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      .participant-reveal-timer .countdown-unit span {
+        margin-top: 4px;
+        font-size: clamp(9px, 5.5cqi, 11px);
+        letter-spacing: .02em;
+      }
+      .participant-reveal-timer .countdown-divider {
+        padding-top: 1px;
+        font-size: clamp(16px, 12cqi, 24px);
+        line-height: 1;
+      }
+      .participant-reveal-timer [hidden] { display: none; }
+      .participant-reveal-caption,
+      .participant-reveal-status { color: var(--muted); font-size: 11px; }
+      .participant-reveal-caption { font-size: 13px; }
+      .participant-card .avatar-placeholder {
+        display: grid;
+        place-items: center;
+        width: 84px;
+        height: 84px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(212, 160, 50, 0.38);
+        color: #efc16b;
+        font: 700 46px/1 Oswald, sans-serif;
+      }
+      .participant-card h2 {
+        margin-bottom: 0;
+        font-size: clamp(16px, 16cqi, 24px);
+      }
+    </style>
   </head>
 
   <body>
@@ -34,40 +128,31 @@
       
         <article class="host-card">
       
-          <img class="avatar" src="krusheri.png" alt="Krusheri">
+          <a class="avatar-link" href="https://www.twitch.tv/krusheri" target="_blank" rel="noopener">
+            <img class="avatar" src="krusheri.png" alt="Krusheri на Twitch">
+          </a>
       
           <h2>Krusheri</h2>
           <div class="participant-links social-icons">
-            <a class="social-icon twitch"
-              href="https://www.twitch.tv/krusheri"
-              target="_blank"
-              aria-label="Twitch"
-              title="Twitch"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 3h15v10l-4 4h-4l-2 2H7v-2H5V3zm2 2v10h3v2l2-2h4l2-2V5H7zm4 2h2v4h-2V7zm4 0h2v4h-2V7z"/>
+            <!-- Brand icons from Simple Icons (CC0): https://simpleicons.org/ -->
+            <a class="social-icon" href="https://www.twitch.tv/krusheri" target="_blank" rel="noopener" aria-label="Twitch" title="Twitch">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
               </svg>
             </a>
-          
-            <a class="social-icon telegram"
-              href="https://t.me/Kru5her"
-              target="_blank"
-              aria-label="Telegram"
-              title="Telegram"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.7 4.3L3.8 10.8c-1.2.5-1.2 1.1-.2 1.4l4.3 1.3 1.7 5.2c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l2.9-13.7c.4-1.3-.5-1.9-1.7-1.4zM8.6 13.1l9.3-5.9c.5-.3.9-.1.5.2l-7.7 7-.3 3.2-1.8-4.5z"/>
+            <a class="social-icon" href="https://www.youtube.com/@KRUSHERI" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
             </a>
-          
-            <a class="social-icon discord"
-              href="https://discord.gg/wMfcRNzp7d"
-              target="_blank"
-              aria-label="Discord"
-              title="Discord"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M19.5 5.5a16.7 16.7 0 0 0-4-1.2l-.2.4c1.5.4 2.2 1 2.2 1a13.9 13.9 0 0 0-5.5-1 13.9 13.9 0 0 0-5.5 1s.7-.6 2.2-1l-.2-.4a16.7 16.7 0 0 0-4 1.2C2 9 1.6 12.4 1.7 15.8c1.6 1.2 3.2 1.9 4.7 2.3l1.1-1.8c-.6-.2-1.2-.5-1.8-.9.2.1.3.2.5.3 2.3 1 4.8 1 7.1 0 .2-.1.3-.2.5-.3-.6.4-1.2.7-1.8.9l1.1 1.8c1.5-.4 3.1-1.1 4.7-2.3.2-4 .1-7.4-2.4-10.3zM9.4 13.8c-.8 0-1.4-.7-1.4-1.6 0-.9.6-1.6 1.4-1.6.8 0 1.4.7 1.4 1.6 0 .9-.6 1.6-1.4 1.6zm5.2 0c-.8 0-1.4-.7-1.4-1.6 0-.9.6-1.6 1.4-1.6.8 0 1.4.7 1.4 1.6 0 .9-.6 1.6-1.4 1.6z"/>
+            <a class="social-icon" href="https://t.me/Kru5her" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+              </svg>
+            </a>
+            <a class="social-icon" href="https://discord.gg/wMfcRNzp7d" target="_blank" rel="noopener" aria-label="Discord" title="Discord">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
               </svg>
             </a>
           </div>
@@ -82,224 +167,147 @@
     </section>
 
       <section class="participants-grid">
-      
         <article class="participant-card">
-          <div class="participant-number">
-            01
+          <div class="participant-reveal-timer" role="timer" aria-label="До анонса участника 1" title="16 ноября, 20:00 МСК" data-reveal-at="2026-11-16T20:00:00+03:00">
+            <span class="participant-reveal-caption" hidden>До открытия</span>
+            <div class="countdown" hidden>
+              <div class="countdown-unit"><strong data-days>--</strong><span>Дней</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-hours>--</strong><span>Часов</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-minutes>--</strong><span>Минут</span></div>
+            </div>
+            <span class="participant-reveal-status" hidden>Ожидается анонс</span>
           </div>
-          
-          <div class="avatar-placeholder"></div>
-          
-          <h2>Nickname</h2>
-        
-          <div class="participant-links social-icons">
-            <a class="social-icon twitch"
-              href="https://www.twitch.tv"
-              target="_blank"
-              aria-label="Twitch"
-              title="Twitch"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 3h15v10l-4 4h-4l-2 2H7v-2H5V3zm2 2v10h3v2l2-2h4l2-2V5H7zm4 2h2v4h-2V7zm4 0h2v4h-2V7z"/>
-              </svg>
-            </a>
-          
-            <a class="social-icon telegram"
-              href="https://t.me"
-              target="_blank"
-              aria-label="Telegram"
-              title="Telegram"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.7 4.3L3.8 10.8c-1.2.5-1.2 1.1-.2 1.4l4.3 1.3 1.7 5.2c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l2.9-13.7c.4-1.3-.5-1.9-1.7-1.4zM8.6 13.1l9.3-5.9c.5-.3.9-.1.5.2l-7.7 7-.3 3.2-1.8-4.5z"/>
-              </svg>
-            </a>
-        
-          </div>
+          <div class="avatar-placeholder" aria-hidden="true">?</div>
+          <h2>Участник 1</h2>
         </article>
-      
-      
-       <article class="participant-card">
-          <div class="participant-number">
-            02
-          </div>
-          
-          <div class="avatar-placeholder"></div>
-          
-          <h2>Nickname</h2>
-        
-           <div class="participant-links social-icons">
-            <a class="social-icon twitch"
-              href="https://www.twitch.tv"
-              target="_blank"
-              aria-label="Twitch"
-              title="Twitch"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 3h15v10l-4 4h-4l-2 2H7v-2H5V3zm2 2v10h3v2l2-2h4l2-2V5H7zm4 2h2v4h-2V7zm4 0h2v4h-2V7z"/>
-              </svg>
-            </a>
-          
-            <a class="social-icon telegram"
-              href="https://t.me"
-              target="_blank"
-              aria-label="Telegram"
-              title="Telegram"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.7 4.3L3.8 10.8c-1.2.5-1.2 1.1-.2 1.4l4.3 1.3 1.7 5.2c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l2.9-13.7c.4-1.3-.5-1.9-1.7-1.4zM8.6 13.1l9.3-5.9c.5-.3.9-.1.5.2l-7.7 7-.3 3.2-1.8-4.5z"/>
-              </svg>
-            </a>
-        
-          </div>
-        </article>
-      
-      
+
         <article class="participant-card">
-          <div class="participant-number">
-            03
+          <div class="participant-reveal-timer" role="timer" aria-label="До анонса участника 2" title="17 ноября, 20:00 МСК" data-reveal-at="2026-11-17T20:00:00+03:00">
+            <span class="participant-reveal-caption" hidden>До открытия</span>
+            <div class="countdown" hidden>
+              <div class="countdown-unit"><strong data-days>--</strong><span>Дней</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-hours>--</strong><span>Часов</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-minutes>--</strong><span>Минут</span></div>
+            </div>
+            <span class="participant-reveal-status" hidden>Ожидается анонс</span>
           </div>
-          
-          <div class="avatar-placeholder"></div>
-          
-          <h2>Nickname</h2>
-        
-         <div class="participant-links social-icons">
-            <a class="social-icon twitch"
-              href="https://www.twitch.tv"
-              target="_blank"
-              aria-label="Twitch"
-              title="Twitch"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 3h15v10l-4 4h-4l-2 2H7v-2H5V3zm2 2v10h3v2l2-2h4l2-2V5H7zm4 2h2v4h-2V7zm4 0h2v4h-2V7z"/>
-              </svg>
-            </a>
-          
-            <a class="social-icon telegram"
-              href="https://t.me"
-              target="_blank"
-              aria-label="Telegram"
-              title="Telegram"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.7 4.3L3.8 10.8c-1.2.5-1.2 1.1-.2 1.4l4.3 1.3 1.7 5.2c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l2.9-13.7c.4-1.3-.5-1.9-1.7-1.4zM8.6 13.1l9.3-5.9c.5-.3.9-.1.5.2l-7.7 7-.3 3.2-1.8-4.5z"/>
-              </svg>
-            </a>
-        
-          </div>
+          <div class="avatar-placeholder" aria-hidden="true">?</div>
+          <h2>Участник 2</h2>
         </article>
-      
+
         <article class="participant-card">
-          <div class="participant-number">
-            04
+          <div class="participant-reveal-timer" role="timer" aria-label="До анонса участника 3" title="18 ноября, 20:00 МСК" data-reveal-at="2026-11-18T20:00:00+03:00">
+            <span class="participant-reveal-caption" hidden>До открытия</span>
+            <div class="countdown" hidden>
+              <div class="countdown-unit"><strong data-days>--</strong><span>Дней</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-hours>--</strong><span>Часов</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-minutes>--</strong><span>Минут</span></div>
+            </div>
+            <span class="participant-reveal-status" hidden>Ожидается анонс</span>
           </div>
-          
-          <div class="avatar-placeholder"></div>
-          
-          <h2>Nickname</h2>
-        
-        <div class="participant-links social-icons">
-            <a class="social-icon twitch"
-              href="https://www.twitch.tv"
-              target="_blank"
-              aria-label="Twitch"
-              title="Twitch"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 3h15v10l-4 4h-4l-2 2H7v-2H5V3zm2 2v10h3v2l2-2h4l2-2V5H7zm4 2h2v4h-2V7zm4 0h2v4h-2V7z"/>
-              </svg>
-            </a>
-          
-            <a class="social-icon telegram"
-              href="https://t.me"
-              target="_blank"
-              aria-label="Telegram"
-              title="Telegram"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.7 4.3L3.8 10.8c-1.2.5-1.2 1.1-.2 1.4l4.3 1.3 1.7 5.2c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l2.9-13.7c.4-1.3-.5-1.9-1.7-1.4zM8.6 13.1l9.3-5.9c.5-.3.9-.1.5.2l-7.7 7-.3 3.2-1.8-4.5z"/>
-              </svg>
-            </a>
-        
-          </div>
+          <div class="avatar-placeholder" aria-hidden="true">?</div>
+          <h2>Участник 3</h2>
         </article>
-      
+
         <article class="participant-card">
-          <div class="participant-number">
-            05
+          <div class="participant-reveal-timer" role="timer" aria-label="До анонса участника 4" title="19 ноября, 20:00 МСК" data-reveal-at="2026-11-19T20:00:00+03:00">
+            <span class="participant-reveal-caption" hidden>До открытия</span>
+            <div class="countdown" hidden>
+              <div class="countdown-unit"><strong data-days>--</strong><span>Дней</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-hours>--</strong><span>Часов</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-minutes>--</strong><span>Минут</span></div>
+            </div>
+            <span class="participant-reveal-status" hidden>Ожидается анонс</span>
           </div>
-          
-          <div class="avatar-placeholder"></div>
-          
-          <h2>Nickname</h2>
-        
-         <div class="participant-links social-icons">
-            <a class="social-icon twitch"
-              href="https://www.twitch.tv"
-              target="_blank"
-              aria-label="Twitch"
-              title="Twitch"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 3h15v10l-4 4h-4l-2 2H7v-2H5V3zm2 2v10h3v2l2-2h4l2-2V5H7zm4 2h2v4h-2V7zm4 0h2v4h-2V7z"/>
-              </svg>
-            </a>
-          
-            <a class="social-icon telegram"
-              href="https://t.me"
-              target="_blank"
-              aria-label="Telegram"
-              title="Telegram"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.7 4.3L3.8 10.8c-1.2.5-1.2 1.1-.2 1.4l4.3 1.3 1.7 5.2c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l2.9-13.7c.4-1.3-.5-1.9-1.7-1.4zM8.6 13.1l9.3-5.9c.5-.3.9-.1.5.2l-7.7 7-.3 3.2-1.8-4.5z"/>
-              </svg>
-            </a>
-        
-          </div>
+          <div class="avatar-placeholder" aria-hidden="true">?</div>
+          <h2>Участник 4</h2>
         </article>
-      
-       <article class="participant-card">
-          <div class="participant-number">
-            06
+
+        <article class="participant-card">
+          <div class="participant-reveal-timer" role="timer" aria-label="До анонса участника 5" title="20 ноября, 20:00 МСК" data-reveal-at="2026-11-20T20:00:00+03:00">
+            <span class="participant-reveal-caption" hidden>До открытия</span>
+            <div class="countdown" hidden>
+              <div class="countdown-unit"><strong data-days>--</strong><span>Дней</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-hours>--</strong><span>Часов</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-minutes>--</strong><span>Минут</span></div>
+            </div>
+            <span class="participant-reveal-status" hidden>Ожидается анонс</span>
           </div>
-          
-          <div class="avatar-placeholder"></div>
-          
-          <h2>Nickname</h2>
-        
-        <div class="participant-links social-icons">
-            <a class="social-icon twitch"
-              href="https://www.twitch.tv"
-              target="_blank"
-              aria-label="Twitch"
-              title="Twitch"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 3h15v10l-4 4h-4l-2 2H7v-2H5V3zm2 2v10h3v2l2-2h4l2-2V5H7zm4 2h2v4h-2V7zm4 0h2v4h-2V7z"/>
-              </svg>
-            </a>
-          
-            <a class="social-icon telegram"
-              href="https://t.me"
-              target="_blank"
-              aria-label="Telegram"
-              title="Telegram"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.7 4.3L3.8 10.8c-1.2.5-1.2 1.1-.2 1.4l4.3 1.3 1.7 5.2c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l2.9-13.7c.4-1.3-.5-1.9-1.7-1.4zM8.6 13.1l9.3-5.9c.5-.3.9-.1.5.2l-7.7 7-.3 3.2-1.8-4.5z"/>
-              </svg>
-            </a>
-        
-          </div>
+          <div class="avatar-placeholder" aria-hidden="true">?</div>
+          <h2>Участник 5</h2>
         </article>
-        
+
+        <article class="participant-card">
+          <div class="participant-reveal-timer" role="timer" aria-label="До анонса участника 6" title="21 ноября, 20:00 МСК" data-reveal-at="2026-11-21T20:00:00+03:00">
+            <span class="participant-reveal-caption" hidden>До открытия</span>
+            <div class="countdown" hidden>
+              <div class="countdown-unit"><strong data-days>--</strong><span>Дней</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-hours>--</strong><span>Часов</span></div>
+              <div class="countdown-divider" aria-hidden="true">:</div>
+              <div class="countdown-unit"><strong data-minutes>--</strong><span>Минут</span></div>
+            </div>
+            <span class="participant-reveal-status" hidden>Ожидается анонс</span>
+          </div>
+          <div class="avatar-placeholder" aria-hidden="true">?</div>
+          <h2>Участник 6</h2>
+        </article>
       </section>
     </main>
 
     <footer>
       <b>✦ IDEAL BRO</b>
     </footer>
+    <script>
+      (() => {
+        const timers = [...document.querySelectorAll('[data-reveal-at]')].map(element => ({
+          target: Date.parse(element.dataset.revealAt),
+          clock: element.querySelector('.countdown'),
+          caption: element.querySelector('.participant-reveal-caption'),
+          status: element.querySelector('.participant-reveal-status'),
+          days: element.querySelector('[data-days]'),
+          hours: element.querySelector('[data-hours]'),
+          minutes: element.querySelector('[data-minutes]')
+        }));
+        const pad = value => String(value).padStart(2, '0');
+        const minuteMs = 60_000;
+
+        function updateTimers() {
+          const now = Date.now();
+          let nextUpdate = Infinity;
+
+          for (const timer of timers) {
+            const remaining = timer.target - now;
+            if (!Number.isFinite(remaining)) continue;
+
+            const elapsed = remaining <= 0;
+            timer.clock.hidden = elapsed;
+            timer.caption.hidden = elapsed;
+            timer.status.hidden = !elapsed;
+            if (elapsed) continue;
+
+            const totalMinutes = Math.ceil(remaining / minuteMs);
+            timer.days.textContent = pad(Math.floor(totalMinutes / 1440));
+            timer.hours.textContent = pad(Math.floor(totalMinutes / 60) % 24);
+            timer.minutes.textContent = pad(totalMinutes % 60);
+            nextUpdate = Math.min(nextUpdate, remaining % minuteMs || minuteMs);
+          }
+
+          if (Number.isFinite(nextUpdate)) setTimeout(updateTimers, nextUpdate);
+        }
+
+        updateTimers();
+      })();
+    </script>
   </body>
 </html>
