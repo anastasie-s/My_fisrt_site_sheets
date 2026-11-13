@@ -3,7 +3,7 @@
 // меняется вручную перед каждым этапом
 // ========================================
 
-const EVENT_STATE = "date-tba";
+const EVENT_STATE = "before-day-1";
 
 /*
 Варианты:
@@ -26,11 +26,11 @@ finished
 
 const EVENT_DATES = {
 
-  day1: new Date("2030-10-15T18:00:00"),
+  day1: new Date("2026-11-27T18:00:00"),
 
-  day2: new Date("2030-10-16T18:00:00"),
+  day2: new Date("2026-11-28T18:00:00"),
 
-  day3: new Date("2030-10-17T18:00:00")
+  day3: new Date("2026-11-29T18:00:00")
 
 };
 
