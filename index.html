@@ -18,6 +18,7 @@
       }
       #countdown .countdown-unit span { letter-spacing: .08em; }
       #countdown .countdown-divider { font-size: clamp(23px, 3.4vw, 48px); }
+      #countdownNote:empty { display: none; }
     </style>
   </head>
   
@@ -79,9 +80,7 @@
           </div>
         </div>
     
-        <p class="countdown-note" id="countdownNote">
-          Дата эксперимента уточняется
-        </p>
+        <p class="countdown-note" id="countdownNote"></p>
         <div class="event-place">
           <p class="small-label">МЕСТО ПРОВЕДЕНИЯ</p>
         
@@ -100,6 +99,6 @@
     <footer>
       <b>✦ IDEAL BRO</b>
     </footer>
-    <script src="home.js"></script>
+    <script src="home.js?v=timer-only"></script>
   </body>
 </html>

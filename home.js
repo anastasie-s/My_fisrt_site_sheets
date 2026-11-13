@@ -49,16 +49,6 @@ function pad(value) {
   return String(value).padStart(2, "0");
 }
 
-function formatEventDate(date) {
-  return date.toLocaleString("ru-RU", {
-    timeZone: "Europe/Moscow",
-    day: "numeric",
-    month: "long",
-    hour: "2-digit",
-    minute: "2-digit"
-  }) + " МСК";
-}
-
 const countdownFields = ["days", "hours", "minutes"].map($);
 
 function setTime(days, hours, minutes) {
@@ -79,11 +69,11 @@ function setPlaceButton(text, link = "https://www.twitch.tv/krusheri") {
 }
 
 
-function showWaiting(title, note, status, targetDate) {
+function showWaiting(title, status, targetDate) {
 
   $("countdownTitle").textContent = title;
 
-  $("countdownNote").textContent = note;
+  $("countdownNote").textContent = "";
 
   $("countdownStatus").innerHTML = `
     <span class="status-dot"></span>
@@ -174,7 +164,6 @@ function initializeCountdown() {
 
       showWaiting(
         "ДО НАЧАЛА ЭКСПЕРИМЕНТА",
-        formatEventDate(EVENT_DATES.day1),
         "СИСТЕМА В РЕЖИМЕ ОЖИДАНИЯ",
         EVENT_DATES.day1
       );
@@ -217,7 +206,6 @@ function initializeCountdown() {
 
       showWaiting(
         "ДО ВТОРОГО ЭТАПА",
-        formatEventDate(EVENT_DATES.day2),
         "ОЖИДАНИЕ СЛЕДУЮЩЕГО ЭТАПА",
         EVENT_DATES.day2
       );
@@ -259,7 +247,6 @@ function initializeCountdown() {
 
       showWaiting(
         "ДО ФИНАЛЬНОГО ЭТАПА",
-        formatEventDate(EVENT_DATES.day3),
         "ОЖИДАНИЕ ФИНАЛА",
         EVENT_DATES.day3
       );
