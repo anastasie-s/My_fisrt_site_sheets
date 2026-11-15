@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;700;900&family=Caveat:wght@600&display=swap");
 
 :root {
+  color-scheme: only light;
   --bg: #090b09;
   --panel: #11140f;
   --paper: #e4d6bd;
