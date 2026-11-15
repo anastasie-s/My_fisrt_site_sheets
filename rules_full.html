@@ -1292,13 +1292,13 @@
             >
               <div class="rule-intro-card">
                 <h3>
-                  Испытание №3 - An Eggstremely Hard Game
+                  Испытание №3 - Fart Together
                 </h3>
             
                 <p>
                   Командам предстоит за ограниченное время продвинуться
                   как можно дальше, преодолевая сложные испытания
-                  и действуя максимально синхронно.
+                  и действуя максимально слаженно.
                 </p>
               </div>
             
@@ -1334,8 +1334,8 @@
                 </p>
               
                 <p>
-                  После окончания таймера дальнейший прогресс команды
-                  и новые достижения в итоговый результат не засчитываются.
+                  После окончания таймера дальнейший прогресс команды 
+                  в итоговый результат не засчитываются.
                 </p>
               </article>
               
@@ -1374,20 +1374,10 @@
               
                 <p>
                   Если несколько команд находятся на одной и той же
-                  контрольной точке, их места определяются по количеству
-                  достижений, полученных во время испытания.
+                  контрольной точке, выше располагается та команда, которая раньше достигла предыдущей контрольной точки.
                 </p>
               
-                <p>
-                  Достижения, связанные с разбиванием яиц,
-                  <strong>не учитываются</strong> при подсчете результата.
-                </p>
               
-                <p>
-                  Если количество достижений также совпадает,
-                  преимущество получает команда, которая раньше получила
-                  свое последнее достижение.
-                </p>
               </article>
             
                 <article class="rules-section">
@@ -1625,7 +1615,7 @@
           openRuleTab(tab.dataset.ruleTab);
         });
       });
-  function openDay(dayName) {
+  function openDay(dayName, updateHash = true) {
     document
       .querySelectorAll("[data-day-tab]")
       .forEach(tab => {
@@ -1643,6 +1633,7 @@
           panel.dataset.dayPanel === dayName
         );
       });
+    if (updateHash) history.replaceState(null, "", "#" + dayName);
   }
 
   document
@@ -1652,6 +1643,13 @@
         openDay(tab.dataset.dayTab);
       });
     });
+
+  function openDayFromHash() {
+    const day = location.hash.slice(1);
+    if (["day1", "day2", "day3"].includes(day)) openDay(day, false);
+  }
+  window.addEventListener("hashchange", openDayFromHash);
+  openDayFromHash();
   </script>
 </body>
 </html>
