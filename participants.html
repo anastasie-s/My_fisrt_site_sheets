@@ -113,6 +113,11 @@
       .participant-reveal-caption,
       .participant-reveal-status { color: var(--muted); font-size: 11px; }
       .participant-reveal-caption { font-size: 13px; }
+      .participant-reveal-caption s {
+        display: block;
+        margin-bottom: 6px;
+      }
+      .participant-reveal-caption span { line-height: 1.4; }
       .participant-card .avatar-placeholder {
         display: grid;
         place-items: center;
@@ -354,7 +359,7 @@
         </article>
 
         <article class="participant-card">
-          <div class="participant-reveal-timer" role="timer" aria-label="До анонса участника 6" title="21 ноября, 20:00 МСК" data-reveal-at="2026-11-21T20:00:00+03:00">
+          <div class="participant-reveal-timer" role="timer" aria-label="До анонса участника 6" title="21 ноября, 20:00 МСК" data-reveal-at="2026-11-21T20:00:00+03:00" data-next-reveal-at="2026-11-22T20:00:00+03:00">
             <span class="participant-reveal-caption" hidden>До открытия</span>
             <div class="countdown" hidden>
               <div class="countdown-unit"><strong data-days>--</strong><span>Дней</span></div>
@@ -367,6 +372,10 @@
           </div>
           <div class="avatar-placeholder" aria-hidden="true">?</div>
           <h2>Участник 6</h2>
+          <template data-countdown-message>
+            <s>До открытия</s>
+            <span>Спасибо, что дождались, пока мы откроем кока-колу 🥤. А последнего участника мы откроем примерно через:</span>
+          </template>
         </article>
       </section>
     </main>
@@ -377,7 +386,10 @@
     <script>
       (() => {
         const timers = [...document.querySelectorAll('[data-reveal-at]')].map(element => ({
+          element,
           target: Date.parse(element.dataset.revealAt),
+          nextTarget: Date.parse(element.dataset.nextRevealAt),
+          nextMessage: element.closest('.participant-card').querySelector('template[data-countdown-message]'),
           card: element.closest('.participant-card'),
           revealCard: element.closest('.participant-card').querySelector('template[data-reveal-card]'),
           revealed: false,
@@ -399,6 +411,12 @@
 
           for (const timer of timers) {
             if (timer.revealed) continue;
+            if (now >= timer.target && Number.isFinite(timer.nextTarget)) {
+              timer.target = timer.nextTarget;
+              timer.nextTarget = NaN;
+              timer.caption.replaceChildren(timer.nextMessage.content.cloneNode(true));
+              timer.element.title = '22 ноября, 20:00 МСК';
+            }
             const remaining = timer.target - now;
             if (!Number.isFinite(remaining)) continue;
 
