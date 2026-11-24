@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="color-scheme" content="only light">
+  <script>
+    const INVITES_CLOSED = true;
+    if (INVITES_CLOSED) window.location.replace("index.html");
+  </script>
 
   <meta
     name="viewport"
@@ -1385,7 +1389,7 @@
       loadInviteStatus();
     }
 
-    initializeInvite();
+    if (!INVITES_CLOSED) initializeInvite();
   </script>
 </body>
 </html>
